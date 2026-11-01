@@ -46,8 +46,10 @@ malsight-agent/
 
 ## Démarrage rapide
 
+Prérequis : Python 3.11.
+
 ```bash
-python -m venv .venv && source .venv/bin/activate
+python3.11 -m venv .venv && source .venv/bin/activate   # Windows : py -3.11 -m venv .venv ; .venv\Scripts\activate
 pip install -r requirements.txt
 pip install -e .
 
@@ -58,7 +60,12 @@ malsight extract samples/test.exe --cape-report rapports/cape.json
 malsight analyze cases/<sha256>/case.json --out cases/<sha256>/rapport.md
 ```
 
-L'outil `capa` doit être installé séparément ([releases](https://github.com/mandiant/capa/releases)) et accessible dans le `PATH`.
+Les outils `capa` et `floss` s'installent séparément, sous forme de binaires autonomes, et doivent être accessibles dans le `PATH` :
+
+- capa : [releases](https://github.com/mandiant/capa/releases)
+- FLOSS : [releases](https://github.com/mandiant/flare-floss/releases) (`floss.exe` sous Windows). Le paquet pip `flare-floss` n'est pas utilisé : sa dépendance `binary2strings` n'a pas de wheel Windows et demande un compilateur C++.
+
+Sans ces binaires, le pipeline fonctionne quand même : pas de règles capa, et une extraction de chaînes ASCII/UTF-16 simple à la place de FLOSS.
 
 ## Usage éthique
 

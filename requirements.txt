@@ -1,7 +1,7 @@
 # Extraction statique
 pefile>=2023.2.7
 yara-python>=4.5
-flare-floss>=3.1
+# FLOSS : installer floss.exe depuis https://github.com/mandiant/flare-floss/releases (comme capa)
 # capa : installer le binaire depuis https://github.com/mandiant/capa/releases
 
 # Modèles et normalisation
