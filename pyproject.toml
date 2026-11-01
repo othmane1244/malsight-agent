@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "malsight-agent"
+version = "0.1.0"
+description = "Agent IA défensif pour l'analyse assistée de malware (pédagogique)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+
+[project.scripts]
+malsight = "malsight.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+malsight = ["report/templates/*.j2"]

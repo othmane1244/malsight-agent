@@ -1,0 +1,38 @@
+# --- Échantillons et résultats : JAMAIS dans git ---
+samples/*
+!samples/README.md
+cases/*
+!cases/.gitkeep
+*.exe
+*.dll
+*.bin
+*.sys
+*.scr
+*.zip
+*.7z
+*.pcap
+*.pcapng
+*.dmp
+*.vmem
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+dist/
+build/
+
+# --- Secrets et données locales ---
+.env
+*.key
+chroma_db/
+data/enterprise-attack.json
+
+# --- IDE / OS ---
+.vscode/
+.idea/
+.DS_Store

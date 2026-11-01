@@ -1,0 +1,23 @@
+{
+  "behavior": {
+    "summary": {
+      "write_files": ["C:\\Users\\lab\\AppData\\Roaming\\demo\\config.txt"],
+      "write_keys": ["HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\DemoApp"],
+      "executed_commands": ["cmd.exe /c whoami"],
+      "mutexes": ["Global\\demo_mutex_42"]
+    },
+    "processes": [
+      {"process_name": "demo.exe", "calls": [
+        {"api": "RegSetValueExW", "arguments": [{"name": "ValueName", "value": "DemoApp"}]},
+        {"api": "CreateProcessW", "arguments": [{"name": "CommandLine", "value": "cmd.exe /c whoami"}]},
+        {"api": "InternetOpenUrlW", "arguments": [{"name": "URL", "value": "http://update.demo.lab/check"}]},
+        {"api": "GetTickCount", "arguments": []}
+      ]}
+    ]
+  },
+  "network": {
+    "domains": [{"domain": "update.demo.lab"}],
+    "hosts": [{"ip": "10.0.0.5"}],
+    "http": [{"uri": "http://update.demo.lab/check"}]
+  }
+}

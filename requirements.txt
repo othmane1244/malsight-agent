@@ -1,0 +1,26 @@
+# Extraction statique
+pefile>=2023.2.7
+yara-python>=4.5
+flare-floss>=3.1
+# capa : installer le binaire depuis https://github.com/mandiant/capa/releases
+
+# Modèles et normalisation
+pydantic>=2.6
+
+# Base ATT&CK et RAG
+mitreattack-python>=3.0
+chromadb>=0.5
+
+# Agent LLM (local via Ollama, ou API cloud)
+langgraph>=0.2
+langchain-ollama>=0.2
+# langchain-anthropic / langchain-openai si API cloud
+
+# Rapport
+jinja2>=3.1
+stix2>=3.0
+
+# CLI, interface et tests
+typer>=0.12
+streamlit>=1.35
+pytest>=8.0

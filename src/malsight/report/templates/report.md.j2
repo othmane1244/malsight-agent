@@ -1,0 +1,68 @@
+# Rapport d'analyse : {{ r.sample.filename }}
+
+| Champ | Valeur |
+| --- | --- |
+| SHA-256 | `{{ r.sample.sha256 }}` |
+| MD5 | `{{ r.sample.md5 }}` |
+| Type | {{ r.sample.file_type }} |
+| Taille | {{ r.sample.size }} octets |
+
+> Rapport généré par MalSight Agent. **À valider par un analyste avant diffusion.**
+
+## Résumé
+
+{{ r.executive_summary }}
+
+## Comportements
+
+| Comportement | Preuve | Statut |
+| --- | --- | --- |
+{% for b in r.behaviors %}
+| {{ b.summary }} | `{{ b.evidence }}` | {{ "observé" if b.kind == "observed" else "inféré" }} |
+{% endfor %}
+
+## Indicateurs de compromission (IOC)
+
+| Type | Valeur | Source |
+| --- | --- | --- |
+{% for i in r.iocs %}
+| {{ i.type }} | `{{ i.value }}` | {{ i.source }} |
+{% endfor %}
+
+## API sensibles
+
+| API | Catégorie | Source |
+| --- | --- | --- |
+{% for a in r.sensitive_apis | sort(attribute="category") %}
+| `{{ a.name }}` | {{ a.category }} | {{ a.source }} |
+{% endfor %}
+
+## Techniques MITRE ATT&CK
+
+| ID | Technique | Tactique | Source | Confiance | Preuve |
+| --- | --- | --- | --- | --- | --- |
+{% for t in r.attack %}
+| [{{ t.id }}](https://attack.mitre.org/techniques/{{ t.id | replace(".", "/") }}/) | {{ t.name }} | {{ t.tactic }} | {{ t.source }} | {{ t.confidence }} | {{ t.evidence }} |
+{% endfor %}
+
+## Recommandations
+
+{% for rec in r.recommendations %}
+- {{ rec }}
+{% endfor %}
+
+## Incertitudes
+
+{% for u in r.uncertainties %}
+- {{ u }}
+{% else %}
+- Aucune signalée.
+{% endfor %}
+{% if r.rejected_claims %}
+
+## Affirmations rejetées par le vérificateur
+
+{% for c in r.rejected_claims %}
+- {{ c }}
+{% endfor %}
+{% endif %}
