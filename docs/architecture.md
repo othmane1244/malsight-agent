@@ -4,7 +4,7 @@ Les faits viennent des outils ; l'agent les corrèle et rédige.
 
 | Étage | Rôle | Outils | Sortie |
 | --- | --- | --- | --- |
-| 1. Laboratoire isolé | Analyse statique et dynamique de l'échantillon | pefile, FLOSS, YARA, capa, CAPEv2 ou Sysmon/Procmon, INetSim | Sorties brutes (JSON, logs) |
+| 1. Laboratoire isolé | Analyse statique et dynamique de l'échantillon | pefile, FLOSS, YARA, capa ; dynamique : Windows Sandbox + Sysmon/Procmon ([D1](decisions.md)), INetSim/CAPEv2 seulement si décidé au jalon J2 | Sorties brutes (JSON, logs) |
 | 2. Normalisation | Fusionner les sorties dans un format unique | Python, Pydantic | `cases/<sha256>/case.json` |
 | 3. Agent IA | Corréler, mapper sur ATT&CK, rédiger | LangGraph, Ollama, mitreattack-python, Chroma | Rapport JSON brut |
 | 4. Vérificateur + rapport | Rejeter tout fait sans preuve, valider les IDs ATT&CK, mettre en forme | Pydantic, Jinja2, stix2 | `rapport.md`, `iocs.stix.json` |

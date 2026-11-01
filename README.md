@@ -70,7 +70,7 @@ Sans ces binaires, le pipeline fonctionne quand même : pas de règles capa, et 
 ## Usage éthique
 
 - Uniquement des échantillons **bénins ou pédagogiques** (binaires de test, Atomic Red Team, EICAR, échantillons fournis par l'encadrant).
-- Analyse dynamique **uniquement** dans une VM isolée, sans accès Internet réel.
+- Analyse dynamique **uniquement** dans un environnement isolé et jetable, sans accès Internet réel : Windows Sandbox sans réseau pour l'instant ([D1](docs/decisions.md)), VM + INetSim seulement si décidé au jalon J2.
 - Aucun échantillon n'est versionné dans ce dépôt.
 - Le projet produit des règles de **détection**, jamais de code offensif.
 

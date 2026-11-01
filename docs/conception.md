@@ -17,7 +17,7 @@ L'agent ne lance jamais d'exécution : il **lit** des rapports d'analyse déjà 
 **Règles du périmètre :**
 
 - Échantillons **bénins ou pédagogiques** uniquement (binaires de test, simulateurs comme les tests Atomic Red Team, échantillons fournis par l'encadrant)
-- Laboratoire **isolé** : VM sans accès Internet réel, réseau simulé (INetSim / FakeNet-NG), snapshots
+- Laboratoire **isolé** et jetable, sans accès Internet réel : Windows Sandbox avec réseau désactivé pour commencer ([D1](decisions.md)) ; VM avec réseau simulé (INetSim / FakeNet-NG) et snapshots seulement si décidé au jalon J2
 - L'agent n'a que des outils en **lecture seule** : il ne peut ni exécuter, ni modifier, ni générer de code offensif
 - Un humain valide toujours le rapport final (l'agent *assiste*, il ne décide pas)
 
@@ -92,7 +92,7 @@ Tout est open source et gratuit, sauf l'API LLM cloud, optionnelle si vous utili
 
 | Couche | Outils recommandés | Rôle |
 | --- | --- | --- |
-| Laboratoire isolé | VirtualBox ou KVM, [REMnux](https://remnux.org) (Linux), [FLARE-VM](https://github.com/mandiant/flare-vm) (Windows), INetSim / FakeNet-NG | VM sans Internet, réseau simulé, snapshots |
+| Laboratoire isolé | Actuellement ([D1](decisions.md)) : Windows Sandbox + Sysmon/Procmon. Si décidé au jalon J2 : VirtualBox ou KVM, [REMnux](https://remnux.org) (Linux), [FLARE-VM](https://github.com/mandiant/flare-vm) (Windows), INetSim / FakeNet-NG | Environnement jetable sans Internet ; réseau simulé et snapshots avec l'option VM |
 | Échantillons bénins | Binaires de test maison, tests [Atomic Red Team](https://github.com/redcanaryco/atomic-red-team), fichier EICAR, échantillons fournis par l'encadrant | Produire des comportements observables sans danger |
 | Analyse statique | [pefile](https://github.com/erocarrera/pefile), [FLOSS](https://github.com/mandiant/flare-floss), YARA, Detect It Easy, [capa](https://github.com/mandiant/capa) | Hachages, imports/API, chaînes, packers, capacités + ATT&CK |
 | Analyse dynamique | [CAPEv2](https://github.com/kevoreilly/CAPEv2) (ou Procmon + Sysmon + Wireshark en version légère) | Appels d'API, fichiers, registre, réseau, rapport JSON |
@@ -116,7 +116,7 @@ Les phases Agent et Rapport se chevauchent volontairement : le format de rapport
 | Phase | Semaines | Tâches clés | Livrable |
 | --- | --- | --- | --- |
 | 1. Cadrage + état de l'art | S1-S2 | Lire les sources, choisir la stack, définir le schéma JSON de sortie, répartir les rôles | Cahier des charges + note d'état de l'art |
-| 2. Labo isolé + échantillons | S2-S4 | Installer REMnux + FLARE-VM, réseau hôte seul, INetSim, snapshots ; constituer 10-20 échantillons bénins avec vérité terrain | Labo documenté + jeu d'échantillons étiquetés |
+| 2. Labo isolé + échantillons | S2-S4 | Mettre en place le labo Windows Sandbox (réseau coupé, Sysmon/Procmon, [D1](decisions.md)) ; REMnux + FLARE-VM + INetSim seulement si décidé au jalon J2 ; constituer 10-20 échantillons bénins avec vérité terrain | Labo documenté + jeu d'échantillons étiquetés |
 | 3. Extraction + normalisation | S4-S7 | Scripts pefile/FLOSS/YARA/capa, collecte dynamique (CAPE ou Sysmon/Procmon), parseurs vers le dossier de cas | Pipeline qui produit un JSON par échantillon |
 | 4. Agent LLM + RAG ATT&CK | S7-S10 | Outils de lecture, index ATT&CK (mitreattack-python + Chroma), prompts, vérificateur de preuves | Prototype d'agent fonctionnel |
 | 5. Rapport + recommandations | S9-S11 | Gabarit Jinja2, export STIX des IOC, propositions YARA/Sigma, interface Streamlit (option) | Rapport automatique Markdown/PDF |
@@ -148,7 +148,7 @@ On évalue l'agent contre une **vérité terrain** : pour chaque échantillon b�
 | Injection de prompt via chaînes du binaire | Données de l'échantillon délimitées comme non fiables, outils en lecture seule côté serveur, pas d'outil d'action |
 | Contexte saturé par de gros rapports | Résumé et filtrage avant le LLM, outils de consultation ciblée, état sur disque |
 | Fuite de données vers un LLM cloud | Modèle local (Ollama) ou échantillons sans donnée sensible |
-| Évasion de l'isolement du labo | VM sans réseau réel, snapshots, échantillons bénins uniquement, un seul dossier partagé en écriture, `C:\labo\resultats`, réservé aux journaux ; on n'y exécute jamais rien côté hôte, et il est vidé après chaque collecte (copie des résultats vers le dépôt ou une archive, sans binaire) |
+| Évasion de l'isolement du labo | Windows Sandbox jetable sans réseau ([D1](decisions.md)), ou VM sans réseau réel avec snapshots si décidé au jalon J2, échantillons bénins uniquement, un seul dossier partagé en écriture, `C:\labo\resultats`, réservé aux journaux ; on n'y exécute jamais rien côté hôte, et il est vidé après chaque collecte (copie des résultats vers le dépôt ou une archive, sans binaire) |
 | Résultats non reproductibles | Température basse, versions figées des modèles et règles, journal des appels d'outils |
 | Glissement vers l'offensif | L'agent n'a ni outil d'exécution ni génération de code ; seules les règles de **détection** sont produites |
 

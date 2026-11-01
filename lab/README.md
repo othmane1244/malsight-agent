@@ -36,6 +36,12 @@ Aucun outil, échantillon ni journal n'est versionné : tout vit dans `C:\labo`,
    Copy-Item .\lab\scripts\*.ps1 C:\labo\entree\scripts\ -Force
    ```
 
+5. Échantillons de test de l'équipe (`lab/echantillons-test/`, vérité terrain dans
+   `lab/verite-terrain/`) : copier T01 avec
+   `Copy-Item .\lab\echantillons-test\T01_persistance_run.ps1 C:\labo\entree\samples\ -Force`,
+   puis dans la sandbox le lancer avec
+   `powershell -NoProfile -ExecutionPolicy Bypass -File C:\travail\T01_persistance_run.ps1`.
+
 ## Procédure d'analyse (par échantillon)
 
 1. Double-cliquer sur `lab\analyse.wsb`. La sandbox démarre et `setup-sandbox.ps1` s'exécute

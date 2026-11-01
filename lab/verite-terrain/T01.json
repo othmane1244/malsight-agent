@@ -1,0 +1,32 @@
+{
+  "id": "T01",
+  "echantillon": "T01_persistance_run.ps1",
+  "description": "Script PowerShell bénin : valeur Run vers notepad.exe, fichier témoin, résolution DNS de test.",
+  "execution": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\\travail\\T01_persistance_run.ps1",
+  "environnement": "Windows Sandbox, réseau coupé (D1)",
+  "iocs": [
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\MalsightTest",
+      "donnee": "C:\\Windows\\System32\\notepad.exe",
+      "preuve_attendue": "Sysmon EID 13 (TargetObject sous HKU\\<SID>\\...\\Run\\MalsightTest) ; Procmon RegSetValue"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\malsight_test.txt",
+      "preuve_attendue": "Procmon CreateFile/WriteFile ; Sysmon EID 11 seulement si la config SwiftOnSecurity capture ce chemin"
+    },
+    {
+      "type": "domain",
+      "value": "test.malsight.lab",
+      "preuve_attendue": "Sysmon EID 22 (requête DNS, résolution en échec attendue)"
+    }
+  ],
+  "attack": [
+    {
+      "id": "T1547.001",
+      "nom": "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder",
+      "preuve_attendue": "écriture de la valeur MalsightTest sous CurrentVersion\\Run"
+    }
+  ]
+}
