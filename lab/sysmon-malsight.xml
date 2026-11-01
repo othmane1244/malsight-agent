@@ -1,0 +1,16 @@
+<!--
+  Règles Sysmon maison MalSight, fusionnées par lab/scripts/Merge-SysmonConfig.ps1
+  dans la config SwiftOnSecurity (sysmonconfig-export.xml) au démarrage de la sandbox.
+  Chaque règle est ajoutée au RuleGroup existant de même type et même onmatch
+  (Sysmon n'accepte qu'un RuleGroup par couple événement/onmatch).
+-->
+<Sysmon schemaversion="4.50">
+  <EventFiltering>
+    <RuleGroup name="" groupRelation="or">
+      <!-- Événement 11 : créations de fichiers dans le dossier de travail du labo -->
+      <FileCreate onmatch="include">
+        <TargetFilename name="MalSight:travail" condition="begin with">C:\travail\</TargetFilename>
+      </FileCreate>
+    </RuleGroup>
+  </EventFiltering>
+</Sysmon>

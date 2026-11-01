@@ -14,7 +14,7 @@
     {
       "type": "file_path",
       "value": "C:\\travail\\malsight_test.txt",
-      "preuve_attendue": "Procmon CreateFile/WriteFile ; Sysmon EID 11 seulement si la config SwiftOnSecurity capture ce chemin"
+      "preuve_attendue": "Sysmon EID 11 (règle maison lab/sysmon-malsight.xml sur C:\\travail\\) ; Procmon CreateFile/WriteFile"
     },
     {
       "type": "domain",

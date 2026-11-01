@@ -1,0 +1,16 @@
+<!-- Extrait minimal au format SwiftOnSecurity, pour tester Merge-SysmonConfig.ps1 -->
+<Sysmon schemaversion="4.50">
+  <HashAlgorithms>md5,sha256</HashAlgorithms>
+  <EventFiltering>
+    <RuleGroup name="" groupRelation="or">
+      <FileCreate onmatch="include">
+        <TargetFilename name="T1165" condition="contains">\Startup\</TargetFilename>
+      </FileCreate>
+    </RuleGroup>
+    <RuleGroup name="" groupRelation="or">
+      <FileCreate onmatch="exclude">
+        <Image condition="is">C:\Windows\system32\smss.exe</Image>
+      </FileCreate>
+    </RuleGroup>
+  </EventFiltering>
+</Sysmon>

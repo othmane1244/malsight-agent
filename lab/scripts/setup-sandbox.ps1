@@ -19,6 +19,8 @@ $OutilsSrc  = Join-Path $Entree 'outils'
 $OutilsLoc  = 'C:\labo-outils'
 $Etat       = 'C:\labo-outils\session.json'
 $ConfigSysmon = Join-Path $OutilsSrc 'sysmonconfig-export.xml'
+$ReglesMaison = Join-Path $Entree 'scripts\sysmon-malsight.xml'
+$ConfigFusion = Join-Path $OutilsLoc 'sysmon-config-fusion.xml'
 
 function Find-Outil([string[]]$Noms) {
     foreach ($n in $Noms) {
@@ -31,7 +33,7 @@ function Find-Outil([string[]]$Noms) {
 Write-Host '=== MalSight : préparation de la sandbox ===' -ForegroundColor Cyan
 
 # --- Vérifications ---------------------------------------------------------
-foreach ($p in @($OutilsSrc, $ConfigSysmon, $Resultats)) {
+foreach ($p in @($OutilsSrc, $ConfigSysmon, $ReglesMaison, $Resultats)) {
     if (-not (Test-Path $p)) { throw "Chemin manquant : $p (voir lab/README.md)" }
 }
 
@@ -43,8 +45,10 @@ $Sysmon  = Find-Outil @('Sysmon64.exe', 'Sysmon.exe')
 $Procmon = Find-Outil @('Procmon64.exe', 'Procmon.exe')
 
 # --- Sysmon ----------------------------------------------------------------
+# Config SwiftOnSecurity + règles maison (lab/sysmon-malsight.xml : événement 11 dans C:\travail\)
+& (Join-Path $Entree 'scripts\Merge-SysmonConfig.ps1') -Base $ConfigSysmon -Ajout $ReglesMaison -Sortie $ConfigFusion
 Write-Host "[1/2] Installation de Sysmon ($([IO.Path]::GetFileName($Sysmon)))..."
-& $Sysmon -accepteula -i (Join-Path $OutilsLoc 'sysmonconfig-export.xml') | Out-Host
+& $Sysmon -accepteula -i $ConfigFusion | Out-Host
 if ($LASTEXITCODE -ne 0) { throw "Échec de l'installation de Sysmon (code $LASTEXITCODE)" }
 
 # --- Procmon ---------------------------------------------------------------
@@ -63,6 +67,7 @@ if (-not (Test-Path $Pml)) { Write-Warning "Le fichier $Pml n'apparaît pas enco
     debut   = (Get-Date).ToString('o')
     procmon = $Procmon
     pml     = $Pml
+    sysmon_config = $ConfigFusion
 } | ConvertTo-Json | Set-Content -Path $Etat -Encoding UTF8
 
 # --- Consignes -------------------------------------------------------------

@@ -9,6 +9,8 @@
 | --- | --- |
 | `analyse.wsb` | Configuration Windows Sandbox : réseau, vGPU et presse-papiers coupés, dossiers mappés |
 | `scripts/setup-sandbox.ps1` | Lancé au démarrage de la sandbox : installe Sysmon, démarre Procmon, affiche les consignes |
+| `sysmon-malsight.xml` | Règles Sysmon maison (événement 11 dans `C:\travail\`), fusionnées dans la config SwiftOnSecurity |
+| `scripts/Merge-SysmonConfig.ps1` | Fusion des règles maison dans la config Sysmon de base (appelé par `setup-sandbox.ps1`) |
 | `scripts/collect.ps1` | Lancé après l'exécution : arrête Procmon, exporte Sysmon (EVTX + CSV), range les résultats |
 
 Aucun outil, échantillon ni journal n'est versionné : tout vit dans `C:\labo`, hors du dépôt.
@@ -20,7 +22,7 @@ Aucun outil, échantillon ni journal n'est versionné : tout vit dans `C:\labo`,
 
    ```text
    C:\labo\entree\outils      Sysmon, Procmon, sysmonconfig-export.xml
-   C:\labo\entree\scripts     copie de lab/scripts/*.ps1
+   C:\labo\entree\scripts     copie de lab/scripts/*.ps1 et lab/sysmon-malsight.xml
    C:\labo\entree\samples     échantillons BÉNINS uniquement (docs/ethique.md)
    C:\labo\resultats          journaux exportés (seul dossier en écriture)
    ```
@@ -33,7 +35,7 @@ Aucun outil, échantillon ni journal n'est versionné : tout vit dans `C:\labo`,
 
    ```powershell
    New-Item -ItemType Directory -Force C:\labo\entree\scripts
-   Copy-Item .\lab\scripts\*.ps1 C:\labo\entree\scripts\ -Force
+   Copy-Item .\lab\scripts\*.ps1, .\lab\sysmon-malsight.xml C:\labo\entree\scripts\ -Force
    ```
 
 5. Échantillons de test de l'équipe (`lab/echantillons-test/`, vérité terrain dans
@@ -68,6 +70,7 @@ Aucun outil, échantillon ni journal n'est versionné : tout vit dans `C:\labo`,
    | --- | --- |
    | `procmon.PML` / `procmon.csv` | Capture Procmon brute et convertie |
    | `sysmon.evtx` / `sysmon.csv` | Journal Sysmon (une colonne par champ EventData) |
+   | `sysmon-config.xml` | Config Sysmon utilisée (SwiftOnSecurity + règles maison) |
    | `manifeste.json` | Nom, SHA-256, horodatage de la capture, liste des fichiers |
 
 6. Fermer la sandbox : tout son contenu est détruit, la suivante repart d'un état propre

@@ -67,6 +67,10 @@ if (Test-Path $evtxLocal) { Remove-Item $evtxLocal -Force }
 & wevtutil.exe epl $LogSysmon $evtxLocal
 if ($LASTEXITCODE -ne 0) { throw "Échec de l'export Sysmon (code $LASTEXITCODE)" }
 Copy-Item $evtxLocal (Join-Path $Sortie 'sysmon.evtx')
+# Config Sysmon effectivement utilisée (SwiftOnSecurity + règles maison), pour la traçabilité
+if ($session.sysmon_config -and (Test-Path $session.sysmon_config)) {
+    Copy-Item $session.sysmon_config (Join-Path $Sortie 'sysmon-config.xml')
+}
 
 # --- 3. Sysmon : CSV -------------------------------------------------------
 Write-Host '[3/3] Conversion du journal Sysmon en CSV...'

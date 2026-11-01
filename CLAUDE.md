@@ -16,6 +16,7 @@ La conception de référence est dans [`docs/conception.md`](docs/conception.md)
 ## Dépôt
 
 - Jamais d'échantillon, de binaire (`.exe`, `.dll`, `.bin`...), de PCAP ou de zip dans git. `samples/` et `cases/` sont ignorés ; ne pas modifier `.gitignore` pour les inclure.
+- **Seule exception** : les scripts **texte bénins écrits par l'équipe**, rangés dans `lab/echantillons-test/`, chacun avec sa vérité terrain dans `lab/verite-terrain/` (même identifiant, ex. `T01`). Tout le reste (binaires, échantillons externes, zip, même bénins) reste interdit.
 
 ## Environnement et tests
 
