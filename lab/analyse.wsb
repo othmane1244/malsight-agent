@@ -1,0 +1,31 @@
+<!--
+  Windows Sandbox : configuration du labo d'analyse dynamique MalSight.
+  - Réseau, vGPU, presse-papiers, micro, caméra et imprimantes désactivés.
+  - C:\labo\entree   -> C:\entree   (lecture seule : outils, scripts, échantillons)
+  - C:\labo\resultats -> C:\resultats (écriture : journaux exportés uniquement)
+  La sandbox est jetable : tout son contenu est détruit à la fermeture.
+  Voir lab/README.md pour la procédure.
+-->
+<Configuration>
+  <VGpu>Disable</VGpu>
+  <Networking>Disable</Networking>
+  <ClipboardRedirection>Disable</ClipboardRedirection>
+  <AudioInput>Disable</AudioInput>
+  <VideoInput>Disable</VideoInput>
+  <PrinterRedirection>Disable</PrinterRedirection>
+  <MappedFolders>
+    <MappedFolder>
+      <HostFolder>C:\labo\entree</HostFolder>
+      <SandboxFolder>C:\entree</SandboxFolder>
+      <ReadOnly>true</ReadOnly>
+    </MappedFolder>
+    <MappedFolder>
+      <HostFolder>C:\labo\resultats</HostFolder>
+      <SandboxFolder>C:\resultats</SandboxFolder>
+      <ReadOnly>false</ReadOnly>
+    </MappedFolder>
+  </MappedFolders>
+  <LogonCommand>
+    <Command>powershell.exe -NoProfile -ExecutionPolicy Bypass -NoExit -File C:\entree\scripts\setup-sandbox.ps1</Command>
+  </LogonCommand>
+</Configuration>

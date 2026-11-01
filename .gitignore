@@ -36,3 +36,8 @@ data/enterprise-attack.json
 .vscode/
 .idea/
 .DS_Store
+
+# --- Journaux du labo (Windows Sandbox) ---
+*.evtx
+*.pml
+*.PML

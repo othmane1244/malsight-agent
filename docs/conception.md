@@ -148,7 +148,7 @@ On évalue l'agent contre une **vérité terrain** : pour chaque échantillon b�
 | Injection de prompt via chaînes du binaire | Données de l'échantillon délimitées comme non fiables, outils en lecture seule côté serveur, pas d'outil d'action |
 | Contexte saturé par de gros rapports | Résumé et filtrage avant le LLM, outils de consultation ciblée, état sur disque |
 | Fuite de données vers un LLM cloud | Modèle local (Ollama) ou échantillons sans donnée sensible |
-| Évasion de l'isolement du labo | VM sans réseau réel, snapshots, échantillons bénins uniquement, aucun partage de dossier en écriture |
+| Évasion de l'isolement du labo | VM sans réseau réel, snapshots, échantillons bénins uniquement, un seul dossier partagé en écriture, `C:\labo\resultats`, réservé aux journaux ; on n'y exécute jamais rien côté hôte, et il est vidé après chaque collecte (copie des résultats vers le dépôt ou une archive, sans binaire) |
 | Résultats non reproductibles | Température basse, versions figées des modèles et règles, journal des appels d'outils |
 | Glissement vers l'offensif | L'agent n'a ni outil d'exécution ni génération de code ; seules les règles de **détection** sont produites |
 
