@@ -7,6 +7,53 @@ est dans les [issues](https://github.com/othmane1244/malsight-agent/issues) et l
 
 ---
 
+## 2026-11-02 (soir) : série T03 à T12, jeu de test complet (#6 fermée)
+
+### Fait
+- T03 seul, puis série autorisée T04 à T12 en mode automatique (D3), `malsight comparer` après
+  chaque échantillon. **12/12 échantillons validés, 17/17 IOC retrouvés.** Résultats archivés
+  hors git dans `cases/T02/` à `cases/T12/` (T01 : `cases/essai2/`).
+
+  | Échantillon | Technique ATT&CK | IOC trouvés / attendus | Sources |
+  | --- | --- | --- | --- |
+  | T01 `persistance_run` | T1547.001 | 3/3 | clé Run : Sysmon + Procmon · fichier : Sysmon + Procmon · DNS : Sysmon seul |
+  | T02 `tache_planifiee` | T1053.005 | 2/2 | fichier de tâche : Sysmon + Procmon (`svchost.exe`) · clé TaskCache : Procmon seul |
+  | T03 `service` | T1543.003 | 1/1 | ImagePath : Sysmon + Procmon (`services.exe`) |
+  | T04 `script_logon` | T1037.001 | 1/1 | `UserInitMprLogonScript` : Sysmon + Procmon |
+  | T05 `registre` | T1112 | 1/1 | `HKCU\Software\MalsightTest\Config` : **Procmon seul** (attendu) |
+  | T06 `powershell_encode` | T1059.001 | 1/1 | fichier : Sysmon + Procmon · `-EncodedCommand` : Sysmon EID 1 |
+  | T07 `decouverte_systeme` | T1082 | 1/1 | fichier : Sysmon + Procmon · `systeminfo`, `hostname` : Sysmon EID 1 |
+  | T08 `decouverte_reseau` | T1016 | 1/1 | fichier : Sysmon + Procmon · `ipconfig`, `route`, `arp` : Sysmon EID 1 |
+  | T09 `archivage` | T1560 | 1/1 | `collecte.zip` : Sysmon + Procmon |
+  | T10 `telechargement` | T1105 | 1/1 | `update.malsight.lab` : **Sysmon EID 22 seul** (réseau coupé) |
+  | T11 `temoin_negatif` | *aucune* | 1/1 | `journal_t11.txt` : Sysmon + Procmon |
+  | T12 `scenario_combine` | T1082 + T1547.001 | 3/3 | clé Run : Sysmon + Procmon · fichier : Sysmon + Procmon · DNS : Sysmon seul · `systeminfo` : EID 1 |
+
+### Incident : course entre deux sandboxes (série T04 → T05)
+- À la fin de T04, le lanceur a rendu la main dès les résultats complets, alors que la
+  sandbox ne s'éteint que 10 s après la collecte. T05, lancé 3 s plus tard, a trouvé la
+  sandbox de T04 encore ouverte et le lanceur a refusé d'en ouvrir une seconde.
+- **Le garde-fou D3 a fonctionné** : arrêt au premier échec, aucun échantillon exécuté,
+  incident signalé avant de continuer. T05 n'avait pas été lancé.
+- Correctif (commit 8c3e546) : après un succès, `lancer-analyse.ps1` attend la fermeture de
+  la sandbox (180 s au plus). La série T05 à T12 relancée ensuite n'a eu aucun échec.
+
+### Constats
+- **Sources** : 2 IOC ne sont visibles que dans Procmon (T02 TaskCache, T05), 3 que dans Sysmon
+  (les domaines de T01, T10, T12) : aucune source seule ne suffit, la fusion (#8) est nécessaire.
+- **Attribution** : la persistance de T02 et T03 est écrite par un service système
+  (`svchost.exe`, `services.exe`), pas par le processus de l'échantillon.
+- **Témoin négatif T11** : le parseur Sysmon en extrait déjà 14 processus, 25 clés de registre
+  et 3 fichiers, dont un seul attendu (`journal_t11.txt`) ; le reste est du bruit système
+  (WMIADAP, `Perflib`, `taskhostw`, `__PSScriptPolicyTest_*.ps1`). C'est la base pour mesurer
+  faux positifs et hallucinations de l'agent (#16).
+
+### Priorité
+1. Parseur Procmon et fusion avec Sysmon, sans filtrer par PID seul (#8).
+2. Filtrage du bruit système, mesuré sur T11.
+
+---
+
 ## 2026-11-02 (soir) : T02, premier échantillon en mode automatique
 
 ### Fait
