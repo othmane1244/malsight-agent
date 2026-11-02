@@ -186,6 +186,25 @@ surestimerait (sur-ajustement) : le filtre a « vu » leurs journaux.
    finale, et l'épisode est consigné ici.
 4. Les résultats sont rapportés séparément : développement (optimiste) et validation
    (estimation honnête).
+5. **Correction de fait sur la vérité terrain** *(précision ajoutée le 2026-11-03, avant toute
+   collecte du jeu de validation)*. Une valeur de vérité terrain de T13 à T16 factuellement
+   fausse (ex. chemin du profil PowerShell si le compte de la sandbox n'est pas
+   `WDAGUtilityAccount`) peut être corrigée après la collecte, **à trois conditions** :
+   - la correction porte **uniquement sur un fait vérifiable de l'environnement** (nom de
+     compte, chemin système, nom donné par Windows), **jamais** sur ce que l'agent a trouvé ou
+     non, ni sur la technique ATT&CK attendue ;
+   - elle est faite **avant de lancer l'agent** sur T13 à T16 (seuls les journaux bruts du labo
+     sont consultés pour établir le fait) ;
+   - elle est **consignée ici** avec la valeur avant / après et le journal qui l'établit.
+
+   Les **filtres, règles, parseurs et prompts restent intouchables** : une correction de fait
+   ne les justifie jamais.
+
+### Corrections de fait appliquées au jeu de validation
+
+| Date | Échantillon | Champ | Avant | Après | Fait établi par |
+| --- | --- | --- | --- | --- | --- |
+| — | — | — | — | — | aucune à ce jour |
 
 ### Justification
 
