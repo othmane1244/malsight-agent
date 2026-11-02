@@ -1,0 +1,46 @@
+{
+  "sample": {
+    "filename": "T11_temoin_negatif.ps1",
+    "sha256": "412fabad6e7a7f182f34e56502ddd3c4adaef3f8d69333338b2502e600094258",
+    "md5": "9d45396a8fdc603d82da39de93d48f97",
+    "size": 1116,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon est un script PowerShell nommé \"T11_temoin_negatif.ps1\". L'analyse dynamique montre qu'il écrit un fichier nommé \"journal_t11.txt\" dans le répertoire \"C:\\travail\\\". Aucune activité réseau, aucune modification de registre, ni création de processus n'ont été observées. L'analyse statique indique zéro importation de bibliothèques, zéro règle CAPA et zéro appel d'API sensible.",
+  "behaviors": [
+    {
+      "summary": "Écriture de fichier",
+      "evidence": "files_written: [\"C:\\travail\\journal_t11.txt\"]",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "412fabad6e7a7f182f34e56502ddd3c4adaef3f8d69333338b2502e600094258",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "9d45396a8fdc603d82da39de93d48f97",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\journal_t11.txt",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [],
+  "countermeasures": [],
+  "recommendations": [
+    "Surveiller la création ou la modification de fichiers dans le répertoire `C:\\travail\\` pour détecter l'écriture de fichiers spécifiques comme `journal_t11.txt`.",
+    "Surveiller l'utilisation de hachages connus (SHA256: `412fabad6e7a7f182f34e56502ddd3c4adaef3f8d69333338b2502e600094258`, MD5: `9d45396a8fdc603d82da39de93d48f97`) dans les journaux d'événements ou les systèmes de détection pour identifier des artefacts potentiels.",
+    "Mettre en place des politiques de contrôle des répertoires pour restreindre l'écriture de fichiers dans des dossiers utilisateurs non essentiels, comme `C:\\travail\\`."
+  ],
+  "uncertainties": [
+    "Aucune activité réseau, de registre ou de processus n'a été observée, ce qui limite la compréhension du comportement complet de l'échantillon."
+  ],
+  "rejected_claims": []
+}

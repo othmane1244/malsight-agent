@@ -7,6 +7,71 @@ est dans les [issues](https://github.com/othmane1244/malsight-agent/issues) et l
 
 ---
 
+## 2026-11-03 : agent sur le jeu de développement T01 à T12 (gemma4:e4b)
+
+Résultats complets : `docs/resultats/dev_gemma4/` (`report.json` et `rapport.md` par échantillon,
+`bilan.csv`, `bilan.md`). Relançable avec `malsight serie <sortie>` (autre modèle : `LLM_MODEL`).
+
+| Échantillon | ATT&CK attendues | ATT&CK trouvées | Vraies | En trop | Ratées | IOC | Comportements obs. / inf. | Rejets | Temps (s) | JSON |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| T01 | T1547.001 | T1547.001 | 1 | — | — | 3/3 | 3 / 0 | 0 | 113.5 | oui |
+| T02 | T1053.005 | T1053, T1027 | 0 | T1027, T1053 | T1053.005 | 2/2 | 14 / 0 | 0 | 160.4 | oui |
+| T03 | T1543.003 | — | 0 | — | T1543.003 | 1/1 | 1 / 0 | 4 | 110.4 | oui |
+| T04 | T1037.001 | T1547.001 | 0 | T1547.001 | T1037.001 | 1/1 | 2 / 0 | 0 | 107.8 | oui |
+| T05 | T1112 | T1071.001 | 0 | T1071.001 | T1112 | 1/1 | 2 / 0 | 5 | 131.3 | oui |
+| T06 | T1059.001 | T1027.002 | 0 | T1027.002 | T1059.001 | 1/1 | 2 / 0 | 0 | 130.0 | oui |
+| T07 | T1082 | T1082 | 1 | — | — | 1/1 | 2 / 0 | 0 | 119.4 | oui |
+| T08 | T1016 | T1082 | 0 | T1082 | T1016 | 1/1 | 8 / 0 | 0 | 133.7 | oui |
+| T09 | T1560 | T1005 | 0 | T1005 | T1560 | 1/1 | 3 / 0 | 0 | 111.3 | oui |
+| T10 | T1105 | T1071.001 | 0 | T1071.001 | T1105 | 1/1 | 3 / 0 | 6 | 133.5 | oui |
+| T11 | — | — | 0 | — | — | 1/1 | 1 / 0 | 0 | 85.1 | oui |
+| T12 | T1082, T1547.001 | T1059.001 | 0 | T1059.001 | T1082, T1547.001 | 3/3 | 4 / 0 | 0 | 130.7 | oui |
+| **Total** | 12 | | **2/12** | 9 | 10 | 17/17 | 45 / 0 | 15 | 1467 | 12/12 |
+
+### Points demandés
+- **T11 (témoin négatif)** : **aucune technique proposée**, un seul comportement (le fichier
+  journal) : pas de faux positif. ✅
+- **T12 (scénario combiné)** : le **récit** est juste (persistance par clé Run, `systeminfo`,
+  tentative DNS vers `c2.malsight.lab`, tous « observés »), mais le **mapping ATT&CK échoue** :
+  ni T1082 ni T1547.001, seulement T1059.001 avec la clé Run comme preuve. ❌
+- **T05** (Procmon seul) : l'agent **utilise bien** `HKCU\Software\MalsightTest` (comportement
+  observé), mais le relie à T1071.001 *Web Protocols* au lieu de T1112. ⚠️
+- **T10** (Sysmon seul) : l'agent **utilise bien** la requête DNS, décrite comme « tentative »
+  (correction du 2 novembre efficace), mais choisit T1071.001 au lieu de T1105. ⚠️
+
+### Erreurs classées par type
+| Type | Cas | Nombre |
+| --- | --- | --- |
+| **A. Technique ratée, voisine choisie** (bonne famille, mauvais ID) | T02 (T1053 au lieu de .005), T04 (T1547.001 au lieu de T1037.001), T08 (T1082 au lieu de T1016), T09 (T1005 au lieu de T1560) | 4 |
+| **B. Technique inventée, sans lien avec la preuve** | T02 T1027 (clés TaskCache), T05 T1071.001 (clé de registre), T10 T1071.001 (aucun échange HTTP), T12 T1059.001 (clé Run comme preuve) | 4 |
+| **C. ID et nom incohérents** | T06 : « T1027.002 PowerShell: Encoded Command Execution » ; T1027.002 est en réalité *Software Packing*. Le vérificateur garde le nom du LLM (`verifier.py`, `t.name = t.name or kb.name(t.id)`) | 1 |
+| **D. Récit juste, technique absente** | T03 (service décrit, aucune technique), T12 (persistance + découverte décrites) | 2 |
+| **E. IOC manquant** | aucun : les IOC viennent des outils, pas du LLM | 0 |
+| **F. Preuve exacte mais non pertinente** (bruit décrit comme comportement) | T04 (clé TaskCache d'un service), T05 (base de notifications), T08 (clés `RFC1156Agent`), T10 (traçage RAS) ; T02 : 14 comportements, un par clé | 5 cas |
+| **G. IDs D3FEND inventés** dans les recommandations (rejetés) | T03, T05, T10 (`D3-REG`, `D3-FILE`, `D3-NET`...) : toujours quand aucune contre-mesure n'était fournie (aucune technique retenue, ou technique hors cache comme T1071.001) | 15 rejets |
+
+### Corrections proposées (non appliquées, à décider)
+1. **Règles déterministes artefact → technique** (source `rule`, confiance haute), comme capa ou
+   Sigma : clé `...\CurrentVersion\Run\` → T1547.001 ; `System32\Tasks\` ou `TaskCache\Tree\` →
+   T1053.005 ; `Services\<nom>\ImagePath` → T1543.003 ; `UserInitMprLogonScript` → T1037.001 ;
+   `systeminfo`/`hostname` → T1082 ; `ipconfig`/`route`/`arp` → T1016 ; `-EncodedCommand` →
+   T1059.001 ; création d'un `.zip` à partir de fichiers écrits → T1560. Règles de
+   référence publiques, mais à **garder génériques** (D4 : le jeu de validation mesurera le
+   sur-ajustement). Traite A, B (en partie) et D.
+2. **Vérificateur ATT&CK** : remplacer toujours le nom et la tactique par ceux de la base
+   officielle (C) ; exiger que la preuve d'une technique cite des valeurs du dossier de cas
+   (même contrôle que les comportements).
+3. **Contexte du brouillon** : donner au LLM, pour les techniques candidates, le nom et un extrait
+   de la description officielle, plutôt que les seuls IDs.
+4. **Provenance dans le contexte** : passer à l'agent l'attribution (`sample_tree` /
+   `service_window`) et les éléments de l'arbre de l'échantillon en premier ; consigne de grouper
+   les comportements (un par action, pas un par clé). Traite F.
+5. **D3FEND sans contre-mesure fournie** : retirer l'ID inventé de la recommandation au lieu de la
+   rejeter entière (le texte reste, l'ID part, rejet noté), et renforcer la consigne. Traite G.
+6. **Modèle** : comparer avec `qwen3:8b` (téléchargement en cours) avant de figer.
+
+---
+
 ## 2026-11-02 (nuit) : D3FEND et premier essai de l'agent (#11, #12)
 
 ### Fait

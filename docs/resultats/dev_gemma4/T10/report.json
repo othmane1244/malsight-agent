@@ -1,0 +1,159 @@
+{
+  "sample": {
+    "filename": "T10_telechargement.ps1",
+    "sha256": "f8a938c6909044c78ef5a18ef7436bb9eedc48c2370c256d0823a8b5c21d7681",
+    "md5": "ddeb822a26e2e57bca8f7dbbff7e8468",
+    "size": 1322,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon est un script PowerShell nommé \"T10_telechargement.ps1\". Son activité observée principale consiste à modifier des clés de registre liées au traçage de PowerShell, spécifiquement sous les chemins `HKLM\\Software\\Microsoft\\Tracing\\powershell_RASAPI32` et `HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASMANCS`. Il tente également de communiquer avec le domaine `update.malsight.lab` via une URL `http://update.malsight.lab/outil.txt`. Aucune exécution de processus ou activité réseau réussie n'est confirmée, mais les modifications de registre et les tentatives de connexion sont notables.",
+  "behaviors": [
+    {
+      "summary": "Modification des paramètres de traçage de PowerShell.",
+      "evidence": "HKLM\\Software\\Microsoft\\Tracing\\powershell_RASAPI32",
+      "kind": "observed"
+    },
+    {
+      "summary": "Modification des paramètres de traçage de PowerShell (second ensemble de clés).",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASMANCS",
+      "kind": "observed"
+    },
+    {
+      "summary": "Tentative de communication réseau avec un domaine spécifique.",
+      "evidence": "update.malsight.lab",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "f8a938c6909044c78ef5a18ef7436bb9eedc48c2370c256d0823a8b5c21d7681",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "ddeb822a26e2e57bca8f7dbbff7e8468",
+      "source": "fichier"
+    },
+    {
+      "type": "url",
+      "value": "http://update.malsight.lab/outil.txt",
+      "source": "extraction"
+    },
+    {
+      "type": "domain",
+      "value": "update.malsight.lab",
+      "source": "extraction"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\outil.txt",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASAPI32\\ConsoleTracingMask",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASAPI32\\EnableAutoFileTracing",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASAPI32\\EnableConsoleTracing",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASAPI32\\EnableFileTracing",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASAPI32\\FileDirectory",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASAPI32\\FileTracingMask",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASAPI32\\MaxFileSize",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASMANCS\\ConsoleTracingMask",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASMANCS\\EnableAutoFileTracing",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASMANCS\\EnableConsoleTracing",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASMANCS\\EnableFileTracing",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASMANCS\\FileDirectory",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASMANCS\\FileTracingMask",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASMANCS\\MaxFileSize",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\Software\\Microsoft\\Tracing\\powershell_RASAPI32",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\Software\\Microsoft\\Tracing\\powershell_RASMANCS",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1071.001",
+      "name": "Web Protocols",
+      "tactic": "command-and-control",
+      "source": "llm",
+      "confidence": "medium",
+      "evidence": "update.malsight.lab"
+    }
+  ],
+  "countermeasures": [],
+  "recommendations": [],
+  "uncertainties": [
+    "L'activité réseau observée est limitée à un domaine (`update.malsight.lab`) et ne confirme pas une connexion établie ou un transfert de données, ce qui est considéré comme une tentative.",
+    "Aucune API spécifique n'est listée dans `top_api_calls` ou `sensitive_apis`, rendant difficile la caractérisation des appels système précis."
+  ],
+  "rejected_claims": [
+    "Recommandation citant un ID D3FEND absent du cache (D3-REG) : Surveiller les modifications des clés de registre liées au traçage de PowerShell, telles que HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASAPI32\\* ou HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASMANCS\\* (D3-REG).",
+    "Recommandation citant un ID D3FEND absent du cache (D3-FILE) : Mettre en place des règles de détection pour les accès ou modifications des fichiers dans le chemin C:\\travail\\ (D3-FILE).",
+    "Recommandation citant un ID D3FEND absent du cache (D3-NET) : Surveiller les connexions sortantes vers le domaine update.malsight.lab (D3-NET).",
+    "Recommandation citant un ID D3FEND absent du cache (D3-DNS) : Bloquer ou surveiller les requêtes DNS pour le domaine update.malsight.lab (D3-DNS).",
+    "Recommandation citant un ID D3FEND absent du cache (D3-REG) : Appliquer le principe du moindre privilège pour limiter les droits d'écriture et de modification des clés de registre de traçage de PowerShell (D3-REG).",
+    "Recommandation citant un ID D3FEND absent du cache (D3-SCRIPT) : Surveiller l'exécution de scripts utilisant des protocoles web (T1071.001) en contexte de travail suspect (D3-SCRIPT)."
+  ]
+}

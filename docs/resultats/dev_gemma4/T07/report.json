@@ -1,0 +1,124 @@
+{
+  "sample": {
+    "filename": "T07_decouverte_systeme.ps1",
+    "sha256": "91379f80153cf471af84f022d11c9a6b683a02ed584a80d0bf3734b6bab1e5f7",
+    "md5": "83410fbb1e5852e13f895ac481f70758",
+    "size": 990,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon, nommé \"T07_decouverte_systeme.ps1\", est un script PowerShell qui exécute des outils système standard pour collecter des informations sur l'environnement hôte. Il écrit également un fichier texte contenant potentiellement ces informations dans le répertoire \"C:\\travail\\\".",
+  "behaviors": [
+    {
+      "summary": "Exécution de commandes système pour la découverte d'informations sur le système.",
+      "evidence": "processes_created: [\"C:\\Windows\\system32\\HOSTNAME.EXE\", \"C:\\Windows\\system32\\systeminfo.exe\"]",
+      "kind": "observed"
+    },
+    {
+      "summary": "Écriture d'un fichier contenant des données dans le répertoire \"C:\\travail\\\".",
+      "evidence": "files_written: [\"C:\\travail\\malsight_t07.txt\"]",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "91379f80153cf471af84f022d11c9a6b683a02ed584a80d0bf3734b6bab1e5f7",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "83410fbb1e5852e13f895ac481f70758",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\malsight_t07.txt",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1082",
+      "name": "System Information Discovery",
+      "tactic": "discovery",
+      "source": "llm",
+      "confidence": "medium",
+      "evidence": "processes_created: [\"C:\\Windows\\system32\\HOSTNAME.EXE\", \"C:\\Windows\\system32\\systeminfo.exe\"]"
+    }
+  ],
+  "countermeasures": [
+    {
+      "id": "D3-PSA",
+      "name": "Process Spawn Analysis",
+      "technique": "T1082",
+      "tactic": "Detect",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SCA",
+      "name": "System Call Analysis",
+      "technique": "T1082",
+      "tactic": "Detect",
+      "artifact": "System Call",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EAL",
+      "name": "Executable Allowlisting",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EDL",
+      "name": "Executable Denylisting",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-HBPI",
+      "name": "Hardware-based Process Isolation",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:Hardware-basedProcessIsolation/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SCF",
+      "name": "System Call Filtering",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "System Call",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallFiltering/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-DE",
+      "name": "Decoy Environment",
+      "technique": "T1082",
+      "tactic": "Deceive",
+      "artifact": "Decoy Artifact",
+      "url": "https://d3fend.mitre.org/technique/d3f:DecoyEnvironment/",
+      "source": "d3fend"
+    }
+  ],
+  "recommendations": [
+    "Surveiller la création de processus exécutant des outils système comme 'systeminfo.exe' ou des noms génériques comme 'HOSTNAME.EXE' (T1082) en analysant les arguments de ligne de commande (D3-PSA).",
+    "Mettre en place des règles de détection (Sysmon/Sigma) pour surveiller l'exécution de fichiers spécifiques connus (IOC : sha256 91379f80153cf471af84f022d11c9a6b683a02ed584a80d0bf3734b6bab1e5f7, md5 83410fbb1e5852e13f895ac481f70758) et de chemins de fichiers spécifiques (IOC : C:\\travail\\malsight_t07.txt).",
+    "Appliquer des politiques de contrôle des applications (Application Whitelisting) pour restreindre l'exécution des binaires système aux chemins attendus, afin de détecter les déviations ou les exécutions inhabituelles (D3-EAL).",
+    "Surveiller les tentatives d'accès ou de modification des fichiers de type 'txt' dans des répertoires non standard comme 'C:\\travail\\' (IOC : C:\\travail\\malsight_t07.txt) pour détecter des activités de persistance ou de fuite d'informations.",
+    "Analyser les appels système (System Call Analysis) pour détecter des séquences d'appels inhabituelles associées à la collecte d'informations système (D3-SCA)."
+  ],
+  "uncertainties": [],
+  "rejected_claims": []
+}

@@ -1,0 +1,185 @@
+{
+  "sample": {
+    "filename": "T01_persistance_run.ps1",
+    "sha256": "fa227aed8895a3786b1bf853bcbc5f43fafbc6fe6854fb65cb6a34476dc1cb6e",
+    "md5": "a28653ca8cf8274a353b629a62c4d1b6",
+    "size": 2146,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon est un script PowerShell (filename: T01_persistance_run.ps1) qui exécute des actions de persistance et de modification de fichiers. Il écrit un fichier dans le répertoire C:\\travail\\malsight_test.txt et établit une entrée de registre pour assurer sa persistance au démarrage de l'utilisateur. Il tente également une activité réseau vers le domaine test.malsight.lab.",
+  "behaviors": [
+    {
+      "summary": "Écriture de fichiers",
+      "evidence": "files_written: [\"C:\\travail\\malsight_test.txt\"]",
+      "kind": "observed"
+    },
+    {
+      "summary": "Modification du registre pour la persistance",
+      "evidence": "registry_keys_set: [\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\MalsightTest\"]",
+      "kind": "observed"
+    },
+    {
+      "summary": "Tentative de communication réseau",
+      "evidence": "domains: [\"test.malsight.lab\"]",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "fa227aed8895a3786b1bf853bcbc5f43fafbc6fe6854fb65cb6a34476dc1cb6e",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "a28653ca8cf8274a353b629a62c4d1b6",
+      "source": "fichier"
+    },
+    {
+      "type": "domain",
+      "value": "test.malsight.lab",
+      "source": "extraction"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\malsight_test.txt",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\MalsightTest",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1547.001",
+      "name": "Registry Run Keys / Startup Folder",
+      "tactic": "persistence, privilege-escalation",
+      "source": "llm",
+      "confidence": "medium",
+      "evidence": "registry_keys_set: [\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\MalsightTest\"]"
+    }
+  ],
+  "countermeasures": [
+    {
+      "id": "D3-FE",
+      "name": "File Encryption",
+      "technique": "T1547.001",
+      "tactic": "Harden",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileEncryption/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-DA",
+      "name": "Dynamic Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:DynamicAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EFA",
+      "name": "Emulated File Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:EmulatedFileAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FA",
+      "name": "File Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FIM",
+      "name": "File Integrity Monitoring",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SICA",
+      "name": "System Init Config Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "System Init Configuration",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemInitConfigAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CF",
+      "name": "Content Filtering",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentFiltering/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CM",
+      "name": "Content Modification",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentModification/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CQ",
+      "name": "Content Quarantine",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentQuarantine/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EAL",
+      "name": "Executable Allowlisting",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EDL",
+      "name": "Executable Denylisting",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-LFP",
+      "name": "Local File Permissions",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:LocalFilePermissions/",
+      "source": "d3fend"
+    }
+  ],
+  "recommendations": [
+    "Surveiller la création ou la modification des clés de registre de démarrage utilisateur, en particulier dans `HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run`, pour détecter l'ajout de chemins non autorisés (D3-FIM).",
+    "Mettre en place des politiques de contrôle des applications pour restreindre l'exécution de fichiers provenant de chemins non standard ou de dossiers utilisateurs (D3-EAL).",
+    "Surveiller les tentatives d'écriture de clés de registre dans les chemins de démarrage utilisateur (ex: `HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run`) via des outils de surveillance de registre (D3-FIM).",
+    "Analyser les fichiers exécutables suspects en utilisant des environnements de sandbox ou d'analyse dynamique (D3-DA) avant de permettre leur exécution.",
+    "Appliquer des restrictions de permissions de fichiers et de registre pour limiter les modifications aux clés de démarrage critiques (D3-LFP).",
+    "Utiliser des solutions de filtrage de contenu pour bloquer l'exécution de fichiers basés sur des signatures connues (D3-CF)."
+  ],
+  "uncertainties": [],
+  "rejected_claims": []
+}

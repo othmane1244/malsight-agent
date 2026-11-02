@@ -1,0 +1,97 @@
+{
+  "sample": {
+    "filename": "T05_registre.ps1",
+    "sha256": "5bd166c11137cafde8f578e7a72d88f0632df4a1bf3a368bef4e1e96e5dd4b7e",
+    "md5": "abd04bcc990942fbf87ef91ba187bc1e",
+    "size": 1058,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon est un script PowerShell (`T05_registre.ps1`) qui a interagi avec le système en modifiant plusieurs clés de registre et en écrivant un fichier local. Aucune activité réseau ou processus créé n'a été observé. Les modifications de registre ciblent des emplacements liés aux notifications Windows et au planificateur de tâches, ainsi que la création d'une base de données de notifications.",
+  "behaviors": [
+    {
+      "summary": "Modification du registre pour créer des clés de configuration et des entrées de notifications.",
+      "evidence": "HKCU\\Software\\MalsightTest, HKCU\\Software\\MalsightTest\\Config, HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power, HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power\\Setting, HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power\\appType, HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power\\wnsId, HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo",
+      "kind": "observed"
+    },
+    {
+      "summary": "Écriture d'un fichier de base de données de notifications.",
+      "evidence": "C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Microsoft\\Windows\\Notifications\\wpndatabase.db-wal",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "5bd166c11137cafde8f578e7a72d88f0632df4a1bf3a368bef4e1e96e5dd4b7e",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "abd04bcc990942fbf87ef91ba187bc1e",
+      "source": "fichier"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\MalsightTest",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\MalsightTest\\Config",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power\\Setting",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power\\appType",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power\\wnsId",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo",
+      "source": "extraction"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Microsoft\\Windows\\Notifications\\wpndatabase.db-wal",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1071.001",
+      "name": "Web Protocols",
+      "tactic": "command-and-control",
+      "source": "llm",
+      "confidence": "medium",
+      "evidence": "HKCU\\Software\\MalsightTest"
+    }
+  ],
+  "countermeasures": [],
+  "recommendations": [],
+  "uncertainties": [
+    "Aucune activité réseau n'a été observée, ce qui empêche de déterminer si des communications externes ont eu lieu."
+  ],
+  "rejected_claims": [
+    "Recommandation citant un ID D3FEND absent du cache (D3-REG) : Surveiller la création ou la modification des clés de registre suivantes : HKCU\\Software\\MalsightTest, HKCU\\Software\\MalsightTest\\Config, HKCU\\Software\\MalsightTest\\DynamicInfo (ou toute clé sous HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power) pour détecter des activités suspectes (D3-REG).",
+    "Recommandation citant un ID D3FEND absent du cache (D3-FILE) : Surveiller les modifications des fichiers de base de données de notifications Windows, tels que C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Microsoft\\Windows\\Notifications\\wpndatabase.db-wal, car ces fichiers sont des cibles potentielles pour la persistance ou l'exfiltration d'informations (D3-FILE).",
+    "Recommandation citant un ID D3FEND absent du cache (D3-HASH) : Mettre en place des règles de détection (YARA/Sigma) pour identifier les hachages SHA256 (5bd166c11137cafde8f578e7a72d88f0632df4a1bf3a368bef4e1e96e5dd4b7e) et MD5 (abd04bcc990942fbf87ef91ba187bc1e) associés à l'échantillon (D3-HASH).",
+    "Recommandation citant un ID D3FEND absent du cache (D3-API) : Surveiller les appels d'API ou les opérations de registre ciblant des chemins spécifiques comme HKCU\\Software\\MalsightTest pour détecter des tentatives de persistance ou de configuration malveillante (D3-API).",
+    "Recommandation citant un ID D3FEND absent du cache (D3-REG) : Durcir les politiques de registre pour limiter les modifications dans les sous-clés de notifications Windows (ex: HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power) pour empêcher la modification des paramètres système (D3-REG)."
+  ]
+}

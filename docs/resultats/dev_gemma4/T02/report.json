@@ -1,0 +1,308 @@
+{
+  "sample": {
+    "filename": "T02_tache_planifiee.ps1",
+    "sha256": "cc7ed63f0672353ffeaf5dbc1b7a6e5ffe70858c5c433feeda6b401cdfaba47b",
+    "md5": "179a3d0948ee1f3502db8a063b4eeed8",
+    "size": 1119,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon est un script PowerShell (`T02_tache_planifiee.ps1`) qui a interagi avec le système de planification des tâches de Windows. Il a écrit un fichier dans le répertoire des tâches système et a créé plusieurs clés de registre associées à la planification de tâches, suggérant la création ou la modification d'une tâche planifiée. Aucune activité réseau ou processus n'a été observé.",
+  "behaviors": [
+    {
+      "summary": "Création de fichier système",
+      "evidence": "C:\\Windows\\System32\\Tasks\\MalsightTest",
+      "kind": "observed"
+    },
+    {
+      "summary": "Modification du registre pour la planification des tâches",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo",
+      "kind": "observed"
+    },
+    {
+      "summary": "Modification du registre pour la planification des tâches",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest",
+      "kind": "observed"
+    },
+    {
+      "summary": "Modification du registre pour la planification des tâches",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest\\SD",
+      "kind": "observed"
+    },
+    {
+      "summary": "Modification du registre pour la planification des tâches",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest\\Id",
+      "kind": "observed"
+    },
+    {
+      "summary": "Modification du registre pour la planification des tâches",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest\\Index",
+      "kind": "observed"
+    },
+    {
+      "summary": "Modification du registre pour la planification des tâches",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Path",
+      "kind": "observed"
+    },
+    {
+      "summary": "Modification du registre pour la planification des tâches",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Hash",
+      "kind": "observed"
+    },
+    {
+      "summary": "Modification du registre pour la planification des tâches",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Plain\\{7497102D-8538-4CE3-BADF-E83613BEE80F}",
+      "kind": "observed"
+    },
+    {
+      "summary": "Modification du registre pour la planification des tâches",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Schema",
+      "kind": "observed"
+    },
+    {
+      "summary": "Modification du registre pour la planification des tâches",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\URI",
+      "kind": "observed"
+    },
+    {
+      "summary": "Modification du registre pour la planification des tâches",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Triggers",
+      "kind": "observed"
+    },
+    {
+      "summary": "Modification du registre pour la planification des tâches",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Actions",
+      "kind": "observed"
+    },
+    {
+      "summary": "Modification du registre pour la planification des tâches",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\DynamicInfo",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "cc7ed63f0672353ffeaf5dbc1b7a6e5ffe70858c5c433feeda6b401cdfaba47b",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "179a3d0948ee1f3502db8a063b4eeed8",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\Windows\\System32\\Tasks\\MalsightTest",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Plain\\{7497102D-8538-4CE3-BADF-E83613BEE80F}",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Actions",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\DynamicInfo",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Hash",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Path",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Schema",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Triggers",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\URI",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest\\Id",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest\\Index",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest\\SD",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1053",
+      "name": "Scheduled Task/Job",
+      "tactic": "execution, persistence, privilege-escalation",
+      "source": "llm",
+      "confidence": "medium",
+      "evidence": "Création de fichier dans C:\\Windows\\System32\\Tasks\\MalsightTest"
+    },
+    {
+      "id": "T1027",
+      "name": "Obfuscated Files or Information",
+      "tactic": "stealth",
+      "source": "llm",
+      "confidence": "medium",
+      "evidence": "Modification de clés de registre liées à la planification des tâches (HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\*)"
+    }
+  ],
+  "countermeasures": [
+    {
+      "id": "D3-FE",
+      "name": "File Encryption",
+      "technique": "T1053",
+      "tactic": "Harden",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileEncryption/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FA",
+      "name": "File Analysis",
+      "technique": "T1053",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FIM",
+      "name": "File Integrity Monitoring",
+      "technique": "T1053",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-PLA",
+      "name": "Process Lineage Analysis",
+      "technique": "T1053",
+      "tactic": "Detect",
+      "artifact": "Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ProcessLineageAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-PSA",
+      "name": "Process Spawn Analysis",
+      "technique": "T1053",
+      "tactic": "Detect",
+      "artifact": "Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-PSMD",
+      "name": "Process Self-Modification Detection",
+      "technique": "T1053",
+      "tactic": "Detect",
+      "artifact": "Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ProcessSelf-ModificationDetection/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SCA",
+      "name": "System Call Analysis",
+      "technique": "T1053",
+      "tactic": "Detect",
+      "artifact": "System Call",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SDM",
+      "name": "System Daemon Monitoring",
+      "technique": "T1053",
+      "tactic": "Detect",
+      "artifact": "Operating System Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemDaemonMonitoring/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SJA",
+      "name": "Scheduled Job Analysis",
+      "technique": "T1053",
+      "tactic": "Detect",
+      "artifact": "Job Schedule",
+      "url": "https://d3fend.mitre.org/technique/d3f:ScheduledJobAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-ABPI",
+      "name": "Application-based Process Isolation",
+      "technique": "T1053",
+      "tactic": "Isolate",
+      "artifact": "Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:Application-basedProcessIsolation/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CF",
+      "name": "Content Filtering",
+      "technique": "T1053",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentFiltering/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CM",
+      "name": "Content Modification",
+      "technique": "T1053",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentModification/",
+      "source": "d3fend"
+    }
+  ],
+  "recommendations": [
+    "Surveiller la création de fichiers dans des chemins inhabituels pour les tâches planifiées, comme \"C:\\Windows\\System32\\Tasks\\MalsightTest\", en utilisant Sysmon pour détecter les événements de création de fichiers (D3-FIM).",
+    "Détecter les modifications des clés de registre associées à la planification des tâches, en particulier dans \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\*\", car ces modifications peuvent indiquer une obfuscation ou une persistance (D3-FIM).",
+    "Mettre en place des règles de détection pour surveiller les appels d'API ou les séquences d'API liées à la création ou la modification de tâches planifiées (ex: utilisation de COM/WMI pour la gestion des tâches), afin de détecter les comportements de persistance (D3-SCA).",
+    "Durcir les droits d'écriture sur les répertoires de tâches planifiées (ex: \"C:\\Windows\\System32\\Tasks\") pour limiter qui peut créer ou modifier des tâches (D3-FE).",
+    "Analyser les processus parents et enfants lors de l'exécution de tâches planifiées pour détecter des chaînes d'exécution anormales (D3-PLA).",
+    "Surveiller les tentatives d'accès ou de modification des clés de registre spécifiques aux tâches planifiées (ex: \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\*\") pour détecter les activités suspectes (D3-FIM)."
+  ],
+  "uncertainties": [],
+  "rejected_claims": []
+}

@@ -1,0 +1,174 @@
+{
+  "sample": {
+    "filename": "T08_decouverte_reseau.ps1",
+    "sha256": "a8957953c905b4f7c069d1f759816f77a93a0334ca0c8436fd91993676a3cf90",
+    "md5": "2006d0747f6ab9022f05118743b17516",
+    "size": 1030,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon, nommé \"T08_decouverte_reseau.ps1\", exécute plusieurs commandes système courantes pour la découverte de réseau et modifie des clés de registre spécifiques. Il écrit également un fichier local. Aucune activité réseau externe n'a été observée. Les actions observées sont principalement liées à la reconnaissance du système.",
+  "behaviors": [
+    {
+      "summary": "Modification du registre pour créer des clés associées à un agent.",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent",
+      "kind": "observed"
+    },
+    {
+      "summary": "Création de clés de registre spécifiques sous HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent.",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion",
+      "kind": "observed"
+    },
+    {
+      "summary": "Création de clés de registre spécifiques sous HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion.",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion\\Parameters",
+      "kind": "observed"
+    },
+    {
+      "summary": "Modification de la valeur de registre \"TrapPollTimeMilliSecs\" sous HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion\\Parameters.",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion\\Parameters\\TrapPollTimeMilliSecs",
+      "kind": "observed"
+    },
+    {
+      "summary": "Exécution de commandes système pour la découverte de réseau.",
+      "evidence": "procmon: \"C:\\Windows\\system32\\ipconfig.exe\" /all",
+      "kind": "observed"
+    },
+    {
+      "summary": "Exécution de commandes système pour la découverte de réseau.",
+      "evidence": "procmon: \"C:\\Windows\\system32\\ROUTE.EXE\" print",
+      "kind": "observed"
+    },
+    {
+      "summary": "Exécution de commandes système pour la découverte de réseau.",
+      "evidence": "procmon: \"C:\\Windows\\system32\\ARP.EXE\" -a",
+      "kind": "observed"
+    },
+    {
+      "summary": "Écriture d'un fichier local.",
+      "evidence": "C:\\travail\\malsight_t08.txt",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "a8957953c905b4f7c069d1f759816f77a93a0334ca0c8436fd91993676a3cf90",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "2006d0747f6ab9022f05118743b17516",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\malsight_t08.txt",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion\\Parameters",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion\\Parameters\\TrapPollTimeMilliSecs",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1082",
+      "name": "System Information Discovery",
+      "tactic": "discovery",
+      "source": "llm",
+      "confidence": "medium",
+      "evidence": "Exécution de \"C:\\Windows\\system32\\ipconfig.exe\" /all, \"C:\\Windows\\system32\\ROUTE.EXE\" print, \"C:\\Windows\\system32\\ARP.EXE\" -a"
+    }
+  ],
+  "countermeasures": [
+    {
+      "id": "D3-PSA",
+      "name": "Process Spawn Analysis",
+      "technique": "T1082",
+      "tactic": "Detect",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SCA",
+      "name": "System Call Analysis",
+      "technique": "T1082",
+      "tactic": "Detect",
+      "artifact": "System Call",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EAL",
+      "name": "Executable Allowlisting",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EDL",
+      "name": "Executable Denylisting",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-HBPI",
+      "name": "Hardware-based Process Isolation",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:Hardware-basedProcessIsolation/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SCF",
+      "name": "System Call Filtering",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "System Call",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallFiltering/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-DE",
+      "name": "Decoy Environment",
+      "technique": "T1082",
+      "tactic": "Deceive",
+      "artifact": "Decoy Artifact",
+      "url": "https://d3fend.mitre.org/technique/d3f:DecoyEnvironment/",
+      "source": "d3fend"
+    }
+  ],
+  "recommendations": [
+    "Surveiller l'exécution de commandes système courantes comme `ipconfig.exe`, `route.exe` et `arp.exe` (T1082) en analysant les arguments passés, car ces outils sont souvent utilisés pour la reconnaissance réseau.",
+    "Mettre en place des règles de détection (ex: Sysmon) pour surveiller la création de processus utilisant des outils système standards avec des arguments spécifiques (ex: `ipconfig.exe /all`, `route.exe print`, `arp.exe -a`). (D3-PSA)",
+    "Durcir les politiques de registre pour surveiller toute modification des clés associées à l'agent RFC1156, notamment `HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent` et ses sous-clés, pour détecter des tentatives de persistance ou de modification de configuration. (D3-SCA)",
+    "Implémenter des mécanismes de contrôle d'application (Application Whitelisting) pour restreindre l'exécution des outils système uniquement aux chemins et contextes attendus, limitant ainsi l'utilisation abusive de `ipconfig.exe`, `route.exe`, et `arp.exe`. (D3-EAL)",
+    "Surveiller les tentatives de création de fichiers dans des répertoires inhabituels ou non liés aux opérations normales, comme `C:\\travail\\malsight_t08.txt`, en tant qu'indicateur potentiel de dépôt de données ou de résultats de reconnaissance."
+  ],
+  "uncertainties": [],
+  "rejected_claims": []
+}

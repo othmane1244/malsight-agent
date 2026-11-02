@@ -1,0 +1,193 @@
+{
+  "sample": {
+    "filename": "T12_scenario_combine.ps1",
+    "sha256": "561a7e11d3359407846f22cabacbe578fe4b49555660b122e90cd9c2d1d39586",
+    "md5": "acbdc6e0398ec6b1e8d774cd8e32b8bf",
+    "size": 1904,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon est un script PowerShell (déduit du nom de fichier `T12_scenario_combine.ps1`) qui exécute des actions de persistance et de collecte d'informations système. Il écrit un fichier dans le répertoire `C:\\travail\\` et crée une entrée de registre pour assurer la persistance au démarrage. Il tente également d'exécuter `systeminfo.exe` et de communiquer avec le domaine `c2.malsight.lab`.",
+  "behaviors": [
+    {
+      "summary": "Création de fichiers et exfiltration potentielle d'informations.",
+      "evidence": "files_written: [\"C:\\travail\\malsight_t12_info.txt\"]",
+      "kind": "observed"
+    },
+    {
+      "summary": "Mise en place d'un mécanisme de persistance au niveau du registre.",
+      "evidence": "registry_keys_set: [\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\MalsightTest12\"]",
+      "kind": "observed"
+    },
+    {
+      "summary": "Exécution d'un outil système pour collecter des informations sur le système.",
+      "evidence": "processes_created: [\"\\\"C:\\Windows\\system32\\systeminfo.exe\"\"]",
+      "kind": "observed"
+    },
+    {
+      "summary": "Tentative de communication réseau avec un domaine spécifique.",
+      "evidence": "domains: [\"c2.malsight.lab\"]",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "561a7e11d3359407846f22cabacbe578fe4b49555660b122e90cd9c2d1d39586",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "acbdc6e0398ec6b1e8d774cd8e32b8bf",
+      "source": "fichier"
+    },
+    {
+      "type": "domain",
+      "value": "c2.malsight.lab",
+      "source": "extraction"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\malsight_t12_info.txt",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\MalsightTest12",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1059.001",
+      "name": "PowerShell",
+      "tactic": "execution",
+      "source": "llm",
+      "confidence": "medium",
+      "evidence": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\MalsightTest12"
+    }
+  ],
+  "countermeasures": [
+    {
+      "id": "D3-FE",
+      "name": "File Encryption",
+      "technique": "T1059.001",
+      "tactic": "Harden",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileEncryption/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-DA",
+      "name": "Dynamic Analysis",
+      "technique": "T1059.001",
+      "tactic": "Detect",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:DynamicAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EFA",
+      "name": "Emulated File Analysis",
+      "technique": "T1059.001",
+      "tactic": "Detect",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:EmulatedFileAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FA",
+      "name": "File Analysis",
+      "technique": "T1059.001",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FIM",
+      "name": "File Integrity Monitoring",
+      "technique": "T1059.001",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CF",
+      "name": "Content Filtering",
+      "technique": "T1059.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentFiltering/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CM",
+      "name": "Content Modification",
+      "technique": "T1059.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentModification/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CQ",
+      "name": "Content Quarantine",
+      "technique": "T1059.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentQuarantine/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EAL",
+      "name": "Executable Allowlisting",
+      "technique": "T1059.001",
+      "tactic": "Isolate",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EDL",
+      "name": "Executable Denylisting",
+      "technique": "T1059.001",
+      "tactic": "Isolate",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-LFP",
+      "name": "Local File Permissions",
+      "technique": "T1059.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:LocalFilePermissions/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-RFAM",
+      "name": "Remote File Access Mediation",
+      "technique": "T1059.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:RemoteFileAccessMediation/",
+      "source": "d3fend"
+    }
+  ],
+  "recommendations": [
+    "Surveiller la création de clés de registre dans les chemins de démarrage utilisateur, comme HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run, pour détecter l'ajout de tâches persistantes (D3-FIM).",
+    "Mettre en place des politiques de sécurité pour restreindre l'exécution de scripts PowerShell depuis des chemins non approuvés ou des clés de registre de démarrage (D3-EAL).",
+    "Surveiller les modifications des clés de registre de démarrage (HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run) pour détecter toute modification non autorisée (D3-FIM).",
+    "Utiliser des solutions de détection des comportements pour identifier l'exécution de scripts PowerShell (D3-DA).",
+    "Bloquer l'exécution de fichiers basés sur des hachages connus (sha256: 561a7e11d3359407846f22cabacbe578fe4b49555660b122e90cd9c2d1d39586, md5: acbdc6e0398ec6b1e8d774cd8e32b8bf) (D3-CF).",
+    "Surveiller les tentatives de connexion ou de résolution DNS vers des domaines connus comme c2.malsight.lab (D3-RFAM)."
+  ],
+  "uncertainties": [
+    "Le type de fichier est indiqué comme \"unknown\" dans l'en-tête, ce qui rend l'analyse de son exécution initiale incertaine.",
+    "L'activité réseau avec le domaine \"c2.malsight.lab\" est observée, mais il n'y a pas de preuve de connexion établie ou de données échangées, ce qui rend la nature de cette communication incertaine (tentative ou succès)."
+  ],
+  "rejected_claims": []
+}

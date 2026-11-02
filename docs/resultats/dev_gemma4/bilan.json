@@ -1,0 +1,696 @@
+{
+ "T01": {
+  "echantillon": "T01",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 113.5,
+  "attack_trouvees": [
+   "T1547.001"
+  ],
+  "attack_attendues": [
+   "T1547.001"
+  ],
+  "attack_vraies": [
+   "T1547.001"
+  ],
+  "attack_en_trop": [],
+  "attack_ratees": [],
+  "iocs_trouves": 3,
+  "iocs_attendus": 3,
+  "iocs_total": 3,
+  "comportements_observes": 3,
+  "comportements_inferes": 0,
+  "rejets": [],
+  "incertitudes": [],
+  "resume": "L'échantillon est un script PowerShell (filename: T01_persistance_run.ps1) qui exécute des actions de persistance et de modification de fichiers. Il écrit un fichier dans le répertoire C:\\travail\\malsight_test.txt et établit une entrée de registre pour assurer sa persistance au démarrage de l'utilisateur. Il tente également une activité réseau vers le domaine test.malsight.lab.",
+  "comportements": [
+   [
+    "observed",
+    "Écriture de fichiers",
+    "files_written: [\"C:\\travail\\malsight_test.txt\"]"
+   ],
+   [
+    "observed",
+    "Modification du registre pour la persistance",
+    "registry_keys_set: [\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\MalsightTest\"]"
+   ],
+   [
+    "observed",
+    "Tentative de communication réseau",
+    "domains: [\"test.malsight.lab\"]"
+   ]
+  ],
+  "techniques": [
+   [
+    "T1547.001",
+    "Registry Run Keys / Startup Folder",
+    "registry_keys_set: [\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\MalsightTest\"]"
+   ]
+  ],
+  "contre_mesures": 12,
+  "recommandations": 6
+ },
+ "T02": {
+  "echantillon": "T02",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 160.4,
+  "attack_trouvees": [
+   "T1053",
+   "T1027"
+  ],
+  "attack_attendues": [
+   "T1053.005"
+  ],
+  "attack_vraies": [],
+  "attack_en_trop": [
+   "T1027",
+   "T1053"
+  ],
+  "attack_ratees": [
+   "T1053.005"
+  ],
+  "iocs_trouves": 2,
+  "iocs_attendus": 2,
+  "iocs_total": 15,
+  "comportements_observes": 14,
+  "comportements_inferes": 0,
+  "rejets": [],
+  "incertitudes": [],
+  "resume": "L'échantillon est un script PowerShell (`T02_tache_planifiee.ps1`) qui a interagi avec le système de planification des tâches de Windows. Il a écrit un fichier dans le répertoire des tâches système et a créé plusieurs clés de registre associées à la planification de tâches, suggérant la création ou la modification d'une tâche planifiée. Aucune activité réseau ou processus n'a été observé.",
+  "comportements": [
+   [
+    "observed",
+    "Création de fichier système",
+    "C:\\Windows\\System32\\Tasks\\MalsightTest"
+   ],
+   [
+    "observed",
+    "Modification du registre pour la planification des tâches",
+    "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo"
+   ],
+   [
+    "observed",
+    "Modification du registre pour la planification des tâches",
+    "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest"
+   ],
+   [
+    "observed",
+    "Modification du registre pour la planification des tâches",
+    "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest\\SD"
+   ],
+   [
+    "observed",
+    "Modification du registre pour la planification des tâches",
+    "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest\\Id"
+   ],
+   [
+    "observed",
+    "Modification du registre pour la planification des tâches",
+    "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest\\Index"
+   ],
+   [
+    "observed",
+    "Modification du registre pour la planification des tâches",
+    "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Path"
+   ],
+   [
+    "observed",
+    "Modification du registre pour la planification des tâches",
+    "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Hash"
+   ],
+   [
+    "observed",
+    "Modification du registre pour la planification des tâches",
+    "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Plain\\{7497102D-8538-4CE3-BADF-E83613BEE80F}"
+   ],
+   [
+    "observed",
+    "Modification du registre pour la planification des tâches",
+    "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Schema"
+   ],
+   [
+    "observed",
+    "Modification du registre pour la planification des tâches",
+    "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\URI"
+   ],
+   [
+    "observed",
+    "Modification du registre pour la planification des tâches",
+    "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Triggers"
+   ],
+   [
+    "observed",
+    "Modification du registre pour la planification des tâches",
+    "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Actions"
+   ],
+   [
+    "observed",
+    "Modification du registre pour la planification des tâches",
+    "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\DynamicInfo"
+   ]
+  ],
+  "techniques": [
+   [
+    "T1053",
+    "Scheduled Task/Job",
+    "Création de fichier dans C:\\Windows\\System32\\Tasks\\MalsightTest"
+   ],
+   [
+    "T1027",
+    "Obfuscated Files or Information",
+    "Modification de clés de registre liées à la planification des tâches (HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\*)"
+   ]
+  ],
+  "contre_mesures": 12,
+  "recommandations": 6
+ },
+ "T03": {
+  "echantillon": "T03",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 110.4,
+  "attack_trouvees": [],
+  "attack_attendues": [
+   "T1543.003"
+  ],
+  "attack_vraies": [],
+  "attack_en_trop": [],
+  "attack_ratees": [
+   "T1543.003"
+  ],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "iocs_total": 7,
+  "comportements_observes": 1,
+  "comportements_inferes": 0,
+  "rejets": [
+   "Recommandation citant un ID D3FEND absent du cache (D3-REG) : Surveiller la création ou la modification des clés de registre suivantes : HKLM\\System\\CurrentControlSet\\Services\\MalsightTest, HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\DisplayName, HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\ErrorControl, HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\ImagePath, HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\ObjectName, HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\Start, et HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\Type. (D3-REG)",
+   "Recommandation citant un ID D3FEND absent du cache (D3-FILE) : Surveiller l'écriture de fichiers avec les hachages SHA256 : bd8fd8f188f1c0310a195806b74e512c7fb0eacca6daeadbf2dafa54c2ffa01f et MD5 : bbe26e04013dda9baceada038738c305. (D3-FILE)",
+   "Recommandation citant un ID D3FEND absent du cache (D3-PRIV) : Appliquer le principe du moindre privilège pour limiter les droits d'écriture dans les clés de registre système critiques, en particulier dans HKLM\\System\\CurrentControlSet\\Services. (D3-PRIV)",
+   "Recommandation citant un ID D3FEND absent du cache (D3-SVC) : Surveiller les tentatives de modification des services système (création/modification de clés sous HKLM\\System\\CurrentControlSet\\Services) pour détecter des changements non autorisés. (D3-SVC)"
+  ],
+  "incertitudes": [
+   "Aucune activité réseau, processus ou fichier n'a été observée, ce qui limite la compréhension complète du comportement de l'échantillon."
+  ],
+  "resume": "L'échantillon est un script PowerShell (`T03_service.ps1`) qui interagit avec le système d'exploitation en modifiant des clés de registre pour créer ou configurer un service système nommé `MalsightTest`. Aucune activité réseau, création de processus ou modification de fichiers n'a été observée dans les données fournies. L'activité principale est la persistance via le registre.",
+  "comportements": [
+   [
+    "observed",
+    "Modification du registre pour la persistance de service.",
+    "HKLM\\System\\CurrentControlSet\\Services\\MalsightTest"
+   ]
+  ],
+  "techniques": [],
+  "contre_mesures": 0,
+  "recommandations": 0
+ },
+ "T04": {
+  "echantillon": "T04",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 107.8,
+  "attack_trouvees": [
+   "T1547.001"
+  ],
+  "attack_attendues": [
+   "T1037.001"
+  ],
+  "attack_vraies": [],
+  "attack_en_trop": [
+   "T1547.001"
+  ],
+  "attack_ratees": [
+   "T1037.001"
+  ],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "iocs_total": 2,
+  "comportements_observes": 2,
+  "comportements_inferes": 0,
+  "rejets": [],
+  "incertitudes": [
+   "Aucune activité réseau, création de processus ou écriture de fichiers n'a été observée, ce qui limite la compréhension complète du comportement de l'échantillon."
+  ],
+  "resume": "L'échantillon est un script PowerShell nommé \"T04_script_logon.ps1\". L'analyse dynamique montre que ce script a modifié des clés de registre spécifiques, notamment dans les chemins liés aux scripts de connexion utilisateur et au cache des tâches planifiées. Aucune activité réseau, création de processus ou écriture de fichiers n'a été observée dans les données fournies.",
+  "comportements": [
+   [
+    "observed",
+    "Modification des clés de registre pour potentiellement exécuter un script au logon de l'utilisateur.",
+    "HKCU\\Environment\\UserInitMprLogonScript"
+   ],
+   [
+    "observed",
+    "Modification des clés de registre liées au cache des tâches planifiées.",
+    "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo"
+   ]
+  ],
+  "techniques": [
+   [
+    "T1547.001",
+    "Registry Run Keys / Startup Folder",
+    "HKCU\\Environment\\UserInitMprLogonScript"
+   ]
+  ],
+  "contre_mesures": 12,
+  "recommandations": 5
+ },
+ "T05": {
+  "echantillon": "T05",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 131.3,
+  "attack_trouvees": [
+   "T1071.001"
+  ],
+  "attack_attendues": [
+   "T1112"
+  ],
+  "attack_vraies": [],
+  "attack_en_trop": [
+   "T1071.001"
+  ],
+  "attack_ratees": [
+   "T1112"
+  ],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "iocs_total": 8,
+  "comportements_observes": 2,
+  "comportements_inferes": 0,
+  "rejets": [
+   "Recommandation citant un ID D3FEND absent du cache (D3-REG) : Surveiller la création ou la modification des clés de registre suivantes : HKCU\\Software\\MalsightTest, HKCU\\Software\\MalsightTest\\Config, HKCU\\Software\\MalsightTest\\DynamicInfo (ou toute clé sous HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power) pour détecter des activités suspectes (D3-REG).",
+   "Recommandation citant un ID D3FEND absent du cache (D3-FILE) : Surveiller les modifications des fichiers de base de données de notifications Windows, tels que C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Microsoft\\Windows\\Notifications\\wpndatabase.db-wal, car ces fichiers sont des cibles potentielles pour la persistance ou l'exfiltration d'informations (D3-FILE).",
+   "Recommandation citant un ID D3FEND absent du cache (D3-HASH) : Mettre en place des règles de détection (YARA/Sigma) pour identifier les hachages SHA256 (5bd166c11137cafde8f578e7a72d88f0632df4a1bf3a368bef4e1e96e5dd4b7e) et MD5 (abd04bcc990942fbf87ef91ba187bc1e) associés à l'échantillon (D3-HASH).",
+   "Recommandation citant un ID D3FEND absent du cache (D3-API) : Surveiller les appels d'API ou les opérations de registre ciblant des chemins spécifiques comme HKCU\\Software\\MalsightTest pour détecter des tentatives de persistance ou de configuration malveillante (D3-API).",
+   "Recommandation citant un ID D3FEND absent du cache (D3-REG) : Durcir les politiques de registre pour limiter les modifications dans les sous-clés de notifications Windows (ex: HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power) pour empêcher la modification des paramètres système (D3-REG)."
+  ],
+  "incertitudes": [
+   "Aucune activité réseau n'a été observée, ce qui empêche de déterminer si des communications externes ont eu lieu."
+  ],
+  "resume": "L'échantillon est un script PowerShell (`T05_registre.ps1`) qui a interagi avec le système en modifiant plusieurs clés de registre et en écrivant un fichier local. Aucune activité réseau ou processus créé n'a été observé. Les modifications de registre ciblent des emplacements liés aux notifications Windows et au planificateur de tâches, ainsi que la création d'une base de données de notifications.",
+  "comportements": [
+   [
+    "observed",
+    "Modification du registre pour créer des clés de configuration et des entrées de notifications.",
+    "HKCU\\Software\\MalsightTest, HKCU\\Software\\MalsightTest\\Config, HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power, HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power\\Setting, HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power\\appType, HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power\\wnsId, HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo"
+   ],
+   [
+    "observed",
+    "Écriture d'un fichier de base de données de notifications.",
+    "C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Microsoft\\Windows\\Notifications\\wpndatabase.db-wal"
+   ]
+  ],
+  "techniques": [
+   [
+    "T1071.001",
+    "Web Protocols",
+    "HKCU\\Software\\MalsightTest"
+   ]
+  ],
+  "contre_mesures": 0,
+  "recommandations": 0
+ },
+ "T06": {
+  "echantillon": "T06",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 130.0,
+  "attack_trouvees": [
+   "T1027.002"
+  ],
+  "attack_attendues": [
+   "T1059.001"
+  ],
+  "attack_vraies": [],
+  "attack_en_trop": [
+   "T1027.002"
+  ],
+  "attack_ratees": [
+   "T1059.001"
+  ],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "iocs_total": 1,
+  "comportements_observes": 2,
+  "comportements_inferes": 0,
+  "rejets": [],
+  "incertitudes": [],
+  "resume": "L'échantillon est un script PowerShell (`T06_powershell_encode.ps1`) qui exécute une commande encodée via `powershell.exe`. Il écrit ensuite un fichier nommé `malsight_t06.txt` dans le répertoire `C:\\travail\\`. Aucune activité réseau n'a été observée. L'exécution de la commande encodée est la principale activité observée.",
+  "comportements": [
+   [
+    "observed",
+    "Exécution de PowerShell avec une commande encodée.",
+    "processes_created: \"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\" -NoProfile -EncodedCommand UwBlAHQALQBDAG8AbgB0AGUAbgB0ACAALQBQAGEAdABoACAAJwBDADoAXAB0AHIAYQB2AGEAaQBsAFwAbQBhAGwAcwBpAGcAaAB0AF8AdAAwADYALgB0AHgAdAAnACAALQBWAGEAbAB1AGUAIAAnAE0AYQBsAFMAaQBnAGgAdAAgAFQAMAA2ACcA\""
+   ],
+   [
+    "observed",
+    "Écriture d'un fichier sur le système de fichiers.",
+    "files_written: [\"C:\\travail\\malsight_t06.txt\"]"
+   ]
+  ],
+  "techniques": [
+   [
+    "T1027.002",
+    "PowerShell: Encoded Command Execution",
+    "processes_created: \"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\" -NoProfile -EncodedCommand UwBlAHQALQBDAG8AbgB0AGUAbgB0ACAALQBQAGEAdABoACAAJwBDADoAXAB0AHIAYQB2AGEAaQBsAFwAbQBhAGwAcwBpAGcAaAB0AF8AdAAwADYALgB0AHgAdAAnACAALQBWAGEAbAB1AGUAIAAnAE0AYQBsAFMAaQBnAGgAdAAgAFQAMAA2ACcA\""
+   ]
+  ],
+  "contre_mesures": 0,
+  "recommandations": 6
+ },
+ "T07": {
+  "echantillon": "T07",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 119.4,
+  "attack_trouvees": [
+   "T1082"
+  ],
+  "attack_attendues": [
+   "T1082"
+  ],
+  "attack_vraies": [
+   "T1082"
+  ],
+  "attack_en_trop": [],
+  "attack_ratees": [],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "iocs_total": 1,
+  "comportements_observes": 2,
+  "comportements_inferes": 0,
+  "rejets": [],
+  "incertitudes": [],
+  "resume": "L'échantillon, nommé \"T07_decouverte_systeme.ps1\", est un script PowerShell qui exécute des outils système standard pour collecter des informations sur l'environnement hôte. Il écrit également un fichier texte contenant potentiellement ces informations dans le répertoire \"C:\\travail\\\".",
+  "comportements": [
+   [
+    "observed",
+    "Exécution de commandes système pour la découverte d'informations sur le système.",
+    "processes_created: [\"C:\\Windows\\system32\\HOSTNAME.EXE\", \"C:\\Windows\\system32\\systeminfo.exe\"]"
+   ],
+   [
+    "observed",
+    "Écriture d'un fichier contenant des données dans le répertoire \"C:\\travail\\\".",
+    "files_written: [\"C:\\travail\\malsight_t07.txt\"]"
+   ]
+  ],
+  "techniques": [
+   [
+    "T1082",
+    "System Information Discovery",
+    "processes_created: [\"C:\\Windows\\system32\\HOSTNAME.EXE\", \"C:\\Windows\\system32\\systeminfo.exe\"]"
+   ]
+  ],
+  "contre_mesures": 7,
+  "recommandations": 5
+ },
+ "T08": {
+  "echantillon": "T08",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 133.7,
+  "attack_trouvees": [
+   "T1082"
+  ],
+  "attack_attendues": [
+   "T1016"
+  ],
+  "attack_vraies": [],
+  "attack_en_trop": [
+   "T1082"
+  ],
+  "attack_ratees": [
+   "T1016"
+  ],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "iocs_total": 5,
+  "comportements_observes": 8,
+  "comportements_inferes": 0,
+  "rejets": [],
+  "incertitudes": [],
+  "resume": "L'échantillon, nommé \"T08_decouverte_reseau.ps1\", exécute plusieurs commandes système courantes pour la découverte de réseau et modifie des clés de registre spécifiques. Il écrit également un fichier local. Aucune activité réseau externe n'a été observée. Les actions observées sont principalement liées à la reconnaissance du système.",
+  "comportements": [
+   [
+    "observed",
+    "Modification du registre pour créer des clés associées à un agent.",
+    "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent"
+   ],
+   [
+    "observed",
+    "Création de clés de registre spécifiques sous HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent.",
+    "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion"
+   ],
+   [
+    "observed",
+    "Création de clés de registre spécifiques sous HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion.",
+    "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion\\Parameters"
+   ],
+   [
+    "observed",
+    "Modification de la valeur de registre \"TrapPollTimeMilliSecs\" sous HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion\\Parameters.",
+    "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion\\Parameters\\TrapPollTimeMilliSecs"
+   ],
+   [
+    "observed",
+    "Exécution de commandes système pour la découverte de réseau.",
+    "procmon: \"C:\\Windows\\system32\\ipconfig.exe\" /all"
+   ],
+   [
+    "observed",
+    "Exécution de commandes système pour la découverte de réseau.",
+    "procmon: \"C:\\Windows\\system32\\ROUTE.EXE\" print"
+   ],
+   [
+    "observed",
+    "Exécution de commandes système pour la découverte de réseau.",
+    "procmon: \"C:\\Windows\\system32\\ARP.EXE\" -a"
+   ],
+   [
+    "observed",
+    "Écriture d'un fichier local.",
+    "C:\\travail\\malsight_t08.txt"
+   ]
+  ],
+  "techniques": [
+   [
+    "T1082",
+    "System Information Discovery",
+    "Exécution de \"C:\\Windows\\system32\\ipconfig.exe\" /all, \"C:\\Windows\\system32\\ROUTE.EXE\" print, \"C:\\Windows\\system32\\ARP.EXE\" -a"
+   ]
+  ],
+  "contre_mesures": 7,
+  "recommandations": 5
+ },
+ "T09": {
+  "echantillon": "T09",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 111.3,
+  "attack_trouvees": [
+   "T1005"
+  ],
+  "attack_attendues": [
+   "T1560"
+  ],
+  "attack_vraies": [],
+  "attack_en_trop": [
+   "T1005"
+  ],
+  "attack_ratees": [
+   "T1560"
+  ],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "iocs_total": 6,
+  "comportements_observes": 3,
+  "comportements_inferes": 0,
+  "rejets": [],
+  "incertitudes": [],
+  "resume": "L'échantillon est un script PowerShell (T09_archivage.ps1) qui exécute des opérations de système de fichiers. Il écrit plusieurs fichiers dans le répertoire `C:\\travail\\collecte` et crée ensuite une archive ZIP de ces fichiers dans le même répertoire. Aucune activité réseau, de registre, ou de processus n'a été observée. L'activité se limite à la collecte et l'archivage de données locales.",
+  "comportements": [
+   [
+    "observed",
+    "Création et écriture de fichiers dans un répertoire de collecte.",
+    "C:\\travail\\collecte"
+   ],
+   [
+    "observed",
+    "Écriture de fichiers spécifiques dans le répertoire de collecte.",
+    "C:\\travail\\collecte\\document1.txt, C:\\travail\\collecte\\document2.txt, C:\\travail\\collecte\\document3.txt"
+   ],
+   [
+    "observed",
+    "Création d'un fichier compressé (archive ZIP) contenant les fichiers collectés.",
+    "C:\\travail\\collecte.zip"
+   ]
+  ],
+  "techniques": [
+   [
+    "T1005",
+    "Data from Local System",
+    "L'échantillon écrit et archive des fichiers locaux dans C:\\travail\\collecte, ce qui est une forme de collecte de données."
+   ]
+  ],
+  "contre_mesures": 0,
+  "recommandations": 4
+ },
+ "T10": {
+  "echantillon": "T10",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 133.5,
+  "attack_trouvees": [
+   "T1071.001"
+  ],
+  "attack_attendues": [
+   "T1105"
+  ],
+  "attack_vraies": [],
+  "attack_en_trop": [
+   "T1071.001"
+  ],
+  "attack_ratees": [
+   "T1105"
+  ],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "iocs_total": 19,
+  "comportements_observes": 3,
+  "comportements_inferes": 0,
+  "rejets": [
+   "Recommandation citant un ID D3FEND absent du cache (D3-REG) : Surveiller les modifications des clés de registre liées au traçage de PowerShell, telles que HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASAPI32\\* ou HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASMANCS\\* (D3-REG).",
+   "Recommandation citant un ID D3FEND absent du cache (D3-FILE) : Mettre en place des règles de détection pour les accès ou modifications des fichiers dans le chemin C:\\travail\\ (D3-FILE).",
+   "Recommandation citant un ID D3FEND absent du cache (D3-NET) : Surveiller les connexions sortantes vers le domaine update.malsight.lab (D3-NET).",
+   "Recommandation citant un ID D3FEND absent du cache (D3-DNS) : Bloquer ou surveiller les requêtes DNS pour le domaine update.malsight.lab (D3-DNS).",
+   "Recommandation citant un ID D3FEND absent du cache (D3-REG) : Appliquer le principe du moindre privilège pour limiter les droits d'écriture et de modification des clés de registre de traçage de PowerShell (D3-REG).",
+   "Recommandation citant un ID D3FEND absent du cache (D3-SCRIPT) : Surveiller l'exécution de scripts utilisant des protocoles web (T1071.001) en contexte de travail suspect (D3-SCRIPT)."
+  ],
+  "incertitudes": [
+   "L'activité réseau observée est limitée à un domaine (`update.malsight.lab`) et ne confirme pas une connexion établie ou un transfert de données, ce qui est considéré comme une tentative.",
+   "Aucune API spécifique n'est listée dans `top_api_calls` ou `sensitive_apis`, rendant difficile la caractérisation des appels système précis."
+  ],
+  "resume": "L'échantillon est un script PowerShell nommé \"T10_telechargement.ps1\". Son activité observée principale consiste à modifier des clés de registre liées au traçage de PowerShell, spécifiquement sous les chemins `HKLM\\Software\\Microsoft\\Tracing\\powershell_RASAPI32` et `HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASMANCS`. Il tente également de communiquer avec le domaine `update.malsight.lab` via une URL `http://update.malsight.lab/outil.txt`. Aucune exécution de processus ou activité réseau réussie n'est confirmée, mais les modifications de registre et les tentatives de connexion sont notables.",
+  "comportements": [
+   [
+    "observed",
+    "Modification des paramètres de traçage de PowerShell.",
+    "HKLM\\Software\\Microsoft\\Tracing\\powershell_RASAPI32"
+   ],
+   [
+    "observed",
+    "Modification des paramètres de traçage de PowerShell (second ensemble de clés).",
+    "HKLM\\SOFTWARE\\Microsoft\\Tracing\\powershell_RASMANCS"
+   ],
+   [
+    "observed",
+    "Tentative de communication réseau avec un domaine spécifique.",
+    "update.malsight.lab"
+   ]
+  ],
+  "techniques": [
+   [
+    "T1071.001",
+    "Web Protocols",
+    "update.malsight.lab"
+   ]
+  ],
+  "contre_mesures": 0,
+  "recommandations": 0
+ },
+ "T11": {
+  "echantillon": "T11",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 85.1,
+  "attack_trouvees": [],
+  "attack_attendues": [],
+  "attack_vraies": [],
+  "attack_en_trop": [],
+  "attack_ratees": [],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "iocs_total": 1,
+  "comportements_observes": 1,
+  "comportements_inferes": 0,
+  "rejets": [],
+  "incertitudes": [
+   "Aucune activité réseau, de registre ou de processus n'a été observée, ce qui limite la compréhension du comportement complet de l'échantillon."
+  ],
+  "resume": "L'échantillon est un script PowerShell nommé \"T11_temoin_negatif.ps1\". L'analyse dynamique montre qu'il écrit un fichier nommé \"journal_t11.txt\" dans le répertoire \"C:\\travail\\\". Aucune activité réseau, aucune modification de registre, ni création de processus n'ont été observées. L'analyse statique indique zéro importation de bibliothèques, zéro règle CAPA et zéro appel d'API sensible.",
+  "comportements": [
+   [
+    "observed",
+    "Écriture de fichier",
+    "files_written: [\"C:\\travail\\journal_t11.txt\"]"
+   ]
+  ],
+  "techniques": [],
+  "contre_mesures": 0,
+  "recommandations": 3
+ },
+ "T12": {
+  "echantillon": "T12",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 130.7,
+  "attack_trouvees": [
+   "T1059.001"
+  ],
+  "attack_attendues": [
+   "T1082",
+   "T1547.001"
+  ],
+  "attack_vraies": [],
+  "attack_en_trop": [
+   "T1059.001"
+  ],
+  "attack_ratees": [
+   "T1082",
+   "T1547.001"
+  ],
+  "iocs_trouves": 3,
+  "iocs_attendus": 3,
+  "iocs_total": 3,
+  "comportements_observes": 4,
+  "comportements_inferes": 0,
+  "rejets": [],
+  "incertitudes": [
+   "Le type de fichier est indiqué comme \"unknown\" dans l'en-tête, ce qui rend l'analyse de son exécution initiale incertaine.",
+   "L'activité réseau avec le domaine \"c2.malsight.lab\" est observée, mais il n'y a pas de preuve de connexion établie ou de données échangées, ce qui rend la nature de cette communication incertaine (tentative ou succès)."
+  ],
+  "resume": "L'échantillon est un script PowerShell (déduit du nom de fichier `T12_scenario_combine.ps1`) qui exécute des actions de persistance et de collecte d'informations système. Il écrit un fichier dans le répertoire `C:\\travail\\` et crée une entrée de registre pour assurer la persistance au démarrage. Il tente également d'exécuter `systeminfo.exe` et de communiquer avec le domaine `c2.malsight.lab`.",
+  "comportements": [
+   [
+    "observed",
+    "Création de fichiers et exfiltration potentielle d'informations.",
+    "files_written: [\"C:\\travail\\malsight_t12_info.txt\"]"
+   ],
+   [
+    "observed",
+    "Mise en place d'un mécanisme de persistance au niveau du registre.",
+    "registry_keys_set: [\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\MalsightTest12\"]"
+   ],
+   [
+    "observed",
+    "Exécution d'un outil système pour collecter des informations sur le système.",
+    "processes_created: [\"\\\"C:\\Windows\\system32\\systeminfo.exe\"\"]"
+   ],
+   [
+    "observed",
+    "Tentative de communication réseau avec un domaine spécifique.",
+    "domains: [\"c2.malsight.lab\"]"
+   ]
+  ],
+  "techniques": [
+   [
+    "T1059.001",
+    "PowerShell",
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\MalsightTest12"
+   ]
+  ],
+  "contre_mesures": 12,
+  "recommandations": 6
+ }
+}
