@@ -14,6 +14,8 @@ from dataclasses import dataclass, field
 from pathlib import Path, PureWindowsPath
 
 from malsight.extractors.dynamic import parse_sysmon_rows
+from malsight.extractors.lab import trouver_dossier  # noqa: F401  (réexporté pour la CLI et les tests)
+from malsight.schemas import Case
 
 # Champ du parseur Sysmon (DynamicData) correspondant à chaque type d'IOC de la vérité terrain
 _CHAMP_SYSMON = {"registry_key": "registry_keys_set", "file_path": "files_written",
@@ -42,16 +44,6 @@ def correspond(type_ioc: str, attendu: str, observe: str) -> bool:
     if type_ioc == "registry_key":
         return o == a or o.startswith(a + "\\")
     return o == a
-
-
-def trouver_dossier(chemin: Path) -> Path:
-    """Accepte un dossier de collecte, ou un dossier qui en contient exactement un."""
-    if (chemin / "sysmon.csv").exists():
-        return chemin
-    candidats = [d for d in chemin.iterdir() if d.is_dir() and (d / "sysmon.csv").exists()]
-    if len(candidats) != 1:
-        raise FileNotFoundError(f"{chemin} : {len(candidats)} dossier(s) de collecte trouvé(s), 1 attendu")
-    return candidats[0]
 
 
 def verite_pour(dossier: Path, verites: Path) -> Path:
@@ -99,6 +91,13 @@ def comparer(dossier: Path, verite: Path) -> tuple[dict, list[ResultatIoc]]:
     procmon = _preuves_procmon(csv_procmon, iocs) if csv_procmon.exists() else {}
     return vt, [ResultatIoc(ioc["type"], ioc["value"], sysmon[i], procmon.get(i, []))
                 for i, ioc in enumerate(iocs)]
+
+
+def ioc_dans_cas(case: Case, ioc: dict) -> list[str]:
+    """Observations du dossier de cas qui correspondent à un IOC attendu (vide si absent)."""
+    kind = {"registry_key": "registry", "file_path": "file", "domain": "domain", "ip": "ip"}.get(ioc["type"])
+    return [f"{o.value} [{'+'.join(o.sources)}, {o.attribution}]" for o in case.dynamic.observations
+            if o.kind == kind and correspond(ioc["type"], ioc["value"], o.value)]
 
 
 def tableau(vt: dict, resultats: list[ResultatIoc]) -> str:

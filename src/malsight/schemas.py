@@ -29,8 +29,19 @@ class ApiCall(BaseModel):
     args: dict[str, str] = Field(default_factory=dict)
 
 
+class Observation(BaseModel):
+    """Un élément dynamique observé, avec sa provenance (labo : fusion Sysmon + Procmon)."""
+    kind: Literal["process", "file", "registry", "domain", "ip"]
+    value: str
+    sources: list[str] = Field(default_factory=list)       # "sysmon", "procmon"
+    operations: list[str] = Field(default_factory=list)    # ex. "EID 13", "RegSetValue"
+    processes: list[str] = Field(default_factory=list)     # ex. "svchost.exe (1448)"
+    attribution: Literal["sample_tree", "service_window"] = "sample_tree"
+
+
 class DynamicData(BaseModel):
-    source: str = "none"                                  # "cape", "sysmon", ...
+    source: str = "none"                                  # "cape", "sysmon", "sysmon+procmon", ...
+    observations: list[Observation] = Field(default_factory=list)   # détail et provenance
     api_calls: list[ApiCall] = Field(default_factory=list)
     files_written: list[str] = Field(default_factory=list)
     registry_keys_set: list[str] = Field(default_factory=list)

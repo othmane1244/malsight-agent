@@ -25,10 +25,17 @@ def iocs_from_strings(strings: list[str]) -> dict[str, list[str]]:
 
 
 def build_case(sample: Path, cape_report: Path | None = None,
-               yara_rules: Path | None = None) -> Case:
+               yara_rules: Path | None = None, labo: Path | None = None) -> Case:
+    """Dossier de cas : analyse statique de l'échantillon + données dynamiques déjà produites
+    (rapport CAPE, ou dossier de collecte du labo sysmon.csv + procmon.csv)."""
+    if cape_report and labo:
+        raise ValueError("Donner un rapport CAPE ou un dossier du labo, pas les deux.")
     strings = static.extract_strings(sample)
     capa = static.run_capa(sample)
     dyn = DynamicData()
+    if labo:
+        from malsight.extractors.lab import load_lab_collection
+        dyn = load_lab_collection(labo)
     if cape_report:
         dyn = dynamic.load_cape(cape_report)
         capa += static.run_capa(cape_report)   # dynamic capa sur le rapport CAPE

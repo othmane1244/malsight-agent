@@ -7,6 +7,52 @@ est dans les [issues](https://github.com/othmane1244/malsight-agent/issues) et l
 
 ---
 
+## 2026-11-02 (nuit) : parseur Procmon et fusion Sysmon + Procmon (#8)
+
+### Fait
+- **Parseur Procmon** (`extractors/procmon.py`) : heure sans date (virgule ou point, AM/PM,
+  passage de minuit), entiers avec séparateur de milliers (`8 080`, `8,080`, `8.080`) ; garde
+  les écritures réussies (`RegSetValue`, `RegCreateKey` d'une clé nouvelle, `CreateFile` créé ou
+  écrasé, `WriteFile`, renommages), les processus et le réseau ; exclut outils du labo et `System`.
+- **Fusion** (`extractors/lab.py`) : arbre de processus de l'échantillon (racine `auto.json`,
+  descendants via Procmon et Sysmon EID 1) + écritures de `svchost`, `services`, `wmiprvse`
+  pendant que l'arbre est actif ; Sysmon hors arbre gardé seulement s'il est corroboré par
+  Procmon. Chaque élément devient une `Observation` (sources, opérations, processus, attribution
+  `sample_tree` / `service_window`), dédupliquée entre les deux sources.
+- **`malsight extract ECHANTILLON --labo cases/T02`** construit le dossier de cas à partir d'une
+  collecte du labo (en plus de `--cape-report`).
+
+### Vérification sur les 12 dossiers `cases/` et mesure du bruit
+Chaque IOC attendu est présent dans le dossier de cas généré (**17/17**). Bruit = observations
+extraites, sans et avec le filtre de bruit système connu (`BRUIT_SYSTEME` : métafichiers NTFS,
+journaux d'événements, WNF, BAM, Amcache, `GameConfigStore`, traçage WMI…) :
+
+| Cas | IOC | Sans filtre | Avec filtre | dont arbre de l'échantillon | dont fenêtre de services |
+| --- | --- | --- | --- | --- | --- |
+| T01 (manuel) | 3/3 | 710 | 99 | 3 | 96 |
+| T02 | 2/2 | 68 | 15 | 0 | 15 (tâche planifiée : TaskCache + fichier) |
+| T03 | 1/1 | 22 | 7 | 0 | 7 (clés du service MalsightTest) |
+| T04 | 1/1 | 22 | 2 | 1 | 1 |
+| T05 | 1/1 | 25 | 8 | 2 | 6 (service de notifications) |
+| T06 | 1/1 | 58 | 2 | 2 | 0 |
+| T07 | 1/1 | 79 | 3 | 3 | 0 |
+| T08 | 1/1 | 51 | 8 | 8 | 0 |
+| T09 | 1/1 | 54 | 5 | 5 | 0 |
+| T10 | 1/1 | 49 | 17 | 17 | 0 (16 clés de traçage RAS) |
+| **T11 (témoin négatif)** | 1/1 | **57** | **1** | 1 | 0 |
+| T12 | 3/3 | 95 | 4 | 4 | 0 |
+
+- **Témoin négatif T11 : 57 éléments extraits avant filtre, 1 après, pour 1 attendu** : plus
+  aucun faux positif dynamique. Hors T01 : 580 → 72 observations sur 11 échantillons.
+- **T01** reste bruité : collecte en mode manuel (pas d'`auto.json`), la racine est la console
+  qui a aussi fait la préparation et la collecte, donc la fenêtre couvre toute la session.
+  Le relancer en mode automatique (accord nécessaire) donnerait un T01 comparable aux autres.
+- **Limite** : la liste `BRUIT_SYSTEME` est tirée de ces 12 analyses ; elle doit être confirmée
+  sur de nouvelles collectes pour éviter le sur-ajustement. Le bruit restant (notifications pour
+  T05, traçage RAS pour T10) est laissé visible volontairement.
+
+---
+
 ## 2026-11-02 (soir) : série T03 à T12, jeu de test complet (#6 fermée)
 
 ### Fait

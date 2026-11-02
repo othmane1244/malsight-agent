@@ -13,10 +13,11 @@ app = typer.Typer(help="MalSight Agent : analyse défensive assistée par IA (p�
 @app.command()
 def extract(sample: Path, cape_report: Path = typer.Option(None, help="Rapport JSON CAPEv2"),
             yara_rules: Path = typer.Option(None, help="Dossier de règles .yar"),
+            labo: Path = typer.Option(None, help="Dossier de collecte du labo (sysmon.csv + procmon.csv), ex. cases/T02"),
             cases_dir: Path = Path("cases")):
-    """Analyse statique + lecture du rapport dynamique -> dossier de cas JSON."""
+    """Analyse statique + lecture des données dynamiques (CAPE ou labo) -> dossier de cas JSON."""
     from malsight.normalize import build_case, save_case
-    out = save_case(build_case(sample, cape_report, yara_rules), cases_dir)
+    out = save_case(build_case(sample, cape_report, yara_rules, labo), cases_dir)
     typer.echo(f"Dossier de cas : {out}")
 
 
