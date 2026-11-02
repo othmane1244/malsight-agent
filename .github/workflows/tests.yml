@@ -9,4 +9,4 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install pydantic jinja2 typer pytest stix2 && pip install -e .
-      - run: pytest -q
+      - run: pytest -q -m "slow or not slow"

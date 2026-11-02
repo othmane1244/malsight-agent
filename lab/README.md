@@ -13,6 +13,8 @@
 | `sysmon-malsight.xml` | Règles Sysmon maison (événement 11 dans `C:\travail\`), fusionnées dans la config SwiftOnSecurity |
 | `scripts/Merge-SysmonConfig.ps1` | Fusion des règles maison dans la config Sysmon de base (appelé par `setup-sandbox.ps1`) |
 | `scripts/collect.ps1` | Lancé après l'exécution : arrête Procmon et attend sa fin, convertit le PML en local, exporte Sysmon (EVTX + CSV), copie le tout dans les résultats |
+| `scripts/lancer-analyse.ps1` | **Mode automatique** (D3), sur l'hôte : un échantillon de test de bout en bout |
+| `scripts/analyse-auto.ps1` | Mode automatique, dans la sandbox : setup, exécution, attente, collecte, extinction |
 
 Aucun outil, échantillon ni journal n'est versionné : tout vit dans `C:\labo`, hors du dépôt.
 
@@ -47,7 +49,27 @@ Aucun outil, échantillon ni journal n'est versionné : tout vit dans `C:\labo`,
    `& C:\travail\T01_persistance_run.ps1` (la fenêtre de `setup-sandbox.ps1` a déjà
    ExecutionPolicy Bypass).
 
-## Procédure d'analyse (par échantillon)
+## Mode automatique (échantillons de test, décision D3)
+
+Pour un échantillon de `lab/echantillons-test/` ayant une vérité terrain, depuis la racine
+du dépôt, sur l'hôte :
+
+```powershell
+.\lab\scripts\lancer-analyse.ps1 -Echantillon T02            # attente de 90 s par défaut
+.\lab\scripts\lancer-analyse.ps1 -Echantillon T02 -SansLancer # vérifie et génère le .wsb seulement
+```
+
+Le script refuse tout identifiant qui ne correspond pas à exactement un script `Tnn_*.ps1`
+avec sa vérité terrain. Il copie scripts et échantillon dans `C:\labo\entree`, vérifie les
+prérequis, ouvre une sandbox (mêmes restrictions que `analyse.wsb`) qui prépare Sysmon/Procmon,
+exécute l'échantillon dans un processus séparé, attend 90 s, collecte, écrit `auto.json`
+(PID et code de sortie de l'échantillon) puis s'éteint. Sur l'hôte, le script attend le
+dossier de résultats (15 min au plus) et affiche son chemin. En cas d'erreur, la sandbox
+reste ouverte et le journal est dans `C:\labo\resultats\auto-erreur_<date>.log`.
+
+Un échantillon à la fois ; vider `C:\labo\resultats` entre deux analyses (étape 7 ci-dessous).
+
+## Procédure d'analyse manuelle (par échantillon)
 
 0. Sur l'hôte, depuis la racine du dépôt, vérifier les prérequis (code de sortie 0 attendu) :
 

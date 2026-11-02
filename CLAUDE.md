@@ -7,6 +7,7 @@ La conception de référence est dans [`docs/conception.md`](docs/conception.md)
 - Aucun code offensif : pas d'exploit, de charge utile, de comportement d'évasion ni d'outil d'attaque. Le projet ne produit que des règles de **détection** (YARA, Sigma) et des recommandations de durcissement et de remédiation.
 - **Évasion** : sont interdits les **comportements** d'évasion (masquage, suppression de traces, désactivation des défenses, obfuscation destinée à tromper), pas les techniques ATT&CK en tant qu'étiquettes. Un échantillon de test dont la technique est classée « Defense Evasion » est acceptable s'il n'a **aucun effet d'évasion réel** (ex. T05 / T1112 : écriture d'une clé applicative factice, voir D2 dans `docs/decisions.md`).
 - Aucune exécution d'échantillon, ni par le code du projet ni pendant le développement. L'analyse dynamique se fait en dehors du projet, dans le laboratoire isolé ; le projet ne fait que **lire** les rapports produits.
+- **Seule exception (D3)** : `lab/scripts/lancer-analyse.ps1` exécute un échantillon de `lab/echantillons-test/` ayant une vérité terrain, **uniquement dans une Windows Sandbox sans réseau**. Claude ne le lance **qu'avec l'accord explicite de l'utilisateur, donné pour cet échantillon précis, un échantillon à la fois** (un accord ne vaut pas pour le suivant). Le pipeline Python (`src/`) n'exécute jamais rien.
 
 ## Agent
 
@@ -23,7 +24,7 @@ La conception de référence est dans [`docs/conception.md`](docs/conception.md)
 
 - Python 3.11, venv dans `.venv` (Windows : `py -3.11 -m venv .venv`).
 - `capa` et `floss` sont des binaires autonomes (pas des paquets pip), à placer dans le `PATH`.
-- Lancer `pytest` avant chaque commit ; ne pas committer si un test échoue.
+- Lancer `pytest` avant chaque commit ; ne pas committer si un test échoue. Les tests qui lancent PowerShell sont marqués `slow` et exclus par défaut : lancer aussi `pytest -m slow` après toute modification de `lab/` (la CI lance tout).
 - Ajouter un test pour chaque nouvelle fonction.
 
 ## Langue

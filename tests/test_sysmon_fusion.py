@@ -26,6 +26,7 @@ def _fusion(base: Path, sortie: Path) -> ET.Element:
     return ET.parse(sortie).getroot()
 
 
+@pytest.mark.slow
 @pytest.mark.skipif(POWERSHELL is None, reason="PowerShell absent")
 def test_fusion_dans_groupe_existant(tmp_path):
     racine = _fusion(BASE, tmp_path / "fusion.xml")
@@ -37,6 +38,7 @@ def test_fusion_dans_groupe_existant(tmp_path):
     assert racine.findtext("HashAlgorithms") == "md5,sha256"
 
 
+@pytest.mark.slow
 @pytest.mark.skipif(POWERSHELL is None, reason="PowerShell absent")
 def test_fusion_cree_un_groupe_si_absent(tmp_path):
     base = tmp_path / "base.xml"

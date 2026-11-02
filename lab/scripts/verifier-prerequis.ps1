@@ -59,7 +59,7 @@ if (-not (Test-Path $cfg)) {
 }
 
 # --- Scripts copiés et à jour ------------------------------------------------------
-$attendus = @('setup-sandbox.ps1', 'collect.ps1', 'Merge-SysmonConfig.ps1', 'sysmon-malsight.xml')
+$attendus = @('setup-sandbox.ps1', 'collect.ps1', 'Merge-SysmonConfig.ps1', 'analyse-auto.ps1', 'sysmon-malsight.xml')
 foreach ($f in $attendus) {
     $cible = Join-Path $Scripts $f
     $source = if ($f -like '*.xml') { [IO.Path]::Combine($Depot, 'lab', $f) } else { [IO.Path]::Combine($Depot, 'lab', 'scripts', $f) }

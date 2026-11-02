@@ -98,3 +98,50 @@ est acceptable si le script n'a aucun effet d'évasion réel.
   `lab/echantillons-test/README.md` qu'il n'a aucun effet d'évasion réel.
 - T06 (`-EncodedCommand`) suit la même règle : la commande en clair est affichée avant
   l'exécution, l'encodage ne sert pas à tromper.
+
+---
+
+## D3 : mode automatique d'analyse (`lancer-analyse.ps1`)
+
+- **Date** : 2026-11-02
+- **Statut** : acceptée
+
+### Contexte
+
+Avec 12 échantillons de test (T01 à T12), la procédure manuelle (ouvrir la sandbox, copier,
+exécuter, attendre, collecter, fermer) devient longue et source d'erreurs. Le mode automatique
+était prévu dès la mise en place du labo (D1).
+
+### Décision
+
+`lab/scripts/lancer-analyse.ps1 -Echantillon T02`, lancé sur l'hôte :
+1. n'accepte qu'un identifiant `Tnn` correspondant à **exactement un** script de
+   `lab/echantillons-test/` **et** à une vérité terrain dans `lab/verite-terrain/` ;
+2. génère un `.wsb` temporaire à partir de `lab/analyse.wsb` (mêmes restrictions ; refus si le
+   réseau n'y est plus désactivé), dont la LogonCommand lance `analyse-auto.ps1` ;
+3. copie scripts et échantillon dans `C:\labo\entree`, vérifie les prérequis ;
+4. dans la sandbox, `analyse-auto.ps1` installe Sysmon/Procmon, exécute l'échantillon dans un
+   processus séparé, attend 90 s, lance `collect.ps1`, écrit `auto.json` (PID, code de sortie)
+   puis éteint la sandbox. En cas d'erreur, la sandbox reste ouverte et un journal
+   `auto-erreur_<date>.log` est copié dans les résultats.
+
+Le mode manuel (`lab/analyse.wsb`) reste disponible.
+
+### Justification
+
+- **Reproductibilité** : même délai, même procédure pour chaque échantillon ; comparaison
+  possible entre essais et entre échantillons pour l'évaluation (#16, #17).
+- **Meilleure attribution** : l'échantillon tourne dans son propre processus, dont le PID est
+  noté dans `auto.json` ; en manuel, T01 partageait la console de `setup-sandbox.ps1` (même PID).
+- **Sécurité inchangée** : mêmes restrictions que le mode manuel (réseau coupé, entrée en
+  lecture seule, sandbox jetable) ; la liste blanche empêche de lancer autre chose que les
+  scripts bénins de l'équipe, même par erreur.
+
+### Conséquences et garde-fous
+
+- Exception à la règle « aucune exécution d'échantillon » de `CLAUDE.md`, limitée à ce script
+  et à la Windows Sandbox. Le pipeline Python (`src/`) n'exécute toujours rien.
+- **Claude ne lance ce script qu'avec l'accord explicite de l'utilisateur, un échantillon à
+  la fois** ; un accord pour un échantillon ne vaut pas pour le suivant.
+- Les tests (`tests/test_lancer_analyse.py`) n'utilisent que `-SansLancer` : ils ne lancent
+  jamais de sandbox.

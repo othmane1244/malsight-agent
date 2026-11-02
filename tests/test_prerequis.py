@@ -8,7 +8,7 @@ import pytest
 RACINE = Path(__file__).resolve().parents[1]
 SCRIPT = RACINE / "lab" / "scripts" / "verifier-prerequis.ps1"
 POWERSHELL = shutil.which("powershell") or shutil.which("pwsh")
-pytestmark = pytest.mark.skipif(POWERSHELL is None, reason="PowerShell absent")
+pytestmark = [pytest.mark.slow, pytest.mark.skipif(POWERSHELL is None, reason="PowerShell absent")]
 
 
 @pytest.fixture
@@ -22,7 +22,7 @@ def labo(tmp_path):
     (outils / "Sysmon64.exe").write_bytes(b"")
     (outils / "Procmon64.exe").write_bytes(b"")
     shutil.copy(Path(__file__).parent / "fixtures" / "sysmon_base_mini.xml", outils / "sysmonconfig-export.xml")
-    for f in ("setup-sandbox.ps1", "collect.ps1", "Merge-SysmonConfig.ps1"):
+    for f in ("setup-sandbox.ps1", "collect.ps1", "Merge-SysmonConfig.ps1", "analyse-auto.ps1"):
         shutil.copy(RACINE / "lab" / "scripts" / f, scripts / f)
     shutil.copy(RACINE / "lab" / "sysmon-malsight.xml", scripts / "sysmon-malsight.xml")
     shutil.copy(RACINE / "lab" / "echantillons-test" / "T01_persistance_run.ps1", samples)

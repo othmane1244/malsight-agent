@@ -18,3 +18,9 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 malsight = ["report/templates/*.j2"]
+
+[tool.pytest.ini_options]
+# Les tests qui lancent PowerShell sont marqués « slow » et exclus par défaut.
+# Les lancer : pytest -m slow ; tout lancer (CI) : pytest -m "slow or not slow".
+markers = ["slow: lance PowerShell (exclu par défaut ; pytest -m slow pour les lancer)"]
+addopts = "-m 'not slow'"
