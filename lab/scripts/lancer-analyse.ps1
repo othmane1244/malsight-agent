@@ -100,8 +100,21 @@ while (-not $issue -and ((Get-Date) - $debut).TotalSeconds -lt $DelaiMax) {
 }
 Remove-Item $SortieWsb -ErrorAction SilentlyContinue
 
+# Après un succès, la sandbox s'éteint d'elle-même (shutdown /t 10) : attendre qu'elle soit
+# fermée avant de rendre la main, sinon l'analyse suivante trouverait une sandbox ouverte.
+if ($issue -like 'ok:*') {
+    $fin = (Get-Date).AddSeconds(180)
+    while ((Get-Process -Name 'WindowsSandbox*' -ErrorAction SilentlyContinue) -and (Get-Date) -lt $fin) {
+        Start-Sleep -Seconds 5
+    }
+    if (Get-Process -Name 'WindowsSandbox*' -ErrorAction SilentlyContinue) {
+        Write-Host 'Résultats complets, mais la sandbox est toujours ouverte après 180 s : la fermer avant l''analyse suivante.' -ForegroundColor Yellow
+        exit 1
+    }
+}
+
 switch -Wildcard ($issue) {
-    'ok:*'     { Write-Host "Analyse terminée : $($issue.Substring(3))" -ForegroundColor Green; exit 0 }
+    'ok:*'     { Write-Host "Analyse terminée : $($issue.Substring(3)) (sandbox fermée)" -ForegroundColor Green; exit 0 }
     'erreur:*' { Write-Host "Échec, journal : $($issue.Substring(7)) (la sandbox est restée ouverte)" -ForegroundColor Red; exit 1 }
     default    { Write-Host "Délai dépassé ($DelaiMax s) sans résultat : vérifier la fenêtre de la sandbox." -ForegroundColor Red; exit 1 }
 }
