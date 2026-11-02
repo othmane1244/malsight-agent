@@ -7,6 +7,25 @@ est dans les [issues](https://github.com/othmane1244/malsight-agent/issues) et l
 
 ---
 
+## 2026-11-02 (nuit) : D3FEND et premier essai de l'agent (#11, #12)
+
+### Fait
+- Contre-mesures MITRE D3FEND (D6) : cache local, vérification des IDs, section du rapport.
+- Premier essai de l'agent de bout en bout sur T01 avec `gemma4:e4b` (modèle de
+  développement, D5) : T1547.001 trouvée (1/1), JSON valide, 143 s. Trois défauts corrigés
+  (preuves vérifiées valeur par valeur, IOC abrégés exclus, tentative / réussite dans le prompt).
+
+### Limite connue : pertinence des contre-mesures D3FEND
+- Le vérificateur garantit qu'un ID D3FEND **existe** dans le cache et que D3FEND le **relie** à
+  une technique retenue ; il ne juge pas si son **usage** dans une recommandation est pertinent.
+  Exemple (essai gemma4:e4b) : D3-CF *Content Filtering*, qui porte sur des fichiers dans
+  D3FEND, est cité pour « bloquer l'accès aux domaines suspects ».
+- Choix assumé (pas de correction automatique) : c'est l'un des arguments de la **validation
+  humaine** obligatoire (`docs/ethique.md`, point 5 ; rapport « à valider avant diffusion »).
+  À présenter comme limite dans le mémoire.
+
+---
+
 ## 2026-11-02 (nuit) : parseur Procmon et fusion Sysmon + Procmon (#8)
 
 ### Fait

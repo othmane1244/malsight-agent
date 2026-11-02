@@ -46,7 +46,7 @@ def deterministic_report(case: Case, tools: CaseTools) -> Report:
 
 def _llm():
     provider = os.getenv("LLM_PROVIDER", "ollama")
-    model = os.getenv("LLM_MODEL", "qwen2.5:14b")
+    model = os.getenv("LLM_MODEL", "gemma4:e4b")
     if provider == "ollama":
         from langchain_ollama import ChatOllama
         return ChatOllama(model=model, temperature=0.1,

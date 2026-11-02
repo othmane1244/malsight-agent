@@ -1,8 +1,11 @@
 """Vérificateur : rejette toute affirmation du rapport sans appui dans le dossier de cas."""
 from __future__ import annotations
 
+import re
+
 from malsight.agent.tools import CaseTools
 from malsight.schemas import Case, Report
+from malsight.sensitive_apis import categorize
 
 
 def _strings(obj):
@@ -20,6 +23,46 @@ def _strings(obj):
 def _case_text(case: Case) -> str:
     """Tout le texte brut du dossier de cas (sans échappement JSON), pour retrouver les preuves."""
     return "\n".join(_strings(case.model_dump())).lower()
+
+
+# Valeurs vérifiables citées dans une preuve (le LLM les entoure souvent de JSON, guillemets...)
+_FIN = r"[^\s\"'`<>|,;\[\]()«»]+"
+_RE_PREUVE = [
+    re.compile(r"\b(?:HKLM|HKCU|HKU|HKCR|HKEY_[A-Z_]+)\\" + _FIN, re.I),      # clé de registre
+    re.compile(r"\b[A-Z]:\\" + _FIN, re.I),                                     # chemin Windows
+    re.compile(r"\b(?:[a-z0-9-]{1,63}\.)+(?:com|net|org|io|ru|cn|info|biz|xyz|local|lab)\b", re.I),  # domaine
+]
+_RE_MOT = re.compile(r"\b[A-Za-z_][A-Za-z0-9_]{3,}\b")
+
+
+def valeurs_citees(evidence: str) -> list[str]:
+    """Extrait d'une preuve les valeurs à vérifier : chemins, clés, domaines, noms d'API sensibles.
+
+    Normalise l'échappement JSON (« \\\\ » -> « \\ ») et retire la ponctuation finale.
+    """
+    texte = evidence.replace("\\\\", "\\")
+    valeurs: list[str] = []
+    for rx in _RE_PREUVE:
+        for v in rx.findall(texte):
+            v = v.rstrip(".:!?\"'`»")
+            if v and not any(v.lower() in w.lower() for w in valeurs):   # un domaine inclus dans un chemin
+                valeurs.append(v)
+    for mot in _RE_MOT.findall(texte):
+        # Nom d'API : seulement les API connues, avec une majuscule (exclut « send », « connect »...)
+        if categorize(mot) and any(c.isupper() for c in mot) and mot not in valeurs:
+            valeurs.append(mot)
+    return valeurs
+
+
+def preuve_retrouvee(evidence: str, corpus: str) -> tuple[bool, list[str]]:
+    """(retrouvée, valeurs manquantes). Toutes les valeurs citées doivent être dans le dossier de cas ;
+    sans valeur reconnaissable, on revient à la recherche du texte mot pour mot."""
+    valeurs = valeurs_citees(evidence)
+    if not valeurs:
+        ok = bool(evidence.strip()) and evidence.lower() in corpus
+        return ok, [] if ok else [evidence]
+    manquantes = [v for v in valeurs if v.lower() not in corpus]
+    return not manquantes, manquantes
 
 
 def _verify_countermeasures(report: Report, defend) -> list[str]:
@@ -93,11 +136,16 @@ def verify(report: Report, case: Case, kb=None, defend=None) -> Report:
     # Contre-mesures D3FEND et IDs D3FEND cités dans les recommandations
     rejected += _verify_countermeasures(report, defend)
 
-    # Comportements "observed" : la preuve doit apparaître dans les données
+    # Comportements "observed" : chaque valeur citée dans la preuve doit exister dans le dossier de cas
     for b in report.behaviors:
-        if b.kind == "observed" and b.evidence.lower() not in corpus:
+        if b.kind != "observed":
+            continue
+        ok, manquantes = preuve_retrouvee(b.evidence, corpus)
+        if not ok:
             b.kind = "inferred"
-            report.uncertainties.append(f"Preuve non retrouvée telle quelle : « {b.evidence} »")
+            note = f"Preuve non retrouvée dans le dossier de cas ({', '.join(manquantes)}) : « {b.summary} »"
+            if note not in report.uncertainties:
+                report.uncertainties.append(note)
 
     report.rejected_claims += rejected
     return report

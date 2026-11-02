@@ -16,11 +16,22 @@ _RE = {
 }
 
 
+_PONCTUATION_FINALE = ".,;:!?)]}>\"'»`"
+
+
+def nettoyer_ioc(valeur: str) -> str | None:
+    """Retire la ponctuation finale ; rejette les valeurs tronquées ou abrégées (« ... », « … »)."""
+    if "..." in valeur or "…" in valeur:
+        return None
+    valeur = valeur.rstrip(_PONCTUATION_FINALE)
+    return valeur or None
+
+
 def iocs_from_strings(strings: list[str]) -> dict[str, list[str]]:
     out: dict[str, set[str]] = {k: set() for k in _RE}
     for s in strings:
         for kind, rx in _RE.items():
-            out[kind].update(rx.findall(s))
+            out[kind].update(v for v in map(nettoyer_ioc, rx.findall(s)) if v)
     return {k: sorted(v) for k, v in out.items() if v}
 
 

@@ -223,6 +223,10 @@ version initiale) n'est plus tenable.
   le mémoire, #1 à #3 rattachées à J4), J2 = 4 novembre, J3 = 6 novembre, J4 = 16 novembre.
 - **Suivi** : sans équipe, la relecture croisée (#22) est remplacée par une relecture différée
   (relire le lendemain) et par les garde-fous automatiques (tests, vérificateur, CI).
+- **Modèles LLM (ajout du 2026-11-02)** : **`gemma4:e4b`** (Ollama, déjà installé) est le modèle
+  de **développement** ; c'est la valeur par défaut de `LLM_MODEL`. **`qwen3:8b`** est en
+  téléchargement (lent) ; dès qu'il est prêt, comparaison sur T01 (techniques trouvées /
+  attendues, rejets, temps, JSON valide) pour choisir le modèle des mesures finales du 9 novembre.
 
 ### Justification
 
