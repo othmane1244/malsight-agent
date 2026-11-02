@@ -87,6 +87,57 @@ def serie(sortie: Path = typer.Argument(..., help="Dossier de résultats, ex. do
     typer.echo(f"Résultats : {sortie} (bilan.md, bilan.csv, bilan.json)")
 
 
+@app.command()
+def injection(echantillon: str = typer.Option("T11", help="Cas réel servant de base (défaut : témoin négatif T11)"),
+              sortie: Path = typer.Option(None, help="Dossier de résultats (défaut : docs/resultats/injection_<modèle>)"),
+              mode: str = typer.Option("hybride", help="llm | hybride"),
+              cases: Path = Path("cases"), attack_db: Path = Path("data/enterprise-attack.json"),
+              d3fend_cache: Path = Path("data/d3fend")):
+    """Test anti-injection (#12) : rapport sur le cas d'origine et sur le cas piégé, puis critères."""
+    import json
+    import os
+
+    from malsight.agent.pipeline import analyze as run
+    from malsight.attack.kb import AttackKB
+    from malsight.defend.kb import DefendKB
+    from malsight.evaluation.injection import evaluer_injection, pieger
+    from malsight.evaluation.serie import MODES
+    from malsight.normalize import build_case
+    from malsight.report.render import to_markdown
+    use_llm, regles = MODES[mode]
+    kb = AttackKB.load(attack_db) if attack_db.exists() else None
+    defend = DefendKB(d3fend_cache)
+    vt = json.loads(Path(f"lab/verite-terrain/{echantillon}.json").read_text(encoding="utf-8"))
+    case = build_case(Path("lab/echantillons-test") / vt["echantillon"], labo=cases / echantillon)
+    ref, pie, criteres = evaluer_injection(case, lambda c: run(c, use_llm=use_llm, kb=kb, defend=defend, regles=regles))
+    modele = os.getenv("LLM_MODEL", "gemma4:e4b")
+    sortie = sortie or Path("docs/resultats") / f"injection_{modele.replace(':', '_')}"
+    sortie.mkdir(parents=True, exist_ok=True)
+    for nom, r in (("origine", ref), ("piege", pie)):
+        (sortie / f"report_{nom}.json").write_text(r.model_dump_json(indent=2), encoding="utf-8")
+        (sortie / f"rapport_{nom}.md").write_text(to_markdown(r), encoding="utf-8")
+    (sortie / "cas_piege_observations.json").write_text(
+        json.dumps([o.model_dump() for o in pieger(case).dynamic.observations[:3]], ensure_ascii=False, indent=1),
+        encoding="utf-8")
+    lignes = [f"# Test anti-injection : {echantillon}, mode {mode}, modèle {modele}", "",
+              "| Critère | Respecté |", "| --- | --- |"]
+    lignes += [f"| {k} | {'oui' if v else '**NON**'} |" for k, v in criteres.items()]
+    (sortie / "criteres.md").write_text("\n".join(lignes) + "\n", encoding="utf-8")
+    typer.echo("\n".join(lignes))
+    if not all(criteres.values()):
+        raise typer.Exit(1)
+
+
+@app.command()
+def bilan(sortie: list[Path] = typer.Argument(..., help="Dossier(s) de série, ex. docs/resultats/dev_regles")):
+    """Recalcule la notation (D9 : strict / tolérant) de séries existantes, sans relancer l'agent."""
+    from malsight.evaluation.serie import renoter, scores
+    for s in sortie:
+        sc = scores(renoter(s))
+        typer.echo(f"{s} : strict {sc['strict']['vraies']}/{sc['attendues']} (FP {sc['strict']['fp']}), "
+                   f"tolérant {sc['tolerant']['vraies']}/{sc['attendues']} (FP {sc['tolerant']['fp']})")
+
+
 @app.command("download-attack")
 def download_attack(dest: Path = Path("data/enterprise-attack.json")):
     """Télécharge la base MITRE ATT&CK Enterprise (STIX)."""

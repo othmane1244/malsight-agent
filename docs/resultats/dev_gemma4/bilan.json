@@ -48,7 +48,12 @@
    ]
   ],
   "contre_mesures": 12,
-  "recommandations": 6
+  "recommandations": 6,
+  "attack_vraies_tol": [
+   "T1547.001"
+  ],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": []
  },
  "T02": {
   "echantillon": "T02",
@@ -163,7 +168,14 @@
    ]
   ],
   "contre_mesures": 12,
-  "recommandations": 6
+  "recommandations": 6,
+  "attack_vraies_tol": [
+   "T1053.005"
+  ],
+  "attack_en_trop_tol": [
+   "T1027"
+  ],
+  "attack_ratees_tol": []
  },
  "T03": {
   "echantillon": "T03",
@@ -203,7 +215,12 @@
   ],
   "techniques": [],
   "contre_mesures": 0,
-  "recommandations": 0
+  "recommandations": 0,
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": [
+   "T1543.003"
+  ]
  },
  "T04": {
   "echantillon": "T04",
@@ -253,7 +270,14 @@
    ]
   ],
   "contre_mesures": 12,
-  "recommandations": 5
+  "recommandations": 5,
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [
+   "T1547.001"
+  ],
+  "attack_ratees_tol": [
+   "T1037.001"
+  ]
  },
  "T05": {
   "echantillon": "T05",
@@ -309,7 +333,14 @@
    ]
   ],
   "contre_mesures": 0,
-  "recommandations": 0
+  "recommandations": 0,
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [
+   "T1071.001"
+  ],
+  "attack_ratees_tol": [
+   "T1112"
+  ]
  },
  "T06": {
   "echantillon": "T06",
@@ -357,7 +388,14 @@
    ]
   ],
   "contre_mesures": 0,
-  "recommandations": 6
+  "recommandations": 6,
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [
+   "T1027.002"
+  ],
+  "attack_ratees_tol": [
+   "T1059.001"
+  ]
  },
  "T07": {
   "echantillon": "T07",
@@ -403,7 +441,12 @@
    ]
   ],
   "contre_mesures": 7,
-  "recommandations": 5
+  "recommandations": 5,
+  "attack_vraies_tol": [
+   "T1082"
+  ],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": []
  },
  "T08": {
   "echantillon": "T08",
@@ -481,7 +524,14 @@
    ]
   ],
   "contre_mesures": 7,
-  "recommandations": 5
+  "recommandations": 5,
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [
+   "T1082"
+  ],
+  "attack_ratees_tol": [
+   "T1016"
+  ]
  },
  "T09": {
   "echantillon": "T09",
@@ -534,7 +584,14 @@
    ]
   ],
   "contre_mesures": 0,
-  "recommandations": 4
+  "recommandations": 4,
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [
+   "T1005"
+  ],
+  "attack_ratees_tol": [
+   "T1560"
+  ]
  },
  "T10": {
   "echantillon": "T10",
@@ -597,7 +654,14 @@
    ]
   ],
   "contre_mesures": 0,
-  "recommandations": 0
+  "recommandations": 0,
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [
+   "T1071.001"
+  ],
+  "attack_ratees_tol": [
+   "T1105"
+  ]
  },
  "T11": {
   "echantillon": "T11",
@@ -628,7 +692,10 @@
   ],
   "techniques": [],
   "contre_mesures": 0,
-  "recommandations": 3
+  "recommandations": 3,
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": []
  },
  "T12": {
   "echantillon": "T12",
@@ -691,6 +758,14 @@
    ]
   ],
   "contre_mesures": 12,
-  "recommandations": 6
+  "recommandations": 6,
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [
+   "T1059.001"
+  ],
+  "attack_ratees_tol": [
+   "T1082",
+   "T1547.001"
+  ]
  }
 }

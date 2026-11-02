@@ -368,3 +368,34 @@ intermédiaire (`service_window`), la règle exige que l'artefact ou une clé pa
 **créé** pendant l'analyse (`RegCreateKey`, `CreateFile` créé, Sysmon EID 11 / 12).
 Enregistrer une tâche ou un service crée des clés ; mettre à jour l'état d'un objet existant
 non. Résultat : 10/12, 0 faux positif (`docs/resultats/dev_regles/`).
+
+---
+
+## D9 : notation ATT&CK stricte et tolérante
+
+- **Date** : 2026-11-03
+- **Statut** : acceptée (fixée avant la fin de la série hybride, et avant toute mesure sur le jeu
+  de validation)
+
+### Décision
+
+Chaque série (`llm`, `regles`, `hybride`) est notée selon deux scores, calculés par
+`malsight serie` et recalculables sans relancer l'agent (`malsight bilan <dossier>`) :
+
+- **strict** : seule la (sous-)technique **exacte** compte. Toute technique trouvée qui n'est
+  pas exactement attendue est un **faux positif** (ex. T1053 trouvée pour T1053.005 attendue).
+- **tolérant** : la **technique parente** d'une technique attendue compte aussi (T1053 pour
+  T1053.005). Toute autre technique trouvée est un **faux positif**.
+- Une technique **en trop** compte comme faux positif **dans les deux scores**.
+- Lecture littérale : seule la parente est tolérée ; une sous-technique trouvée quand la
+  technique parente est attendue (ex. T1560.001 pour T1560) reste un faux positif.
+- Un rapport non valide (JSON invalide, erreur du LLM) compte comme zéro technique trouvée.
+- Totaux : vraies / attendues, faux positifs, précision = vraies / (vraies + FP),
+  rappel = vraies / attendues, pour chaque score.
+
+### Justification
+
+- Le score strict mesure la précision demandée à un analyste (la sous-technique oriente la
+  détection et les contre-mesures D3FEND) ; le tolérant mesure si l'agent a compris la bonne
+  famille de comportement. Les deux sont rapportés, sans en choisir un a posteriori.
+- Fixée avant les résultats finaux pour ne pas choisir la notation la plus flatteuse.

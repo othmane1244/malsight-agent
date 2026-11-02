@@ -20,7 +20,12 @@
   "iocs_attendus": 3,
   "comportements_observes": 0,
   "comportements_inferes": 0,
-  "rejets": []
+  "rejets": [],
+  "attack_vraies_tol": [
+   "T1547.001"
+  ],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": []
  },
  "T02": {
   "echantillon": "T02",
@@ -43,7 +48,12 @@
   "iocs_attendus": 2,
   "comportements_observes": 0,
   "comportements_inferes": 0,
-  "rejets": []
+  "rejets": [],
+  "attack_vraies_tol": [
+   "T1053.005"
+  ],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": []
  },
  "T03": {
   "echantillon": "T03",
@@ -66,7 +76,12 @@
   "iocs_attendus": 1,
   "comportements_observes": 0,
   "comportements_inferes": 0,
-  "rejets": []
+  "rejets": [],
+  "attack_vraies_tol": [
+   "T1543.003"
+  ],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": []
  },
  "T04": {
   "echantillon": "T04",
@@ -89,7 +104,12 @@
   "iocs_attendus": 1,
   "comportements_observes": 0,
   "comportements_inferes": 0,
-  "rejets": []
+  "rejets": [],
+  "attack_vraies_tol": [
+   "T1037.001"
+  ],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": []
  },
  "T05": {
   "echantillon": "T05",
@@ -110,7 +130,12 @@
   "iocs_attendus": 1,
   "comportements_observes": 0,
   "comportements_inferes": 0,
-  "rejets": []
+  "rejets": [],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": [
+   "T1112"
+  ]
  },
  "T06": {
   "echantillon": "T06",
@@ -133,7 +158,12 @@
   "iocs_attendus": 1,
   "comportements_observes": 0,
   "comportements_inferes": 0,
-  "rejets": []
+  "rejets": [],
+  "attack_vraies_tol": [
+   "T1059.001"
+  ],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": []
  },
  "T07": {
   "echantillon": "T07",
@@ -156,7 +186,12 @@
   "iocs_attendus": 1,
   "comportements_observes": 0,
   "comportements_inferes": 0,
-  "rejets": []
+  "rejets": [],
+  "attack_vraies_tol": [
+   "T1082"
+  ],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": []
  },
  "T08": {
   "echantillon": "T08",
@@ -179,7 +214,12 @@
   "iocs_attendus": 1,
   "comportements_observes": 0,
   "comportements_inferes": 0,
-  "rejets": []
+  "rejets": [],
+  "attack_vraies_tol": [
+   "T1016"
+  ],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": []
  },
  "T09": {
   "echantillon": "T09",
@@ -202,7 +242,12 @@
   "iocs_attendus": 1,
   "comportements_observes": 0,
   "comportements_inferes": 0,
-  "rejets": []
+  "rejets": [],
+  "attack_vraies_tol": [
+   "T1560"
+  ],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": []
  },
  "T10": {
   "echantillon": "T10",
@@ -223,7 +268,12 @@
   "iocs_attendus": 1,
   "comportements_observes": 0,
   "comportements_inferes": 0,
-  "rejets": []
+  "rejets": [],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": [
+   "T1105"
+  ]
  },
  "T11": {
   "echantillon": "T11",
@@ -240,7 +290,10 @@
   "iocs_attendus": 1,
   "comportements_observes": 0,
   "comportements_inferes": 0,
-  "rejets": []
+  "rejets": [],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": []
  },
  "T12": {
   "echantillon": "T12",
@@ -266,6 +319,12 @@
   "iocs_attendus": 3,
   "comportements_observes": 0,
   "comportements_inferes": 0,
-  "rejets": []
+  "rejets": [],
+  "attack_vraies_tol": [
+   "T1082",
+   "T1547.001"
+  ],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": []
  }
 }

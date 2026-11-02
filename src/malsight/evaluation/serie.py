@@ -25,11 +25,37 @@ MODES = {"llm": (True, False), "regles": (False, True), "hybride": (True, True)}
 
 COLONNES = [
     ("echantillon", "Échantillon"), ("attack_attendues", "ATT&CK attendues"),
-    ("attack_trouvees", "ATT&CK trouvées"), ("attack_vraies", "Vraies"), ("attack_en_trop", "En trop"),
-    ("attack_ratees", "Ratées"), ("iocs", "IOC trouvés / attendus"),
+    ("attack_trouvees", "ATT&CK trouvées"), ("attack_vraies", "Vraies (strict)"),
+    ("attack_vraies_tol", "Vraies (tolérant)"), ("attack_en_trop", "FP strict"),
+    ("attack_en_trop_tol", "FP tolérant"), ("attack_ratees", "Ratées (strict)"), ("iocs", "IOC trouvés / attendus"),
     ("comportements", "Comportements observés / inférés"), ("rejets", "Rejets"),
     ("temps_s", "Temps (s)"), ("json_valide", "JSON valide"),
 ]
+
+
+def _parent(tid: str) -> str:
+    return tid.split(".")[0]
+
+
+def noter_attack(trouvees: list[str], attendues: set[str]) -> dict:
+    """Notation ATT&CK (D9).
+
+    - strict : seule la (sous-)technique exacte compte ; toute technique trouvée non attendue
+      exactement est un faux positif ;
+    - tolérant : la technique PARENTE d'une technique attendue compte aussi (T1053 pour T1053.005) ;
+      toute autre technique trouvée est un faux positif.
+    """
+    trouvees_set = set(trouvees)
+    vraies_tol = sorted(a for a in attendues if a in trouvees_set or _parent(a) in trouvees_set)
+    parents_attendus = {_parent(a) for a in attendues if "." in a}
+    return {
+        "attack_vraies": sorted(trouvees_set & attendues),
+        "attack_en_trop": sorted(trouvees_set - attendues),
+        "attack_ratees": sorted(attendues - trouvees_set),
+        "attack_vraies_tol": vraies_tol,
+        "attack_en_trop_tol": sorted(t for t in trouvees_set if t not in attendues and t not in parents_attendus),
+        "attack_ratees_tol": sorted(attendues - set(vraies_tol)),
+    }
 
 
 def evaluer(report: Report, verite: dict) -> dict:
@@ -40,8 +66,7 @@ def evaluer(report: Report, verite: dict) -> dict:
                   for a in verite["iocs"])
     return {
         "attack_attendues": sorted(attendues), "attack_trouvees": trouvees,
-        "attack_vraies": sorted(set(trouvees) & attendues), "attack_en_trop": sorted(set(trouvees) - attendues),
-        "attack_ratees": sorted(attendues - set(trouvees)),
+        **noter_attack(trouvees, attendues),
         "iocs_trouves": iocs_ok, "iocs_attendus": len(verite["iocs"]),
         "comportements_observes": sum(b.kind == "observed" for b in report.behaviors),
         "comportements_inferes": sum(b.kind == "inferred" for b in report.behaviors),
@@ -97,7 +122,9 @@ def _cellules(l: dict) -> dict[str, str]:
         "echantillon": l["echantillon"], "attack_attendues": ids(l.get("attack_attendues")),
         "attack_trouvees": ids(l.get("attack_trouvees")) if ok else "—",
         "attack_vraies": str(len(l.get("attack_vraies", []))) if ok else "—",
+        "attack_vraies_tol": str(len(l.get("attack_vraies_tol", []))) if ok else "—",
         "attack_en_trop": ids(l.get("attack_en_trop")) if ok else "—",
+        "attack_en_trop_tol": ids(l.get("attack_en_trop_tol")) if ok else "—",
         "attack_ratees": ids(l.get("attack_ratees")) if ok else ids(l.get("attack_attendues")),
         "iocs": f"{l['iocs_trouves']}/{l['iocs_attendus']}" if ok else "—",
         "comportements": f"{l['comportements_observes']} / {l['comportements_inferes']}" if ok else "—",
@@ -115,15 +142,17 @@ def ecrire_tableaux(bilan: dict, sortie: Path) -> None:
         w = csv.DictWriter(f, fieldnames=[c for c, _ in COLONNES])
         w.writeheader()
         w.writerows(lignes)
-    valides = [l for l in bilan.values() if l.get("json_valide")]
-    attendues = sum(len(l.get("attack_attendues", [])) for l in bilan.values())
-    vraies = sum(len(l.get("attack_vraies", [])) for l in valides)
-    en_trop = sum(len(l.get("attack_en_trop", [])) for l in valides)
+    s = scores(bilan)
+    attendues = s["attendues"]
     md = ["| " + " | ".join(t for _, t in COLONNES) + " |", "|" + " --- |" * len(COLONNES)]
     md += ["| " + " | ".join(c[k] for k, _ in COLONNES) + " |" for c in lignes]
+    valides = [l for l in bilan.values() if l.get("json_valide")]
     total = {
         "echantillon": "**Total**", "attack_attendues": str(attendues), "attack_trouvees": "",
-        "attack_vraies": f"**{vraies}/{attendues}**", "attack_en_trop": str(en_trop), "attack_ratees": str(attendues - vraies),
+        "attack_vraies": f"**{s['strict']['vraies']}/{attendues}**",
+        "attack_vraies_tol": f"**{s['tolerant']['vraies']}/{attendues}**",
+        "attack_en_trop": str(s["strict"]["fp"]), "attack_en_trop_tol": str(s["tolerant"]["fp"]),
+        "attack_ratees": str(attendues - s["strict"]["vraies"]),
         "iocs": f"{sum(l.get('iocs_trouves', 0) for l in valides)}/{sum(l.get('iocs_attendus', 0) for l in valides)}",
         "comportements": f"{sum(l.get('comportements_observes', 0) for l in valides)} / "
                          f"{sum(l.get('comportements_inferes', 0) for l in valides)}",
@@ -132,4 +161,44 @@ def ecrire_tableaux(bilan: dict, sortie: Path) -> None:
         "json_valide": f"{len(valides)}/{len(bilan)}",
     }
     md.append("| " + " | ".join(total[k] for k, _ in COLONNES) + " |")
+    md += ["", "Notation ATT&CK (D9) : **strict** = (sous-)technique exacte ; **tolérant** = la technique "
+           "parente d'une technique attendue compte aussi. Toute technique en trop est un faux positif (FP).", "",
+           "| Score | Vraies | FP | Précision | Rappel |", "| --- | --- | --- | --- | --- |"]
+    for nom, cle in (("strict", "strict"), ("tolérant", "tolerant")):
+        x = s[cle]
+        md.append(f"| {nom} | {x['vraies']}/{attendues} | {x['fp']} | {_pct(x['precision'])} | {_pct(x['rappel'])} |")
     (sortie / "bilan.md").write_text("\n".join(md) + "\n", encoding="utf-8")
+
+
+def _pct(x: float | None) -> str:
+    return "—" if x is None else f"{x:.0%}"
+
+
+def scores(bilan: dict) -> dict:
+    """Totaux strict / tolérant (D9) : vraies, faux positifs, précision, rappel. Un rapport non
+    valide compte comme zéro technique trouvée."""
+    valides = [l for l in bilan.values() if l.get("json_valide")]
+    attendues = sum(len(l.get("attack_attendues", [])) for l in bilan.values())
+    out = {"attendues": attendues}
+    for cle, vraies_k, fp_k in (("strict", "attack_vraies", "attack_en_trop"),
+                                ("tolerant", "attack_vraies_tol", "attack_en_trop_tol")):
+        vraies = sum(len(l.get(vraies_k, [])) for l in valides)
+        fp = sum(len(l.get(fp_k, [])) for l in valides)
+        out[cle] = {"vraies": vraies, "fp": fp,
+                    "precision": vraies / (vraies + fp) if vraies + fp else None,
+                    "rappel": vraies / attendues if attendues else None}
+    return out
+
+
+def renoter(sortie: Path, verites: Path = Path("lab/verite-terrain")) -> dict:
+    """Recalcule la notation d'une série existante à partir de ses report.json (sans relancer
+    l'agent) et réécrit bilan.json / .csv / .md. Les champs non liés à la notation sont conservés."""
+    bilan = json.loads((sortie / "bilan.json").read_text(encoding="utf-8"))
+    for tid, ligne in bilan.items():
+        ligne.setdefault("echantillon", tid)
+        f = sortie / tid / "report.json"
+        if ligne.get("json_valide") and f.exists():
+            vt = json.loads((verites / f"{tid}.json").read_text(encoding="utf-8"))
+            ligne.update(evaluer(Report.model_validate_json(f.read_text(encoding="utf-8")), vt))
+    ecrire_tableaux(bilan, sortie)
+    return bilan
