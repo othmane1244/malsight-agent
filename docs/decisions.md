@@ -60,3 +60,41 @@ Ajouter VirtualBox + INetSim si au moins un de ces points est vrai :
 3. Le dossier en écriture ou les limites de Windows Sandbox posent un problème concret.
 
 Sinon, Windows Sandbox est conservé jusqu'à la fin du projet.
+
+---
+
+## D2 : garder T05 (T1112 Modify Registry) malgré son classement « Defense Evasion »
+
+- **Date** : 2026-11-02
+- **Statut** : acceptée
+
+### Contexte
+
+`CLAUDE.md` interdisait toute « technique d'évasion ». L'échantillon de test T05 écrit la clé
+factice `HKCU\Software\MalsightTest\Config` ; ATT&CK range cette action sous T1112 *Modify
+Registry*, technique classée dans la tactique *Defense Evasion*.
+
+### Décision
+
+On garde T05. La règle est précisée dans `CLAUDE.md` : sont interdits les **comportements**
+d'évasion (masquage, suppression de traces, désactivation des défenses, obfuscation destinée à
+tromper), pas les techniques ATT&CK en tant qu'étiquettes. Une technique classée Defense Evasion
+est acceptable si le script n'a aucun effet d'évasion réel.
+
+### Justification
+
+- **Aucun effet d'évasion** : T05 n'écrit qu'une clé applicative inventée ; il ne cache rien,
+  ne supprime aucune trace et ne touche à aucune défense. Il est réversible (`-Nettoyer`).
+- **Valeur pour l'évaluation** : c'est le seul échantillon dont le comportement est visible
+  **uniquement dans Procmon** (clé hors config Sysmon). Il teste la fusion Sysmon + Procmon (#8)
+  et le risque qu'un agent n'utilise qu'une source.
+- **Réalisme** : beaucoup de malwares stockent leur configuration dans le registre ; un agent
+  doit savoir le reconnaître sans le confondre avec une persistance.
+- L'alternative T1012 *Query Registry* (lecture seule) ne produirait aucune écriture à détecter.
+
+### Conséquences
+
+- Chaque nouvel échantillon classé Defense Evasion doit justifier dans son en-tête et dans
+  `lab/echantillons-test/README.md` qu'il n'a aucun effet d'évasion réel.
+- T06 (`-EncodedCommand`) suit la même règle : la commande en clair est affichée avant
+  l'exécution, l'encodage ne sert pas à tromper.

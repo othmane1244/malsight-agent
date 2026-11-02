@@ -4,7 +4,8 @@ La conception de référence est dans [`docs/conception.md`](docs/conception.md)
 
 ## Cadre : pédagogique et défensif uniquement
 
-- Aucun code offensif : pas d'exploit, de charge utile, de technique d'évasion ni d'outil d'attaque. Le projet ne produit que des règles de **détection** (YARA, Sigma) et des recommandations de durcissement et de remédiation.
+- Aucun code offensif : pas d'exploit, de charge utile, de comportement d'évasion ni d'outil d'attaque. Le projet ne produit que des règles de **détection** (YARA, Sigma) et des recommandations de durcissement et de remédiation.
+- **Évasion** : sont interdits les **comportements** d'évasion (masquage, suppression de traces, désactivation des défenses, obfuscation destinée à tromper), pas les techniques ATT&CK en tant qu'étiquettes. Un échantillon de test dont la technique est classée « Defense Evasion » est acceptable s'il n'a **aucun effet d'évasion réel** (ex. T05 / T1112 : écriture d'une clé applicative factice, voir D2 dans `docs/decisions.md`).
 - Aucune exécution d'échantillon, ni par le code du projet ni pendant le développement. L'analyse dynamique se fait en dehors du projet, dans le laboratoire isolé ; le projet ne fait que **lire** les rapports produits.
 
 ## Agent
