@@ -7,6 +7,44 @@ est dans les [issues](https://github.com/othmane1244/malsight-agent/issues) et l
 
 ---
 
+## 2026-11-03 (fin) : gel du code (D11), bilan final
+
+### Gel
+Plus aucune modification des règles, filtres, parseurs, prompts ni du vérificateur ; seules les
+corrections de bugs bloquants pour la démo sont permises (D11). Une seule appliquée : `malsight
+analyze` n'appliquait pas les règles D7 (liste officielle vide en démo) ; corrigé avec un test.
+Tag `v1.0-soutenance` et release GitHub.
+
+### Bilan final (gemma4:e4b, contexte 8192, liste officielle notée en D9, suggestions à part en D10)
+
+| Jeu | Mode | Officielle : vraies / FP | Précision | Rappel | Suggestions : vraies / total | IOC |
+| --- | --- | --- | --- | --- | --- | --- |
+| Développement T01-T12 | règles | 10/12 · 0 | 100 % | 83 % | — | 17/17 |
+| Développement T01-T12 | LLM seul | 0/12 · 0 | — | 0 % | 4 / 5 | 17/17 |
+| Développement T01-T12 | **hybride** | **10/12 · 0** | **100 %** | **83 %** | 0 / 1 | 17/17 |
+| Validation T13-T16 | règles | 2/4 · 0 | 100 % | 50 % | — | 5/5 |
+| Validation T13-T16 | LLM seul | 0/4 · 0 | — | 0 % | 1 / 2 | 5/5 |
+| Validation T13-T16 | **hybride** | **2/4 · 0** | **100 %** | **50 %** | 0 / 1 | 5/5 |
+
+- **Ce qui marche** : labo isolé reproductible (16 échantillons, collecte automatique, 22/22 IOC
+  retrouvés) ; fusion Sysmon + Procmon avec attribution (bruit T11 : 57 → 1) ; liste officielle
+  sans aucun faux positif en développement comme en validation ; vérificateur et architecture qui
+  résistent aux injections testées, y compris inédites.
+- **Ce qui ne marche pas** : la couverture se limite aux règles (8 techniques) ; le LLM ne
+  trouve pas les techniques nouvelles (T1033, T1546.013) et ne classe pas de façon fiable ;
+  rappel 50 % en validation.
+- **Décisions clés** : D1 (Windows Sandbox), D3 (mode automatique encadré), D4 (validation
+  séparée), D7 (règles sourcées), D8 (preuves et injection), D9 (notation), D10 (les outils
+  classent, le LLM explique).
+- **Perspectives** : plus de règles (T1112, T1105, T1033...) et de sources (capa sur exécutables),
+  réseau simulé (INetSim), autres modèles (qwen3:8b, cloud), export PDF, règles YARA / Sigma.
+
+### Suite (planning D5)
+10-12 nov : mémoire (#19, avec #1 à #3) · 13 nov : slides (#21) · 14 nov : démo enregistrée
+(#20, scénario `docs/demo.md`) · 15 nov : répétition · 16 nov : soutenance.
+
+---
+
 ## 2026-11-03 (nuit) : jeu de validation T13 à T16 (#23, D4)
 
 ### Collecte (mode automatique, accord pour T13, T14, T15, T16)

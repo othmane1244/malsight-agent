@@ -501,3 +501,25 @@ Après D10 (`malsight bilan --reverifier`, mêmes brouillons du LLM) :
   signalée comme « à valider ».
 - En mode `llm`, 4 des 5 suggestions gardées sont justes : le LLM reste utile pour expliquer et
   proposer, pas pour classer.
+
+---
+
+## D11 : gel du code pour la soutenance
+
+- **Date** : 2026-11-03 (avancé par rapport au 9 novembre prévu en D5)
+- **Statut** : acceptée · tag `v1.0-soutenance`
+
+### Décision
+
+- **Plus aucune modification** des règles (D7), des filtres de bruit, des parseurs, des prompts
+  ni du vérificateur. Les résultats de `docs/resultats/` (développement et validation) sont
+  définitifs.
+- **Seule exception** : la correction d'un **bug bloquant pour la démo**, consignée ici avec son
+  commit et un test de non-régression.
+- La suite du planning (D5) porte sur le mémoire, les slides, la démo et la répétition.
+
+### Corrections appliquées au titre de l'exception
+
+| Date | Bug | Correction |
+| --- | --- | --- |
+| 2026-11-03 | `malsight analyze` n'appliquait pas les règles D7 (seul `malsight serie` le faisait) : avec D10, la liste officielle du rapport de démo était vide | `analyze` en mode hybride par défaut, règles seules avec `--no-llm` ; test `test_analyze_applique_les_regles_d7` |

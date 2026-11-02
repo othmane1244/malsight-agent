@@ -66,3 +66,20 @@ def test_commande_comparer(collecte_t01):
     r = CliRunner().invoke(app, ["comparer", str(collecte_t01.parent), "--verites", str(VERITES)])
     assert r.exit_code == 0, r.output
     assert "| IOC attendu | Type | Trouvé | Sysmon | Procmon |" in r.output
+
+
+def test_analyze_applique_les_regles_d7(tmp_path):
+    """Régression (préparation de la démo) : « malsight analyze » doit remplir la liste officielle
+    avec les règles D7 (D10), y compris sans LLM."""
+    from malsight.schemas import Case, DynamicData, Observation, SampleInfo
+    cle = r"HKCU\Software\Microsoft\Windows\CurrentVersion\Run\X"
+    case = Case(sample=SampleInfo(filename="x", sha256="a" * 64, md5="b" * 32, size=1),
+                dynamic=DynamicData(registry_keys_set=[cle], observations=[
+                    Observation(kind="registry", value=cle, processes=["powershell.exe (1)"])]))
+    f = tmp_path / "case.json"
+    f.write_text(case.model_dump_json(), encoding="utf-8")
+    r = CliRunner().invoke(app, ["analyze", str(f), "--no-llm", "--attack-db", str(tmp_path / "absente.json"),
+                                 "--d3fend-cache", str(tmp_path)])
+    assert r.exit_code == 0, r.output
+    rapport = json.loads((tmp_path / "report.json").read_text(encoding="utf-8"))
+    assert [t["id"] for t in rapport["attack"]] == ["T1547.001"]

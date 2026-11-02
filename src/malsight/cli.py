@@ -23,7 +23,7 @@ def extract(sample: Path, cape_report: Path = typer.Option(None, help="Rapport J
 
 @app.command()
 def analyze(case_file: Path, out: Path = typer.Option(None, help="Rapport Markdown de sortie"),
-            no_llm: bool = typer.Option(False, help="Sans LLM : faits extraits uniquement"),
+            no_llm: bool = typer.Option(False, help="Sans LLM : faits extraits et règles D7 uniquement"),
             attack_db: Path = Path("data/enterprise-attack.json"),
             d3fend_cache: Path = typer.Option(Path("data/d3fend"), help="Cache local D3FEND (hors ligne)")):
     """Dossier de cas -> rapport vérifié (Markdown + IOC STIX)."""
@@ -40,7 +40,9 @@ def analyze(case_file: Path, out: Path = typer.Option(None, help="Rapport Markdo
     if not any(d3fend_cache.glob("T*.json")):
         typer.echo("Cache D3FEND vide : lancez `malsight download-d3fend` (aucune contre-mesure).")
     case = Case.model_validate_json(case_file.read_text(encoding="utf-8"))
-    report = run(case, use_llm=not no_llm, kb=kb, defend=defend)
+    # D10 : la liste officielle vient des règles D7 (et de capa) ; le LLM ajoute résumé, suggestions et
+    # recommandations. --no-llm : règles seules (mode « regles »), sans appel au modèle.
+    report = run(case, use_llm=not no_llm, kb=kb, defend=defend, regles=True)
     out = out or case_file.with_name("rapport.md")
     out.write_text(to_markdown(report), encoding="utf-8")
     case_file.with_name("report.json").write_text(report.model_dump_json(indent=2), encoding="utf-8")
