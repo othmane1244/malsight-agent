@@ -1,0 +1,151 @@
+{
+  "sample": {
+    "filename": "T08_decouverte_reseau.ps1",
+    "sha256": "a8957953c905b4f7c069d1f759816f77a93a0334ca0c8436fd91993676a3cf90",
+    "md5": "2006d0747f6ab9022f05118743b17516",
+    "size": 1030,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon, un script PowerShell nommé \"T08_decouverte_reseau.ps1\", exécute plusieurs commandes système standard pour la découverte de réseau. Il exécute `ipconfig.exe`, `route print`, et `arp.exe` pour collecter des informations sur la configuration réseau et la table ARP. De plus, il interagit avec le registre pour créer ou modifier des clés sous `HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent` et écrit un fichier texte nommé `C:\\travail\\malsight_t08.txt`. Ces actions suggèrent une phase de reconnaissance réseau.",
+  "behaviors": [
+    {
+      "summary": "Exécution de commandes système pour la découverte d'informations réseau.",
+      "evidence": "Exécution de \"C:\\Windows\\system32\\ipconfig.exe\" /all par powershell.exe (7472) ; Exécution de \"C:\\Windows\\system32\\ROUTE.EXE\" print par powershell.exe (7472) ; Exécution de \"C:\\Windows\\system32\\ARP.EXE\" -a par powershell.exe (7472).",
+      "kind": "observed"
+    },
+    {
+      "summary": "Modification du registre pour créer des clés associées à un agent RFC1156.",
+      "evidence": "Création/Modification des clés de registre : HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent, HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion, HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion\\Parameters, et HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion\\Parameters\\TrapPollTimeMilliSecs par ARP.EXE (8168).",
+      "kind": "observed"
+    },
+    {
+      "summary": "Écriture d'un fichier de données dans le répertoire de travail.",
+      "evidence": "Création du fichier \"C:\\travail\\malsight_t08.txt\" par powershell.exe (7472).",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "a8957953c905b4f7c069d1f759816f77a93a0334ca0c8436fd91993676a3cf90",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "2006d0747f6ab9022f05118743b17516",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\malsight_t08.txt",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion\\Parameters",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion\\Parameters\\TrapPollTimeMilliSecs",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1082",
+      "name": "System Information Discovery",
+      "tactic": "discovery",
+      "source": "llm",
+      "confidence": "medium",
+      "evidence": "L'utilisation de commandes comme ipconfig.exe et route print est typique de la collecte d'informations système."
+    }
+  ],
+  "countermeasures": [
+    {
+      "id": "D3-PSA",
+      "name": "Process Spawn Analysis",
+      "technique": "T1082",
+      "tactic": "Detect",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SCA",
+      "name": "System Call Analysis",
+      "technique": "T1082",
+      "tactic": "Detect",
+      "artifact": "System Call",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EAL",
+      "name": "Executable Allowlisting",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EDL",
+      "name": "Executable Denylisting",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-HBPI",
+      "name": "Hardware-based Process Isolation",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:Hardware-basedProcessIsolation/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SCF",
+      "name": "System Call Filtering",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "System Call",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallFiltering/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-DE",
+      "name": "Decoy Environment",
+      "technique": "T1082",
+      "tactic": "Deceive",
+      "artifact": "Decoy Artifact",
+      "url": "https://d3fend.mitre.org/technique/d3f:DecoyEnvironment/",
+      "source": "d3fend"
+    }
+  ],
+  "recommendations": [
+    "Surveiller l'exécution de commandes système de découverte d'informations comme `ipconfig.exe` et `route print` (T1082) en analysant les appels système (D3-SCA) pour détecter des séquences inhabituelles ou des processus non autorisés.",
+    "Mettre en place une surveillance des modifications des clés de registre spécifiques telles que `HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent` et ses sous-clés (IOC) pour détecter toute tentative de persistance ou de configuration non désirée.",
+    "Implémenter des politiques de contrôle des applications (Application Whitelisting) pour restreindre l'exécution de binaires non approuvés, ce qui aiderait à contrer l'utilisation de commandes système (D3-EAL).",
+    "Surveiller les tentatives d'accès ou de modification des clés de registre critiques (IOC) en utilisant des mécanismes de surveillance de registre pour détecter les changements non sollicités.",
+    "Pour les processus exécutant des commandes système de découverte (T1082), envisager l'utilisation de mécanismes de détection basés sur le comportement des appels système (D3-SCA) plutôt que sur la simple signature de la commande."
+  ],
+  "uncertainties": [
+    "Le rôle exact de l'écriture du fichier \"C:\\travail\\malsight_t08.txt\" n'est pas clair sans connaître le contenu ou la destination finale des données collectées."
+  ],
+  "rejected_claims": []
+}

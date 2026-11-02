@@ -1,0 +1,117 @@
+{
+  "sample": {
+    "filename": "T03_service.ps1",
+    "sha256": "bd8fd8f188f1c0310a195806b74e512c7fb0eacca6daeadbf2dafa54c2ffa01f",
+    "md5": "bbe26e04013dda9baceada038738c305",
+    "size": 942,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon analysé n'a pas d'activité d'exécution directe visible dans les données fournies. Cependant, des modifications de registre ont été observées via `services.exe` (processus système), indiquant une tentative de persistance en créant ou en modifiant un service Windows nommé `MalsightTest`. Cette activité est fortement corrélée à la technique de persistance T1543.003 (Windows Service).",
+  "behaviors": [
+    {
+      "summary": "Création/Modification d'un service Windows pour la persistance",
+      "evidence": "HKLM\\System\\CurrentControlSet\\Services\\MalsightTest",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "bd8fd8f188f1c0310a195806b74e512c7fb0eacca6daeadbf2dafa54c2ffa01f",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "bbe26e04013dda9baceada038738c305",
+      "source": "fichier"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\System\\CurrentControlSet\\Services\\MalsightTest",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\DisplayName",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\ErrorControl",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\ImagePath",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\ObjectName",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\Start",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\Type",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1543.003",
+      "name": "Windows Service",
+      "tactic": "persistence, privilege-escalation",
+      "source": "rule",
+      "confidence": "high",
+      "evidence": "règle R-T1543.003-registre : HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\ImagePath (services.exe (852))"
+    }
+  ],
+  "countermeasures": [
+    {
+      "id": "D3-SCP",
+      "name": "System Configuration Permissions",
+      "technique": "T1543.003",
+      "tactic": "Harden",
+      "artifact": "System Configuration Database",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemConfigurationPermissions/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-RD",
+      "name": "Restore Database",
+      "technique": "T1543.003",
+      "tactic": "Restore",
+      "artifact": "Database",
+      "url": "https://d3fend.mitre.org/technique/d3f:RestoreDatabase/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-DI",
+      "name": "Data Inventory",
+      "technique": "T1543.003",
+      "tactic": "Model",
+      "artifact": "Database",
+      "url": "https://d3fend.mitre.org/technique/d3f:DataInventory/",
+      "source": "d3fend"
+    }
+  ],
+  "recommendations": [
+    "Surveiller la création ou la modification de services système dans les chemins critiques comme HKLM\\System\\CurrentControlSet\\Services, en particulier les clés nommées 'MalsightTest'. (D3-SCP)",
+    "Surveiller les modifications des clés de registre de services (ex: HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\ImagePath, HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\Start) pour détecter des changements non autorisés. (D3-SCP)",
+    "Mettre en place des politiques de durcissement pour restreindre la création de services système non signés ou non documentés dans le registre. (D3-SCP)",
+    "Analyser les artefacts avec les hachages SHA256 (bd8fd8f188f1c0310a195806b74e512c7fb0eacca6daeadbf2dafa54c2ffa01f) et MD5 (bbe26e04013dda9baceada038738c305) pour identifier leur nature et leur comportement connu. (D3-DI)",
+    "Surveiller les tentatives d'écriture ou de modification des clés de registre listées (HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\*) pour détecter toute activité suspecte. (D3-SCP)",
+    "Utiliser des règles de détection basées sur les chemins de registre spécifiques (ex: HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\*) pour alerter sur la présence de services potentiellement malveillants. (D3-SCP)"
+  ],
+  "uncertainties": [
+    "L'attribution de l'activité de modification de registre au processus `services.exe (852)` est notée comme 'service_window', ce qui signifie que l'action pourrait être une activité normale du système plutôt qu'une action directe de l'échantillon lui-même. L'échantillon n'a pas été vu exécuter ces commandes de registre directement.",
+    "Aucune activité réseau (connexion établie, résolution DNS) n'a été observée, ce qui limite la compréhension des objectifs de communication de l'échantillon."
+  ],
+  "rejected_claims": []
+}

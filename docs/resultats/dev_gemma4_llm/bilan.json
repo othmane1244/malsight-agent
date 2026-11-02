@@ -1,0 +1,364 @@
+{
+ "T01": {
+  "echantillon": "T01",
+  "mode": "llm",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 175.9,
+  "attack_attendues": [
+   "T1547.001"
+  ],
+  "attack_trouvees": [
+   "T1547.001"
+  ],
+  "attack_vraies": [
+   "T1547.001"
+  ],
+  "attack_en_trop": [],
+  "attack_ratees": [],
+  "iocs_trouves": 3,
+  "iocs_attendus": 3,
+  "comportements_observes": 3,
+  "comportements_inferes": 0,
+  "rejets": [],
+  "attack_vraies_tol": [
+   "T1547.001"
+  ],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": []
+ },
+ "T02": {
+  "echantillon": "T02",
+  "mode": "llm",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 191.0,
+  "attack_attendues": [
+   "T1053.005"
+  ],
+  "attack_trouvees": [
+   "T1053"
+  ],
+  "attack_vraies": [],
+  "attack_en_trop": [
+   "T1053"
+  ],
+  "attack_ratees": [
+   "T1053.005"
+  ],
+  "iocs_trouves": 2,
+  "iocs_attendus": 2,
+  "comportements_observes": 3,
+  "comportements_inferes": 0,
+  "rejets": [],
+  "attack_vraies_tol": [
+   "T1053.005"
+  ],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": []
+ },
+ "T03": {
+  "echantillon": "T03",
+  "mode": "llm",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 148.2,
+  "attack_attendues": [
+   "T1543.003"
+  ],
+  "attack_trouvees": [
+   "T1543.003"
+  ],
+  "attack_vraies": [
+   "T1543.003"
+  ],
+  "attack_en_trop": [],
+  "attack_ratees": [],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 0,
+  "comportements_inferes": 1,
+  "rejets": [],
+  "attack_vraies_tol": [
+   "T1543.003"
+  ],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": []
+ },
+ "T04": {
+  "echantillon": "T04",
+  "mode": "llm",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 163.8,
+  "attack_attendues": [
+   "T1037.001"
+  ],
+  "attack_trouvees": [
+   "T1547.001"
+  ],
+  "attack_vraies": [],
+  "attack_en_trop": [
+   "T1547.001"
+  ],
+  "attack_ratees": [
+   "T1037.001"
+  ],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 1,
+  "comportements_inferes": 1,
+  "rejets": [],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [
+   "T1547.001"
+  ],
+  "attack_ratees_tol": [
+   "T1037.001"
+  ]
+ },
+ "T05": {
+  "echantillon": "T05",
+  "mode": "llm",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 190.9,
+  "attack_attendues": [
+   "T1112"
+  ],
+  "attack_trouvees": [
+   "T1547.001"
+  ],
+  "attack_vraies": [],
+  "attack_en_trop": [
+   "T1547.001"
+  ],
+  "attack_ratees": [
+   "T1112"
+  ],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 3,
+  "comportements_inferes": 0,
+  "rejets": [],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [
+   "T1547.001"
+  ],
+  "attack_ratees_tol": [
+   "T1112"
+  ]
+ },
+ "T06": {
+  "echantillon": "T06",
+  "mode": "llm",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 152.8,
+  "attack_attendues": [
+   "T1059.001"
+  ],
+  "attack_trouvees": [
+   "T1027"
+  ],
+  "attack_vraies": [],
+  "attack_en_trop": [
+   "T1027"
+  ],
+  "attack_ratees": [
+   "T1059.001"
+  ],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 2,
+  "comportements_inferes": 0,
+  "rejets": [],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [
+   "T1027"
+  ],
+  "attack_ratees_tol": [
+   "T1059.001"
+  ]
+ },
+ "T07": {
+  "echantillon": "T07",
+  "mode": "llm",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 144.8,
+  "attack_attendues": [
+   "T1082"
+  ],
+  "attack_trouvees": [
+   "T1047"
+  ],
+  "attack_vraies": [],
+  "attack_en_trop": [
+   "T1047"
+  ],
+  "attack_ratees": [
+   "T1082"
+  ],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 3,
+  "comportements_inferes": 0,
+  "rejets": [],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [
+   "T1047"
+  ],
+  "attack_ratees_tol": [
+   "T1082"
+  ]
+ },
+ "T08": {
+  "echantillon": "T08",
+  "mode": "llm",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 178.0,
+  "attack_attendues": [
+   "T1016"
+  ],
+  "attack_trouvees": [
+   "T1082"
+  ],
+  "attack_vraies": [],
+  "attack_en_trop": [
+   "T1082"
+  ],
+  "attack_ratees": [
+   "T1016"
+  ],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 3,
+  "comportements_inferes": 0,
+  "rejets": [],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [
+   "T1082"
+  ],
+  "attack_ratees_tol": [
+   "T1016"
+  ]
+ },
+ "T09": {
+  "echantillon": "T09",
+  "mode": "llm",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 157.9,
+  "attack_attendues": [
+   "T1560"
+  ],
+  "attack_trouvees": [
+   "T1074"
+  ],
+  "attack_vraies": [],
+  "attack_en_trop": [
+   "T1074"
+  ],
+  "attack_ratees": [
+   "T1560"
+  ],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 1,
+  "comportements_inferes": 0,
+  "rejets": [],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [
+   "T1074"
+  ],
+  "attack_ratees_tol": [
+   "T1560"
+  ]
+ },
+ "T10": {
+  "echantillon": "T10",
+  "mode": "llm",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 164.8,
+  "attack_attendues": [
+   "T1105"
+  ],
+  "attack_trouvees": [
+   "T1547.001"
+  ],
+  "attack_vraies": [],
+  "attack_en_trop": [
+   "T1547.001"
+  ],
+  "attack_ratees": [
+   "T1105"
+  ],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 0,
+  "comportements_inferes": 15,
+  "rejets": [],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [
+   "T1547.001"
+  ],
+  "attack_ratees_tol": [
+   "T1105"
+  ]
+ },
+ "T11": {
+  "echantillon": "T11",
+  "mode": "llm",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 90.5,
+  "attack_attendues": [],
+  "attack_trouvees": [],
+  "attack_vraies": [],
+  "attack_en_trop": [],
+  "attack_ratees": [],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 1,
+  "comportements_inferes": 0,
+  "rejets": [],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": []
+ },
+ "T12": {
+  "echantillon": "T12",
+  "mode": "llm",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 120.3,
+  "attack_attendues": [
+   "T1082",
+   "T1547.001"
+  ],
+  "attack_trouvees": [
+   "T1082",
+   "T1547.001"
+  ],
+  "attack_vraies": [
+   "T1082",
+   "T1547.001"
+  ],
+  "attack_en_trop": [],
+  "attack_ratees": [],
+  "iocs_trouves": 3,
+  "iocs_attendus": 3,
+  "comportements_observes": 4,
+  "comportements_inferes": 0,
+  "rejets": [],
+  "attack_vraies_tol": [
+   "T1082",
+   "T1547.001"
+  ],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": []
+ }
+}

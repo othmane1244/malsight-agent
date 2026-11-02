@@ -1,0 +1,194 @@
+{
+  "sample": {
+    "filename": "T08_decouverte_reseau.ps1",
+    "sha256": "a8957953c905b4f7c069d1f759816f77a93a0334ca0c8436fd91993676a3cf90",
+    "md5": "2006d0747f6ab9022f05118743b17516",
+    "size": 1030,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon exécute des commandes système standard pour la découverte de réseau et modifie des clés de registre spécifiques. Il exécute successivement `ipconfig.exe /all`, `ROUTE.EXE print`, et `ARP.EXE -a` via `powershell.exe`. De plus, il écrit un fichier local et manipule plusieurs clés de registre sous `HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent`. Ces actions indiquent une phase de reconnaissance et de persistance potentielle.",
+  "behaviors": [
+    {
+      "summary": "Exécution d'outils système pour la découverte d'informations réseau.",
+      "evidence": "L'échantillon exécute \"C:\\Windows\\system32\\ipconfig.exe\" /all, \"C:\\Windows\\system32\\ROUTE.EXE\" print, et \"C:\\Windows\\system32\\ARP.EXE\" -a, tous lancés depuis \"powershell.exe (7472)\".",
+      "kind": "observed"
+    },
+    {
+      "summary": "Écriture de données sur le système de fichiers.",
+      "evidence": "Création du fichier \"C:\\travail\\malsight_t08.txt\" par \"powershell.exe (7472)\".",
+      "kind": "observed"
+    },
+    {
+      "summary": "Modification de clés de registre liées à un agent système.",
+      "evidence": "L'échantillon interagit avec les clés de registre suivantes : HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent, HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion, HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion\\Parameters, et HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion\\Parameters\\TrapPollTimeMilliSecs, en utilisant \"ARP.EXE (8168)\".",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "a8957953c905b4f7c069d1f759816f77a93a0334ca0c8436fd91993676a3cf90",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "2006d0747f6ab9022f05118743b17516",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\malsight_t08.txt",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion\\Parameters",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent\\CurrentVersion\\Parameters\\TrapPollTimeMilliSecs",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1016",
+      "name": "System Network Configuration Discovery",
+      "tactic": "discovery",
+      "source": "rule",
+      "confidence": "high",
+      "evidence": "règle R-T1016-processus : \"C:\\Windows\\system32\\ipconfig.exe\" /all (powershell.exe (7472))"
+    }
+  ],
+  "countermeasures": [
+    {
+      "id": "D3-FE",
+      "name": "File Encryption",
+      "technique": "T1016",
+      "tactic": "Harden",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileEncryption/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-DA",
+      "name": "Dynamic Analysis",
+      "technique": "T1016",
+      "tactic": "Detect",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:DynamicAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EFA",
+      "name": "Emulated File Analysis",
+      "technique": "T1016",
+      "tactic": "Detect",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:EmulatedFileAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FA",
+      "name": "File Analysis",
+      "technique": "T1016",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FIM",
+      "name": "File Integrity Monitoring",
+      "technique": "T1016",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-PSA",
+      "name": "Process Spawn Analysis",
+      "technique": "T1016",
+      "tactic": "Detect",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SCA",
+      "name": "System Call Analysis",
+      "technique": "T1016",
+      "tactic": "Detect",
+      "artifact": "System Call",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CF",
+      "name": "Content Filtering",
+      "technique": "T1016",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentFiltering/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CM",
+      "name": "Content Modification",
+      "technique": "T1016",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentModification/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CQ",
+      "name": "Content Quarantine",
+      "technique": "T1016",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentQuarantine/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EAL",
+      "name": "Executable Allowlisting",
+      "technique": "T1016",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EDL",
+      "name": "Executable Denylisting",
+      "technique": "T1016",
+      "tactic": "Isolate",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
+      "source": "d3fend"
+    }
+  ],
+  "recommendations": [
+    "Surveiller l'exécution de `ipconfig.exe` lorsqu'il est appelé par des processus inattendus comme `powershell.exe` (Détection de processus anormaux).",
+    "Mettre en place une surveillance des modifications des clés de registre spécifiques associées à l'agent RFC1156, notamment `HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent` et ses sous-clés, pour détecter toute tentative de persistance ou de modification de configuration (D3-FIM).",
+    "Surveiller les appels aux outils système comme `ipconfig.exe` pour détecter des séquences d'actions inhabituelles de découverte de réseau (D3-PSA).",
+    "Considérer l'application de politiques de contrôle des applications pour limiter l'exécution des outils système de diagnostic réseau (`ipconfig.exe`) aux utilisateurs ou processus autorisés (D3-EAL).",
+    "Analyser les fichiers suspects (SHA256: a8957953c905b4f7c069d1f759816f77a93a0334ca0c8436fd91993676a3cf90, MD5: 2006d0747f6ab9022f05118743b17516) en utilisant des solutions de sandbox ou d'analyse dynamique pour identifier leur comportement réel (D3-DA, D3-FA)."
+  ],
+  "uncertainties": [],
+  "rejected_claims": []
+}

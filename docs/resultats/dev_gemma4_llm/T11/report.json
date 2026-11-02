@@ -1,0 +1,44 @@
+{
+  "sample": {
+    "filename": "T11_temoin_negatif.ps1",
+    "sha256": "412fabad6e7a7f182f34e56502ddd3c4adaef3f8d69333338b2502e600094258",
+    "md5": "9d45396a8fdc603d82da39de93d48f97",
+    "size": 1116,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon est un script PowerShell (`T11_temoin_negatif.ps1`) qui a été exécuté. L'activité observée se limite à la création ou la modification d'un fichier local. Aucune activité réseau, modification de registre, ou exécution de processus enfant n'a été détectée. Le script écrit un fichier nommé `journal_t11.txt` dans le répertoire `C:\\travail\\`.",
+  "behaviors": [
+    {
+      "summary": "Écriture d'un fichier local",
+      "evidence": "C:\\travail\\journal_t11.txt",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "412fabad6e7a7f182f34e56502ddd3c4adaef3f8d69333338b2502e600094258",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "9d45396a8fdc603d82da39de93d48f97",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\journal_t11.txt",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [],
+  "countermeasures": [],
+  "recommendations": [
+    "Surveiller la création de fichiers dans des répertoires spécifiques comme `C:\\travail\\` pour détecter des écritures de données non sollicitées. (Aucun identifiant D3FEND spécifique)",
+    "Surveiller les hachages SHA256 et MD5 connus (ex: `412fabad6e7a7f182f34e56502ddd3c4adaef3f8d69333338b2502e600094258`, `9d45396a8fdc603d82da39de93d48f97`) pour bloquer l'exécution de fichiers malveillants connus.",
+    "Mettre en place des politiques de contrôle des répertoires pour restreindre l'écriture de fichiers dans des chemins non essentiels comme `C:\\travail\\`."
+  ],
+  "uncertainties": [],
+  "rejected_claims": []
+}

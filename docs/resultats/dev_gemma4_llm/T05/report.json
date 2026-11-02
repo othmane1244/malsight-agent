@@ -1,0 +1,211 @@
+{
+  "sample": {
+    "filename": "T05_registre.ps1",
+    "sha256": "5bd166c11137cafde8f578e7a72d88f0632df4a1bf3a368bef4e1e96e5dd4b7e",
+    "md5": "abd04bcc990942fbf87ef91ba187bc1e",
+    "size": 1058,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon, exécuté via PowerShell, a interagi avec le système de registre pour créer des clés sous `HKCU\\Software\\MalsightTest` et `HKCU\\Software\\MalsightTest\\Config` (observation `sample_tree`). De plus, des modifications de registre ont été observées sur des chemins liés aux notifications système de Windows (`service_window`). Aucune activité réseau, appel API sensible, ou règle CAPA n'a été détectée. L'activité observée est principalement limitée à la modification de clés de registre utilisateur.",
+  "behaviors": [
+    {
+      "summary": "Modification de clés de registre utilisateur pour un test spécifique.",
+      "evidence": "HKCU\\Software\\MalsightTest",
+      "kind": "observed"
+    },
+    {
+      "summary": "Modification de clés de registre utilisateur pour un test spécifique.",
+      "evidence": "HKCU\\Software\\MalsightTest\\Config",
+      "kind": "observed"
+    },
+    {
+      "summary": "Interaction avec des clés de registre système liées aux notifications Windows.",
+      "evidence": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "5bd166c11137cafde8f578e7a72d88f0632df4a1bf3a368bef4e1e96e5dd4b7e",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "abd04bcc990942fbf87ef91ba187bc1e",
+      "source": "fichier"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\MalsightTest",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\MalsightTest\\Config",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power\\Setting",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power\\appType",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power\\wnsId",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo",
+      "source": "extraction"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Microsoft\\Windows\\Notifications\\wpndatabase.db-wal",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1547.001",
+      "name": "Registry Run Keys / Startup Folder",
+      "tactic": "persistence, privilege-escalation",
+      "source": "llm",
+      "confidence": "medium",
+      "evidence": "HKCU\\Software\\MalsightTest"
+    }
+  ],
+  "countermeasures": [
+    {
+      "id": "D3-FE",
+      "name": "File Encryption",
+      "technique": "T1547.001",
+      "tactic": "Harden",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileEncryption/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-DA",
+      "name": "Dynamic Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:DynamicAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EFA",
+      "name": "Emulated File Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:EmulatedFileAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FA",
+      "name": "File Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FIM",
+      "name": "File Integrity Monitoring",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SICA",
+      "name": "System Init Config Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "System Init Configuration",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemInitConfigAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CF",
+      "name": "Content Filtering",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentFiltering/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CM",
+      "name": "Content Modification",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentModification/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CQ",
+      "name": "Content Quarantine",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentQuarantine/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EAL",
+      "name": "Executable Allowlisting",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EDL",
+      "name": "Executable Denylisting",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-LFP",
+      "name": "Local File Permissions",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:LocalFilePermissions/",
+      "source": "d3fend"
+    }
+  ],
+  "recommendations": [
+    "Surveiller la création ou la modification des clés de registre de démarrage utilisateur, telles que HKCU\\Software\\MalsightTest, pour détecter des tentatives de persistance (D3-FIM).",
+    "Surveiller les modifications des clés de registre système sensibles, en particulier celles liées aux notifications ou aux tâches planifiées, pour détecter des changements non autorisés (D3-FIM).",
+    "Mettre en place des politiques de contrôle des applications pour restreindre l'exécution de fichiers provenant de chemins temporaires ou non standard (D3-EAL).",
+    "Configurer des règles de détection (Sysmon/EDR) pour alerter sur l'écriture de clés de registre spécifiques utilisées pour la persistance, comme HKCU\\Software\\MalsightTest (D3-FIM).",
+    "Analyser les processus qui accèdent ou modifient les bases de données de notifications utilisateur (ex: C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Microsoft\\Windows\\Notifications\\wpndatabase.db-wal) pour identifier des comportements anormaux (D3-DA)."
+  ],
+  "uncertainties": [
+    "Les modifications de registre observées sur les chemins de notifications système (`service_window`) ne sont pas directement attribuables à l'exécution de l'échantillon, mais sont des activités de fond de Windows détectées pendant l'analyse."
+  ],
+  "rejected_claims": []
+}

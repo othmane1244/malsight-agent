@@ -1,0 +1,211 @@
+{
+  "sample": {
+    "filename": "T05_registre.ps1",
+    "sha256": "5bd166c11137cafde8f578e7a72d88f0632df4a1bf3a368bef4e1e96e5dd4b7e",
+    "md5": "abd04bcc990942fbf87ef91ba187bc1e",
+    "size": 1058,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon, exécuté via PowerShell, a interagi avec le système de registre pour créer des clés sous `HKCU\\Software\\MalsightTest` et `HKCU\\Software\\MalsightTest\\Config` (attribution : sample_tree). De plus, des modifications de registre ont été observées sur des clés liées aux notifications système de Windows (attribution : service_window). Aucune activité réseau, appel d'API sensible ou règle CAPA n'ont été observés. L'activité principale concerne la persistance ou la configuration de données utilisateur spécifiques.",
+  "behaviors": [
+    {
+      "summary": "Écriture de clés de registre spécifiques pour un test ou une configuration.",
+      "evidence": "HKCU\\Software\\MalsightTest",
+      "kind": "observed"
+    },
+    {
+      "summary": "Écriture de clés de registre de configuration pour un test ou une configuration.",
+      "evidence": "HKCU\\Software\\MalsightTest\\Config",
+      "kind": "observed"
+    },
+    {
+      "summary": "Interaction avec les clés de registre des notifications système de Windows.",
+      "evidence": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "5bd166c11137cafde8f578e7a72d88f0632df4a1bf3a368bef4e1e96e5dd4b7e",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "abd04bcc990942fbf87ef91ba187bc1e",
+      "source": "fichier"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\MalsightTest",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\MalsightTest\\Config",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power\\Setting",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power\\appType",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power\\wnsId",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo",
+      "source": "extraction"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Microsoft\\Windows\\Notifications\\wpndatabase.db-wal",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1547.001",
+      "name": "Registry Run Keys / Startup Folder",
+      "tactic": "persistence, privilege-escalation",
+      "source": "llm",
+      "confidence": "medium",
+      "evidence": "HKCU\\Software\\MalsightTest"
+    }
+  ],
+  "countermeasures": [
+    {
+      "id": "D3-FE",
+      "name": "File Encryption",
+      "technique": "T1547.001",
+      "tactic": "Harden",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileEncryption/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-DA",
+      "name": "Dynamic Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:DynamicAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EFA",
+      "name": "Emulated File Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:EmulatedFileAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FA",
+      "name": "File Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FIM",
+      "name": "File Integrity Monitoring",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SICA",
+      "name": "System Init Config Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "System Init Configuration",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemInitConfigAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CF",
+      "name": "Content Filtering",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentFiltering/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CM",
+      "name": "Content Modification",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentModification/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CQ",
+      "name": "Content Quarantine",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentQuarantine/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EAL",
+      "name": "Executable Allowlisting",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EDL",
+      "name": "Executable Denylisting",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-LFP",
+      "name": "Local File Permissions",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:LocalFilePermissions/",
+      "source": "d3fend"
+    }
+  ],
+  "recommendations": [
+    "Surveiller la création ou la modification des clés de registre de démarrage utilisateur, telles que HKCU\\Software\\MalsightTest, pour détecter les tentatives de persistance (D3-FIM).",
+    "Surveiller les modifications des clés de registre système sensibles, en particulier celles liées aux notifications ou aux tâches planifiées, pour détecter les changements non autorisés (D3-FIM).",
+    "Mettre en place des politiques de contrôle des applications pour restreindre l'exécution de fichiers provenant de chemins temporaires ou non standard, afin de limiter l'impact potentiel (D3-EAL).",
+    "Configurer des règles de détection basées sur les chemins de registre spécifiques listés (ex: HKCU\\Software\\MalsightTest) pour alerter en cas de création ou de modification (D3-FIM).",
+    "Analyser les comportements d'écriture dans les bases de données locales de notifications (ex: C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Microsoft\\Windows\\Notifications\\wpndatabase.db-wal) pour identifier des activités suspectes (D3-DA)."
+  ],
+  "uncertainties": [
+    "L'attribution des modifications de registre sur les clés de notifications système (ex: `HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power`) est attribuée à `service_window` (svchost.exe), ce qui suggère une activité système de fond plutôt qu'une action directe de l'échantillon, bien que l'échantillon puisse avoir déclenché cette activité."
+  ],
+  "rejected_claims": []
+}

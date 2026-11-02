@@ -1,0 +1,124 @@
+{
+  "sample": {
+    "filename": "T07_decouverte_systeme.ps1",
+    "sha256": "91379f80153cf471af84f022d11c9a6b683a02ed584a80d0bf3734b6bab1e5f7",
+    "md5": "83410fbb1e5852e13f895ac481f70758",
+    "size": 990,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon, un script PowerShell nommé \"T07_decouverte_systeme.ps1\", exécute des commandes système pour collecter des informations sur l'environnement cible. Les activités observées incluent l'exécution de `HOSTNAME.EXE` et `systeminfo.exe` via `powershell.exe`, ainsi que la création d'un fichier texte dans le répertoire `C:\\travail\\malsight_t07.txt`. Ces actions sont typiques des phases de reconnaissance et de collecte d'informations (Discovery).",
+  "behaviors": [
+    {
+      "summary": "Collecte d'informations système de base",
+      "evidence": "Exécution de \"C:\\Windows\\system32\\HOSTNAME.EXE\" par powershell.exe (3320) ; Exécution de \"C:\\Windows\\system32\\systeminfo.exe\" par powershell.exe (3320)",
+      "kind": "observed"
+    },
+    {
+      "summary": "Écriture de données dans un fichier local",
+      "evidence": "Création du fichier \"C:\\travail\\malsight_t07.txt\" par powershell.exe (3320)",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "91379f80153cf471af84f022d11c9a6b683a02ed584a80d0bf3734b6bab1e5f7",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "83410fbb1e5852e13f895ac481f70758",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\malsight_t07.txt",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1082",
+      "name": "System Information Discovery",
+      "tactic": "discovery",
+      "source": "rule",
+      "confidence": "high",
+      "evidence": "règle R-T1082-processus : \"C:\\Windows\\system32\\HOSTNAME.EXE\" (powershell.exe (3320))"
+    }
+  ],
+  "countermeasures": [
+    {
+      "id": "D3-PSA",
+      "name": "Process Spawn Analysis",
+      "technique": "T1082",
+      "tactic": "Detect",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SCA",
+      "name": "System Call Analysis",
+      "technique": "T1082",
+      "tactic": "Detect",
+      "artifact": "System Call",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EAL",
+      "name": "Executable Allowlisting",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EDL",
+      "name": "Executable Denylisting",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-HBPI",
+      "name": "Hardware-based Process Isolation",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:Hardware-basedProcessIsolation/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SCF",
+      "name": "System Call Filtering",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "System Call",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallFiltering/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-DE",
+      "name": "Decoy Environment",
+      "technique": "T1082",
+      "tactic": "Deceive",
+      "artifact": "Decoy Artifact",
+      "url": "https://d3fend.mitre.org/technique/d3f:DecoyEnvironment/",
+      "source": "d3fend"
+    }
+  ],
+  "recommendations": [
+    "Surveiller l'exécution de processus spécifiques comme `powershell.exe` lorsqu'ils sont appelés avec des arguments contenant des noms de fichiers système comme `C:\\Windows\\system32\\HOSTNAME.EXE` (Détection de processus anormaux) (D3-PSA).",
+    "Mettre en place des politiques de contrôle des processus pour limiter l'exécution de scripts ou d'outils système (comme PowerShell) à des chemins et des arguments prédéfinis (D3-EAL).",
+    "Surveiller les appels système pour détecter des tentatives d'exécution de commandes d'information système inhabituelles ou non sollicitées (D3-SCA).",
+    "Analyser les fichiers avec les hachages SHA256 `91379f80153cf471af84f022d11c9a6b683a02ed584a80d0bf3734b6bab1e5f7` et MD5 `83410fbb1e5852e13f895ac481f70758` et bloquer leur exécution ou leur mouvement (Remédiation/Blocage des IOCs).",
+    "Surveiller la création ou la modification du fichier `C:\\travail\\malsight_t07.txt` pour détecter toute activité suspecte liée à ce chemin (Surveillance de fichiers spécifiques)."
+  ],
+  "uncertainties": [],
+  "rejected_claims": []
+}

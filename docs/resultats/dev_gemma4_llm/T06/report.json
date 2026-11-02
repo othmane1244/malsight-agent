@@ -1,0 +1,59 @@
+{
+  "sample": {
+    "filename": "T06_powershell_encode.ps1",
+    "sha256": "218f8c080741fa2a5999144e4e0e8006ad9cc8f5c069babcc5275c3efcf04219",
+    "md5": "93e6808250a5e84400feff270ba03042",
+    "size": 1199,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon exécute PowerShell avec une commande encodée (`-EncodedCommand`) et crée ensuite un fichier local. Aucune activité réseau n'a été observée. L'exécution de PowerShell avec des commandes encodées est un comportement notable.",
+  "behaviors": [
+    {
+      "summary": "Exécution de PowerShell avec une commande encodée",
+      "evidence": "powershell.exe \"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\" -NoProfile -EncodedCommand UwBlAHQALQBDAG8AbgB0AGUAbgB0ACAALQBQAGEAdABoACAAJwBDADoAXAB0AHIAYQB2AGEAaQBsAFwAbQBhAGwAcwBpAGcAaAB0AF8AdAAwADYALgB0AHgAdAAnACAALQBWAGEAbAB1AGUAIAAnAE0AYQBsAFMAaQBnAGgAdAAgAFQAMAA2ACcA",
+      "kind": "observed"
+    },
+    {
+      "summary": "Création d'un fichier local",
+      "evidence": "C:\\travail\\malsight_t06.txt",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "218f8c080741fa2a5999144e4e0e8006ad9cc8f5c069babcc5275c3efcf04219",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "93e6808250a5e84400feff270ba03042",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\malsight_t06.txt",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1027",
+      "name": "Obfuscated Files or Information",
+      "tactic": "stealth",
+      "source": "llm",
+      "confidence": "medium",
+      "evidence": "L'utilisation de l'argument `-EncodedCommand` avec PowerShell pour exécuter une chaîne de caractères encodée est une technique courante pour masquer l'intention réelle de la commande."
+    }
+  ],
+  "countermeasures": [],
+  "recommendations": [
+    "Surveiller l'utilisation de PowerShell avec l'argument `-EncodedCommand` via Sysmon (Event ID 1) pour détecter l'exécution de commandes encodées. (D3-PS) (D3-LFP)",
+    "Mettre en place des règles de détection YARA ou Sigma ciblant les chaînes de caractères ou les signatures associées aux IOCs SHA256 (218f8c080741fa2a5999144e4e0e8006ad9cc8f5c069babcc5275c3efcf04219) et MD5 (93e6808250a5e84400feff270ba03042).",
+    "Appliquer le durcissement de la politique d'exécution de PowerShell (PowerShell Constrained Language Mode) pour limiter les capacités d'encodage et d'exécution de scripts complexes. (D3-PS)",
+    "Surveiller les accès aux fichiers spécifiques comme `C:\\travail\\malsight_t06.txt` pour détecter toute lecture ou modification non autorisée."
+  ],
+  "uncertainties": [],
+  "rejected_claims": []
+}

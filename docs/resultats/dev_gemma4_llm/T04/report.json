@@ -1,0 +1,177 @@
+{
+  "sample": {
+    "filename": "T04_script_logon.ps1",
+    "sha256": "75f147e378deae3f4ad4f4bf64b5367f4e8bc203a47b2dfcb114510d54c9a37b",
+    "md5": "79df13f3d86a8156fb0bc208fd4c1536",
+    "size": 998,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon, un script PowerShell nommé `T04_script_logon.ps1`, a été exécuté et a interagi avec le système de registre. Il a écrit une valeur dans la clé `HKCU\\Environment\\UserInitMprLogonScript` et une autre clé dans le cache des tâches planifiées (`HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo`). Ces actions suggèrent une tentative de persistance ou de modification des scripts de connexion utilisateur et des tâches planifiées.",
+  "behaviors": [
+    {
+      "summary": "Modification des scripts de connexion utilisateur (UserInit/MprLogon)",
+      "evidence": "HKCU\\Environment\\UserInitMprLogonScript",
+      "kind": "inferred"
+    },
+    {
+      "summary": "Écriture dans le cache des tâches planifiées",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "75f147e378deae3f4ad4f4bf64b5367f4e8bc203a47b2dfcb114510d54c9a37b",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "79df13f3d86a8156fb0bc208fd4c1536",
+      "source": "fichier"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Environment\\UserInitMprLogonScript",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1547.001",
+      "name": "Registry Run Keys / Startup Folder",
+      "tactic": "persistence, privilege-escalation",
+      "source": "llm",
+      "confidence": "medium",
+      "evidence": "Modification de la clé de registre HKCU\\Environment\\UserInitMprLogonScript"
+    }
+  ],
+  "countermeasures": [
+    {
+      "id": "D3-FE",
+      "name": "File Encryption",
+      "technique": "T1547.001",
+      "tactic": "Harden",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileEncryption/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-DA",
+      "name": "Dynamic Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:DynamicAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EFA",
+      "name": "Emulated File Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:EmulatedFileAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FA",
+      "name": "File Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FIM",
+      "name": "File Integrity Monitoring",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SICA",
+      "name": "System Init Config Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "System Init Configuration",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemInitConfigAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CF",
+      "name": "Content Filtering",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentFiltering/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CM",
+      "name": "Content Modification",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentModification/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CQ",
+      "name": "Content Quarantine",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentQuarantine/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EAL",
+      "name": "Executable Allowlisting",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EDL",
+      "name": "Executable Denylisting",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-LFP",
+      "name": "Local File Permissions",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:LocalFilePermissions/",
+      "source": "d3fend"
+    }
+  ],
+  "recommendations": [
+    "Surveiller les modifications des clés de registre de démarrage utilisateur, telles que HKCU\\Environment\\UserInitMprLogonScript, pour détecter l'ajout de scripts ou de chemins exécutables non autorisés (D3-FIM).",
+    "Mettre en place des politiques de durcissement pour restreindre l'écriture dans les clés de registre de démarrage utilisateur (HKCU\\Environment\\UserInitMprLogonScript) afin de prévenir l'exécution de code au démarrage (D3-LFP).",
+    "Utiliser des solutions de détection des comportements pour identifier les tentatives de modification des clés de registre système critiques, comme celles liées aux tâches planifiées (HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo) (D3-FIM).",
+    "Considérer l'implémentation de listes blanches (Allowlisting) pour les exécutables et les scripts afin de n'autoriser que les programmes connus et nécessaires au fonctionnement normal du système (D3-EAL).",
+    "Surveiller les événements de création ou de modification de tâches planifiées pour détecter toute activité suspecte (D3-FIM)."
+  ],
+  "uncertainties": [
+    "L'attribution de la modification de la clé `HKCU\\Environment\\UserInitMprLogonScript` est attribuée au processus `powershell.exe (8064)` via `sample_tree`, ce qui indique que l'échantillon est responsable de cette action. Cependant, le contexte exact de cette modification (valeur écrite, données) n'est pas fourni, rendant l'impact précis incertain.",
+    "L'écriture dans `HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo` est attribuée à `service_window` via `procmon`, ce qui pourrait indiquer une activité de fond de Windows ou une interaction indirecte avec un service, même si l'échantillon est le déclencheur général."
+  ],
+  "rejected_claims": []
+}

@@ -7,6 +7,27 @@ est dans les [issues](https://github.com/othmane1244/malsight-agent/issues) et l
 
 ---
 
+## 2026-11-03 (soir) : comparaison des 3 modes sur le jeu de développement
+
+**Modèle : gemma4:e4b**, contexte 8192, notation D9. Détail et lecture :
+`docs/resultats/comparaison_modes_dev.md`.
+
+| Mode | Strict (vraies / FP) | Tolérant (vraies / FP) | Précision strict | T11 sans FP | IOC | JSON | Temps |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `regles` | **10/12 · 0** | **10/12 · 0** | **100 %** | oui | 17/17 | 12/12 | < 1 s |
+| `llm` | 4/12 · 8 | 5/12 · 7 | 33 % | oui | 17/17 | 12/12 | 1 879 s |
+| `hybride` | **10/12** · 2 | **10/12** · 2 | 83 % | oui | 17/17 | 12/12 | 1 510 s |
+
+- Les **règles** portent la justesse ATT&CK ; le **LLM seul** reste faible sur le mapping (4/12)
+  mais réussit T12 et n'invente rien sur T11.
+- En **hybride**, le LLM n'ajoute **aucune** vraie technique et ajoute **2 faux positifs** à
+  preuve incohérente (T05 : T1547.001 sur une clé qui n'est pas une clé Run ; T10 : T1547.002 sur
+  un domaine). Son apport réel : résumé, comportements, recommandations D3FEND.
+- Pistes proposées, non appliquées : cohérence technique / preuve pour les techniques couvertes
+  par une règle ; techniques LLM non confirmées présentées « à valider ».
+
+---
+
 ## 2026-11-03 (après-midi) : contexte Ollama et statut des séries de référence
 
 - **Incident** : la série `llm` (gemma4:e4b) est restée bloquée près d'une heure sur T02. Cause :
