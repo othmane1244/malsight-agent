@@ -7,7 +7,29 @@ est dans les [issues](https://github.com/othmane1244/malsight-agent/issues) et l
 
 ---
 
+## 2026-11-03 (après-midi) : contexte Ollama et statut des séries de référence
+
+- **Incident** : la série `llm` (gemma4:e4b) est restée bloquée près d'une heure sur T02. Cause :
+  contexte Ollama par défaut de **4096 tokens**, partagé entre le prompt (T02 : environ 3 000
+  tokens) et la réponse, et génération sans limite en sortie JSON. Correctif (commit d2e976c) :
+  `LLM_NUM_CTX` 8192, `LLM_NUM_PREDICT` 2048 et `LLM_TIMEOUT_S` 600 explicites.
+- **Statut des séries** :
+  - `docs/resultats/dev_gemma4/` (contexte **4096**, avant les règles D7) devient une **mesure
+    historique** : T02 et T10, les plus gros prompts, ont pu être tronqués. Elle reste utile
+    seulement pour la comparaison avec `qwen3:8b` sur l'ancien code (base `43ef7d7`).
+  - La nouvelle série `llm` (contexte **8192**) la **remplace** comme référence du mode LLM seul.
+  - Le **tableau final des 3 modes** (`llm`, `regles`, `hybride`) n'utilise **que des séries en
+    contexte 8192** (le mode `regles` n'utilise pas de LLM).
+- **qwen3:8b** (téléchargement en cours) : sa **comparaison finale** avec gemma4:e4b se fera en
+  **mode hybride, contexte 8192**. Sa série sur la base `43ef7d7` (contexte par défaut) ne sert
+  qu'à comparer avec l'ancienne série gemma `dev_gemma4`.
+
+---
+
 ## 2026-11-03 : agent sur le jeu de développement T01 à T12 (gemma4:e4b)
+
+> **Mesure historique** (contexte Ollama 4096, avant les règles D7) : remplacée comme référence
+> du mode LLM seul par la série `dev_gemma4_llm` (contexte 8192). Voir l'entrée suivante.
 
 Résultats complets : `docs/resultats/dev_gemma4/` (`report.json` et `rapport.md` par échantillon,
 `bilan.csv`, `bilan.md`). Relançable avec `malsight serie <sortie>` (autre modèle : `LLM_MODEL`).
