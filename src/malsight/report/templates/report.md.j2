@@ -45,6 +45,21 @@
 | [{{ t.id }}](https://attack.mitre.org/techniques/{{ t.id | replace(".", "/") }}/) | {{ t.name }} | {{ t.tactic }} | {{ t.source }} | {{ t.confidence }} | {{ t.evidence }} |
 {% endfor %}
 
+## Contre-mesures D3FEND
+
+{% if r.countermeasures %}
+Contre-mesures défensives [MITRE D3FEND](https://d3fend.mitre.org) associées aux techniques
+ATT&CK retenues (source : d3fend, cache local ; IDs vérifiés).
+
+| Technique ATT&CK | Contre-mesure D3FEND | Tactique | Artefact |
+| --- | --- | --- | --- |
+{% for c in r.countermeasures %}
+| [{{ c.technique }}](https://attack.mitre.org/techniques/{{ c.technique | replace(".", "/") }}/) | [{{ c.id }} {{ c.name }}]({{ c.url or "https://d3fend.mitre.org/" }}) | {{ c.tactic }} | {{ c.artifact }} |
+{% endfor %}
+{% else %}
+- Aucune (aucune technique ATT&CK retenue, ou cache D3FEND absent : `malsight download-d3fend`).
+{% endif %}
+
 ## Recommandations
 
 {% for rec in r.recommendations %}

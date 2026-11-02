@@ -95,6 +95,17 @@ class AttackTechnique(BaseModel):
     evidence: str
 
 
+class Countermeasure(BaseModel):
+    """Contre-mesure MITRE D3FEND associée à une technique ATT&CK retenue (jamais inventée par le LLM)."""
+    id: str                       # ex. "D3-LFP"
+    name: str                     # ex. "Local File Permissions"
+    technique: str                # technique ATT&CK couverte, ex. "T1547.001"
+    tactic: str = ""              # tactique D3FEND : Harden, Detect, Isolate, Deceive, Evict, Restore...
+    artifact: str = ""            # artefact numérique visé, ex. "File"
+    url: str = ""                 # page d3fend.mitre.org
+    source: Literal["d3fend"] = "d3fend"
+
+
 class Report(BaseModel):
     sample: SampleInfo
     executive_summary: str = ""
@@ -102,6 +113,7 @@ class Report(BaseModel):
     iocs: list[IOC] = Field(default_factory=list)
     sensitive_apis: list[SensitiveApi] = Field(default_factory=list)
     attack: list[AttackTechnique] = Field(default_factory=list)
+    countermeasures: list[Countermeasure] = Field(default_factory=list)   # D3FEND, depuis le cache local
     recommendations: list[str] = Field(default_factory=list)
     uncertainties: list[str] = Field(default_factory=list)
     rejected_claims: list[str] = Field(default_factory=list)   # rempli par le vérificateur

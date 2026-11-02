@@ -1,4 +1,4 @@
-"""Interface en ligne de commande : malsight extract | analyze | comparer | download-attack."""
+"""Interface en ligne de commande : malsight extract | analyze | comparer | download-attack | download-d3fend."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -24,9 +24,11 @@ def extract(sample: Path, cape_report: Path = typer.Option(None, help="Rapport J
 @app.command()
 def analyze(case_file: Path, out: Path = typer.Option(None, help="Rapport Markdown de sortie"),
             no_llm: bool = typer.Option(False, help="Sans LLM : faits extraits uniquement"),
-            attack_db: Path = Path("data/enterprise-attack.json")):
+            attack_db: Path = Path("data/enterprise-attack.json"),
+            d3fend_cache: Path = typer.Option(Path("data/d3fend"), help="Cache local D3FEND (hors ligne)")):
     """Dossier de cas -> rapport vérifié (Markdown + IOC STIX)."""
     from malsight.agent.pipeline import analyze as run
+    from malsight.defend.kb import DefendKB
     from malsight.report.render import to_markdown, to_stix
     kb = None
     if attack_db.exists():
@@ -34,8 +36,11 @@ def analyze(case_file: Path, out: Path = typer.Option(None, help="Rapport Markdo
         kb = AttackKB.load(attack_db)
     else:
         typer.echo("Base ATT&CK absente : lancez `malsight download-attack` (IDs non vérifiés).")
+    defend = DefendKB(d3fend_cache)
+    if not any(d3fend_cache.glob("T*.json")):
+        typer.echo("Cache D3FEND vide : lancez `malsight download-d3fend` (aucune contre-mesure).")
     case = Case.model_validate_json(case_file.read_text(encoding="utf-8"))
-    report = run(case, use_llm=not no_llm, kb=kb)
+    report = run(case, use_llm=not no_llm, kb=kb, defend=defend)
     out = out or case_file.with_name("rapport.md")
     out.write_text(to_markdown(report), encoding="utf-8")
     case_file.with_name("report.json").write_text(report.model_dump_json(indent=2), encoding="utf-8")
@@ -64,6 +69,18 @@ def download_attack(dest: Path = Path("data/enterprise-attack.json")):
     """Télécharge la base MITRE ATT&CK Enterprise (STIX)."""
     from malsight.attack.kb import download
     typer.echo(f"Base ATT&CK : {download(dest)}")
+
+
+@app.command("download-d3fend")
+def download_d3fend(verites: Path = typer.Option(Path("lab/verite-terrain"), help="Vérités terrain (techniques à couvrir)"),
+                    technique: list[str] = typer.Option(None, help="Technique ATT&CK supplémentaire (répétable)"),
+                    cache: Path = typer.Option(Path("data/d3fend"), help="Cache local D3FEND")):
+    """Pré-remplit le cache D3FEND (réseau) ; l'analyse l'utilise ensuite hors ligne."""
+    from malsight.defend.kb import download, techniques_des_verites
+    tids = sorted(set(techniques_des_verites(verites)) | set(technique or []))
+    for tid, n in download(tids, cache).items():
+        typer.echo(f"{tid} : {n} contre-mesure(s)")
+    typer.echo(f"Cache D3FEND : {cache} ({len(tids)} techniques)")
 
 
 if __name__ == "__main__":

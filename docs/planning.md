@@ -1,13 +1,24 @@
-# Planning (14 semaines, hypothèse)
+# Planning (14 jours, travail seul, décision D5)
 
-| Phase | Semaines | Livrable | Jalon |
+Soutenance le **lundi 16 novembre 2026**. **Gel du code le lundi 9 novembre** : ensuite, plus
+aucune modification du code, seulement les résultats, la rédaction et la préparation.
+Les phases 1 et 2 (cadrage, labo, jeu de test T01 à T12) sont faites ; voir `docs/journal.md`.
+
+| Date | Travail | Issues | Jalon |
 | --- | --- | --- | --- |
-| 1. Cadrage + état de l'art | S1-S2 | Cahier des charges, schéma JSON de sortie | |
-| 2. Laboratoire isolé + échantillons | S2-S4 | Labo documenté, 10-20 échantillons bénins avec vérité terrain | Labo prêt (fin S4) |
-| 3. Extraction + normalisation | S4-S7 | Pipeline qui produit un `case.json` par échantillon | Dossier JSON (fin S7) |
-| 4. Agent LLM + RAG ATT&CK | S7-S10 | Prototype d'agent | Prototype agent (fin S10) |
-| 5. Rapport + recommandations | S9-S11 | Rapport Markdown/PDF, export STIX | |
-| 6. Évaluation + tests | S11-S13 | Métriques, comparaisons | |
-| 7. Rédaction + soutenance | S13-S14 | Mémoire, démo | Soutenance (fin S14) |
+| 2-3 nov | Agent de bout en bout (index ATT&CK simplifié, orchestration, Ollama) | #10, #11 | |
+| 4 nov | Vérificateur + test anti-injection | #12 | **J2** (4 nov) |
+| 5 nov | Agent sur les 12 cas, rapport Markdown + export STIX | #13, #14 | |
+| 6-7 nov | Script d'évaluation et métriques | #16 | **J3** (6 nov) |
+| 8 nov | Comparaisons agent / LLM seul / capa seul + jeu de validation T13 à T16 | #17, #23 | |
+| 9 nov | **Gel du code**, résultats finaux (`docs/resultats/`) | #16 | |
+| 10-12 nov | Rédaction du mémoire | #19 | |
+| 13 nov | Slides de soutenance | #21 | |
+| 14 nov | Démo enregistrée | #20 | |
+| 15 nov | Répétition | #21 | |
+| 16 nov | **Soutenance** | | **J4** (16 nov) |
 
-Le suivi des tâches se fait dans les **Issues** et le **Project** GitHub (une milestone par jalon).
+**Hors périmètre (perspectives, D5)** : recherche vectorielle Chroma (#10 simplifiée),
+interface Streamlit (#15), option VM + INetSim (#5), comparaison local / cloud (#18).
+
+Le suivi se fait dans les **Issues** GitHub (une milestone par jalon) et dans `docs/journal.md`.

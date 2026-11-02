@@ -192,3 +192,90 @@ surestimerait (sur-ajustement) : le filtre a « vu » leurs journaux.
 - Séparation classique apprentissage / test : sans elle, un taux de faux positifs de 0 sur T11
   ne prouve rien, puisque le filtre a été écrit en regardant T11.
 - Coût faible : 4 scripts de plus, collectés en mode automatique (D3).
+
+---
+
+## D5 : replanification sur 14 jours, travail seul, gel du code le 9 novembre
+
+- **Date** : 2026-11-02
+- **Statut** : acceptée
+
+### Contexte
+
+Le projet est mené **seul** (et non en équipe de 3) et la soutenance est fixée au
+**lundi 16 novembre 2026**, soit 14 jours. Le planning de 14 semaines (`docs/planning.md`,
+version initiale) n'est plus tenable.
+
+### Décision
+
+- **Gel du code le lundi 9 novembre** : ensuite, seuls les résultats finaux, le mémoire, les
+  slides, la démo et la répétition. Planning détaillé dans `docs/planning.md`.
+- **Hors périmètre, présentés comme perspectives** dans le mémoire et la soutenance :
+  - **Chroma / recherche vectorielle** (#10 simplifiée) : on garde la validation des IDs
+    ATT&CK contre la base officielle et la recherche lexicale existante ;
+  - **Interface Streamlit** (#15) ;
+  - **Option VM + INetSim** (#5) : bilan J2 fait par anticipation, **Windows Sandbox suffit**
+    (D1) : les 12 échantillons du jeu de développement sont observés sans réseau simulé, et les
+    tentatives réseau restent visibles par Sysmon (EID 22) ;
+  - **Comparaison local / cloud** (#18).
+- **Maintenu** : le jeu de validation T13 à T16 (#23, D4), à faire le 8 novembre.
+- **Jalons** : J1 clos (labo + jeu de test faits ; cadrage, état de l'art et schéma rédigés dans
+  le mémoire, #1 à #3 rattachées à J4), J2 = 4 novembre, J3 = 6 novembre, J4 = 16 novembre.
+- **Suivi** : sans équipe, la relecture croisée (#22) est remplacée par une relecture différée
+  (relire le lendemain) et par les garde-fous automatiques (tests, vérificateur, CI).
+
+### Justification
+
+- Priorité au cœur démontrable : agent de bout en bout, vérificateur, évaluation mesurée sur
+  un jeu de validation honnête (D4). Les éléments retirés n'apportent rien à cette démonstration.
+- La recherche lexicale + validation des IDs suffit pour un jeu de 16 échantillons aux
+  techniques connues ; la recherche vectorielle n'est utile qu'à plus grande échelle.
+- Le gel du code une semaine avant laisse le temps de rédiger sans que les résultats bougent.
+
+---
+
+## D6 : contre-mesures MITRE D3FEND pour les recommandations
+
+- **Date** : 2026-11-02
+- **Statut** : acceptée
+
+### Contexte
+
+Les recommandations étaient rédigées librement par le LLM, sans référentiel : impossible de
+vérifier qu'elles correspondent aux techniques observées, et risque d'inventer des mesures.
+MITRE D3FEND relie chaque technique ATT&CK à des techniques défensives identifiées
+(`D3-LFP`, `D3-FIM`...), classées par tactique (Harden, Detect, Isolate, Deceive, Evict,
+Restore).
+
+### Décision
+
+- `src/malsight/defend/kb.py` récupère les contre-mesures d'une technique via l'API officielle
+  (`https://d3fend.mitre.org/api/offensive-technique/attack/<ID>.json`, champs
+  `off_to_def.results.bindings` : `def_tech_id`, `def_tech_label`, `def_tactic_label`,
+  `def_artifact_label`, `def_tech`). À défaut pour une sous-technique, la technique parente.
+- **Hors ligne** : l'analyse ne lit que le cache `data/d3fend/` (ignoré par git), pré-rempli par
+  `malsight download-d3fend` pour toutes les techniques de `lab/verite-terrain/` (et leurs
+  parentes). Seule cette commande utilise le réseau.
+- Le rapport gagne une liste `countermeasures` (id D3FEND, nom, technique ATT&CK couverte,
+  tactique, artefact, lien, source `d3fend`), **remplie depuis le cache, jamais par le LLM**.
+- Le pipeline passe en deux appels : brouillon (résumé, comportements, ATT&CK), vérification,
+  contre-mesures des techniques retenues, puis recommandations rédigées **avec ces contre-mesures
+  en contexte** (ID cités entre parenthèses).
+- Le vérificateur rejette toute contre-mesure dont l'ID est absent du cache, qui couvre une
+  technique non retenue ou que D3FEND ne relie pas à cette technique, et toute recommandation
+  citant un ID D3FEND absent du cache.
+- Section « Contre-mesures D3FEND » dans le rapport, avec liens vers d3fend.mitre.org.
+
+### Justification
+
+- Recommandations ancrées dans un référentiel officiel et vérifiables, comme les IDs ATT&CK.
+- Cohérent avec la charte (`docs/ethique.md`) : uniquement défensif, et mode local privilégié
+  (aucun appel réseau pendant l'analyse).
+- Coût faible : 15 techniques en cache (API D3FEND 1.6.0), 3 à 27 contre-mesures chacune.
+
+### Limites
+
+- L'API D3FEND est annoncée « alpha » : son format peut changer. Le cache garde la version et la
+  date de téléchargement ; les tests utilisent une réponse réelle figée (fixture).
+- Une contre-mesure D3FEND est générique : la pertinence de chaque recommandation reste à
+  valider par l'analyste (rapport « à valider avant diffusion »).

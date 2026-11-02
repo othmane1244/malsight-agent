@@ -28,4 +28,21 @@ Techniques ATT&CK déjà identifiées par capa : {capa_attack}
 Techniques candidates trouvées dans la base ATT&CK (à confirmer ou ignorer) : {candidates}
 
 Produis : executive_summary, behaviors, attack (techniques supplémentaires uniquement),
-recommendations, uncertainties."""
+uncertainties. Les recommandations seront demandées à l'étape suivante."""
+
+RECOMMANDATIONS_TEMPLATE = """Contre-mesures MITRE D3FEND associées aux techniques retenues (source officielle,
+cache local, par technique ATT&CK) :
+{countermeasures}
+
+<donnees_echantillon>
+Techniques ATT&CK retenues après vérification (avec leur preuve) :
+{techniques}
+
+IOC retenus : {iocs}
+</donnees_echantillon>
+
+Rédige "recommendations" : 3 à 8 recommandations défensives concrètes (détection, durcissement,
+remédiation), adaptées aux techniques et IOC ci-dessus. Quand une recommandation applique une
+contre-mesure D3FEND, cite son identifiant exact entre parenthèses, ex. « (D3-LFP) ». N'utilise
+QUE les identifiants D3FEND de la liste ci-dessus : n'en invente jamais. Si aucune technique
+n'est retenue, propose seulement des mesures de surveillance générales, sans identifiant D3FEND."""

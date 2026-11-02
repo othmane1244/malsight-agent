@@ -53,11 +53,19 @@ python3.11 -m venv .venv && source .venv/bin/activate   # Windows : py -3.11 -m 
 pip install -r requirements.txt
 pip install -e .
 
-# 1. Extraire et normaliser (statique, + rapport CAPE optionnel)
-malsight extract samples/test.exe --cape-report rapports/cape.json
+# 0. Une fois (réseau) : bases MITRE ATT&CK et D3FEND en local ; ensuite tout marche hors ligne
+malsight download-attack
+malsight download-d3fend
 
-# 2. Lancer l'agent sur le dossier de cas et produire le rapport
+# 1. Extraire et normaliser (statique + rapport CAPE, ou collecte du labo sysmon.csv + procmon.csv)
+malsight extract samples/test.exe --cape-report rapports/cape.json
+malsight extract lab/echantillons-test/T01_persistance_run.ps1 --labo cases/T01
+
+# 2. Lancer l'agent sur le dossier de cas et produire le rapport (IOC, ATT&CK, contre-mesures D3FEND)
 malsight analyze cases/<sha256>/case.json --out cases/<sha256>/rapport.md
+
+# 3. Labo : comparer une collecte à sa vérité terrain
+malsight comparer cases/T01
 ```
 
 Les outils `capa` et `floss` s'installent séparément, sous forme de binaires autonomes, et doivent être accessibles dans le `PATH` :
@@ -78,11 +86,9 @@ Voir [`docs/ethique.md`](docs/ethique.md).
 
 ## Équipe
 
-| Rôle | Membre |
-| --- | --- |
-| Laboratoire + extraction | _à compléter_ |
-| Agent + RAG ATT&CK | _à compléter_ |
-| Rapport + évaluation | _à compléter_ |
+Projet réalisé **seul** : laboratoire, extraction, agent, rapport et évaluation
+(othmane1244). Planning sur 14 jours et périmètre : décision D5 dans
+[`docs/decisions.md`](docs/decisions.md) et [`docs/planning.md`](docs/planning.md).
 
 ## Licence
 

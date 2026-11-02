@@ -22,7 +22,36 @@ def _case_text(case: Case) -> str:
     return "\n".join(_strings(case.model_dump())).lower()
 
 
-def verify(report: Report, case: Case, kb=None) -> Report:
+def _verify_countermeasures(report: Report, defend) -> list[str]:
+    """D3FEND : tout ID absent du cache est rejeté, comme toute contre-mesure d'une technique non retenue."""
+    rejected: list[str] = []
+    connus = defend.known_ids() if defend is not None else set()
+    retenues = {t.id for t in report.attack}
+    kept = []
+    for c in report.countermeasures:
+        if c.id not in connus:
+            rejected.append(f"ID D3FEND absent du cache : {c.id}")
+        elif c.technique not in retenues:
+            rejected.append(f"Contre-mesure {c.id} pour une technique non retenue : {c.technique}")
+        elif not defend.covers(c.id, c.technique):
+            rejected.append(f"D3FEND ne relie pas {c.id} à {c.technique}")
+        else:
+            kept.append(c)
+    report.countermeasures = kept
+    # Recommandations : un ID D3FEND cité doit exister dans le cache
+    from malsight.defend.kb import D3ID
+    kept_recs = []
+    for rec in report.recommendations:
+        inconnus = [i for i in D3ID.findall(rec) if i not in connus]
+        if inconnus:
+            rejected.append(f"Recommandation citant un ID D3FEND absent du cache ({', '.join(inconnus)}) : {rec}")
+        else:
+            kept_recs.append(rec)
+    report.recommendations = kept_recs
+    return rejected
+
+
+def verify(report: Report, case: Case, kb=None, defend=None) -> Report:
     tools = CaseTools(case)
     corpus = _case_text(case)
     rejected: list[str] = []
@@ -60,6 +89,9 @@ def verify(report: Report, case: Case, kb=None) -> Report:
         seen.add(t.id)
         kept_attack.append(t)
     report.attack = kept_attack
+
+    # Contre-mesures D3FEND et IDs D3FEND cités dans les recommandations
+    rejected += _verify_countermeasures(report, defend)
 
     # Comportements "observed" : la preuve doit apparaître dans les données
     for b in report.behaviors:
