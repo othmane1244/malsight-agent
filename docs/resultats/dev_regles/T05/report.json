@@ -1,0 +1,69 @@
+{
+  "sample": {
+    "filename": "T05_registre.ps1",
+    "sha256": "5bd166c11137cafde8f578e7a72d88f0632df4a1bf3a368bef4e1e96e5dd4b7e",
+    "md5": "abd04bcc990942fbf87ef91ba187bc1e",
+    "size": 1058,
+    "file_type": "unknown"
+  },
+  "executive_summary": "Rapport généré sans LLM : faits extraits uniquement.",
+  "behaviors": [],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "5bd166c11137cafde8f578e7a72d88f0632df4a1bf3a368bef4e1e96e5dd4b7e",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "abd04bcc990942fbf87ef91ba187bc1e",
+      "source": "fichier"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\MalsightTest",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\MalsightTest\\Config",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power\\Setting",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power\\appType",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power\\wnsId",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo",
+      "source": "extraction"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Microsoft\\Windows\\Notifications\\wpndatabase.db-wal",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [],
+  "countermeasures": [],
+  "recommendations": [],
+  "uncertainties": [],
+  "rejected_claims": []
+}

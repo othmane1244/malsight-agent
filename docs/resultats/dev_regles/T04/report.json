@@ -1,0 +1,157 @@
+{
+  "sample": {
+    "filename": "T04_script_logon.ps1",
+    "sha256": "75f147e378deae3f4ad4f4bf64b5367f4e8bc203a47b2dfcb114510d54c9a37b",
+    "md5": "79df13f3d86a8156fb0bc208fd4c1536",
+    "size": 998,
+    "file_type": "unknown"
+  },
+  "executive_summary": "Rapport généré sans LLM : faits extraits uniquement.",
+  "behaviors": [],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "75f147e378deae3f4ad4f4bf64b5367f4e8bc203a47b2dfcb114510d54c9a37b",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "79df13f3d86a8156fb0bc208fd4c1536",
+      "source": "fichier"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Environment\\UserInitMprLogonScript",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1037.001",
+      "name": "Logon Script (Windows)",
+      "tactic": "persistence, privilege-escalation",
+      "source": "rule",
+      "confidence": "high",
+      "evidence": "règle R-T1037.001-registre : HKCU\\Environment\\UserInitMprLogonScript (powershell.exe (8064))"
+    }
+  ],
+  "countermeasures": [
+    {
+      "id": "D3-FE",
+      "name": "File Encryption",
+      "technique": "T1037.001",
+      "tactic": "Harden",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileEncryption/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-DA",
+      "name": "Dynamic Analysis",
+      "technique": "T1037.001",
+      "tactic": "Detect",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:DynamicAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EFA",
+      "name": "Emulated File Analysis",
+      "technique": "T1037.001",
+      "tactic": "Detect",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:EmulatedFileAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FA",
+      "name": "File Analysis",
+      "technique": "T1037.001",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FIM",
+      "name": "File Integrity Monitoring",
+      "technique": "T1037.001",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CF",
+      "name": "Content Filtering",
+      "technique": "T1037.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentFiltering/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CM",
+      "name": "Content Modification",
+      "technique": "T1037.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentModification/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CQ",
+      "name": "Content Quarantine",
+      "technique": "T1037.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentQuarantine/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EAL",
+      "name": "Executable Allowlisting",
+      "technique": "T1037.001",
+      "tactic": "Isolate",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EDL",
+      "name": "Executable Denylisting",
+      "technique": "T1037.001",
+      "tactic": "Isolate",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-LFP",
+      "name": "Local File Permissions",
+      "technique": "T1037.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:LocalFilePermissions/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-RFAM",
+      "name": "Remote File Access Mediation",
+      "technique": "T1037.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:RemoteFileAccessMediation/",
+      "source": "d3fend"
+    }
+  ],
+  "recommendations": [],
+  "uncertainties": [],
+  "rejected_claims": []
+}

@@ -339,3 +339,13 @@ D3FEND inventé est retiré de la recommandation au lieu de la rejeter entière.
   ni pour T1105 (seule une requête DNS est observable sans réseau) : laissées au LLM.
 - Évaluation en trois modes (`malsight serie --mode llm | regles | hybride`) pour mesurer
   l'apport de chaque composant ; mesure finale sur le jeu de validation.
+
+### Raffinement (même jour, sur le jeu de développement)
+
+Première mesure en mode `regles` : 10/12 mais 2 faux positifs T1053.005 (T04, T05), causés par
+`svchost.exe` qui met à jour `TaskCache\Tasks\{GUID}\DynamicInfo` (dernière exécution d'une
+tâche système **déjà existante**). Principe générique ajouté : pour une écriture d'un service
+intermédiaire (`service_window`), la règle exige que l'artefact ou une clé parente ait été
+**créé** pendant l'analyse (`RegCreateKey`, `CreateFile` créé, Sysmon EID 11 / 12).
+Enregistrer une tâche ou un service crée des clés ; mettre à jour l'état d'un objet existant
+non. Résultat : 10/12, 0 faux positif (`docs/resultats/dev_regles/`).

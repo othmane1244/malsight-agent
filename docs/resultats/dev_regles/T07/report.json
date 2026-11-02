@@ -1,0 +1,107 @@
+{
+  "sample": {
+    "filename": "T07_decouverte_systeme.ps1",
+    "sha256": "91379f80153cf471af84f022d11c9a6b683a02ed584a80d0bf3734b6bab1e5f7",
+    "md5": "83410fbb1e5852e13f895ac481f70758",
+    "size": 990,
+    "file_type": "unknown"
+  },
+  "executive_summary": "Rapport généré sans LLM : faits extraits uniquement.",
+  "behaviors": [],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "91379f80153cf471af84f022d11c9a6b683a02ed584a80d0bf3734b6bab1e5f7",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "83410fbb1e5852e13f895ac481f70758",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\malsight_t07.txt",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1082",
+      "name": "System Information Discovery",
+      "tactic": "discovery",
+      "source": "rule",
+      "confidence": "high",
+      "evidence": "règle R-T1082-processus : \"C:\\Windows\\system32\\HOSTNAME.EXE\" (powershell.exe (3320))"
+    }
+  ],
+  "countermeasures": [
+    {
+      "id": "D3-PSA",
+      "name": "Process Spawn Analysis",
+      "technique": "T1082",
+      "tactic": "Detect",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SCA",
+      "name": "System Call Analysis",
+      "technique": "T1082",
+      "tactic": "Detect",
+      "artifact": "System Call",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EAL",
+      "name": "Executable Allowlisting",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EDL",
+      "name": "Executable Denylisting",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-HBPI",
+      "name": "Hardware-based Process Isolation",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:Hardware-basedProcessIsolation/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SCF",
+      "name": "System Call Filtering",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "System Call",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallFiltering/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-DE",
+      "name": "Decoy Environment",
+      "technique": "T1082",
+      "tactic": "Deceive",
+      "artifact": "Decoy Artifact",
+      "url": "https://d3fend.mitre.org/technique/d3f:DecoyEnvironment/",
+      "source": "d3fend"
+    }
+  ],
+  "recommendations": [],
+  "uncertainties": [],
+  "rejected_claims": []
+}

@@ -1,0 +1,168 @@
+{
+  "sample": {
+    "filename": "T09_archivage.ps1",
+    "sha256": "14a0a901790ea75816c93424419e51c61fad1628514a82f916d590baa33d0abd",
+    "md5": "6024d633dd165c894da09e563f5f7da5",
+    "size": 1270,
+    "file_type": "unknown"
+  },
+  "executive_summary": "Rapport généré sans LLM : faits extraits uniquement.",
+  "behaviors": [],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "14a0a901790ea75816c93424419e51c61fad1628514a82f916d590baa33d0abd",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "6024d633dd165c894da09e563f5f7da5",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\collecte",
+      "source": "extraction"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\collecte.zip",
+      "source": "extraction"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\collecte\\",
+      "source": "extraction"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\collecte\\document1.txt",
+      "source": "extraction"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\collecte\\document2.txt",
+      "source": "extraction"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\collecte\\document3.txt",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1560",
+      "name": "Archive Collected Data",
+      "tactic": "collection",
+      "source": "rule",
+      "confidence": "high",
+      "evidence": "règle R-T1560-archive : C:\\travail\\collecte.zip (powershell.exe (7900))"
+    }
+  ],
+  "countermeasures": [
+    {
+      "id": "D3-FE",
+      "name": "File Encryption",
+      "technique": "T1560",
+      "tactic": "Harden",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileEncryption/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FA",
+      "name": "File Analysis",
+      "technique": "T1560",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FIM",
+      "name": "File Integrity Monitoring",
+      "technique": "T1560",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CF",
+      "name": "Content Filtering",
+      "technique": "T1560",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentFiltering/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CM",
+      "name": "Content Modification",
+      "technique": "T1560",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentModification/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CQ",
+      "name": "Content Quarantine",
+      "technique": "T1560",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentQuarantine/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-LFP",
+      "name": "Local File Permissions",
+      "technique": "T1560",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:LocalFilePermissions/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-RFAM",
+      "name": "Remote File Access Mediation",
+      "technique": "T1560",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:RemoteFileAccessMediation/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-DF",
+      "name": "Decoy File",
+      "technique": "T1560",
+      "tactic": "Deceive",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:DecoyFile/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FEV",
+      "name": "File Eviction",
+      "technique": "T1560",
+      "tactic": "Evict",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileEviction/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-RF",
+      "name": "Restore File",
+      "technique": "T1560",
+      "tactic": "Restore",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:RestoreFile/",
+      "source": "d3fend"
+    }
+  ],
+  "recommendations": [],
+  "uncertainties": [],
+  "rejected_claims": []
+}

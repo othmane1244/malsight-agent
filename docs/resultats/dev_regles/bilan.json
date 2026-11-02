@@ -1,0 +1,271 @@
+{
+ "T01": {
+  "echantillon": "T01",
+  "mode": "regles",
+  "modele": "",
+  "json_valide": true,
+  "temps_s": 0.0,
+  "attack_attendues": [
+   "T1547.001"
+  ],
+  "attack_trouvees": [
+   "T1547.001"
+  ],
+  "attack_vraies": [
+   "T1547.001"
+  ],
+  "attack_en_trop": [],
+  "attack_ratees": [],
+  "iocs_trouves": 3,
+  "iocs_attendus": 3,
+  "comportements_observes": 0,
+  "comportements_inferes": 0,
+  "rejets": []
+ },
+ "T02": {
+  "echantillon": "T02",
+  "mode": "regles",
+  "modele": "",
+  "json_valide": true,
+  "temps_s": 0.0,
+  "attack_attendues": [
+   "T1053.005"
+  ],
+  "attack_trouvees": [
+   "T1053.005"
+  ],
+  "attack_vraies": [
+   "T1053.005"
+  ],
+  "attack_en_trop": [],
+  "attack_ratees": [],
+  "iocs_trouves": 2,
+  "iocs_attendus": 2,
+  "comportements_observes": 0,
+  "comportements_inferes": 0,
+  "rejets": []
+ },
+ "T03": {
+  "echantillon": "T03",
+  "mode": "regles",
+  "modele": "",
+  "json_valide": true,
+  "temps_s": 0.0,
+  "attack_attendues": [
+   "T1543.003"
+  ],
+  "attack_trouvees": [
+   "T1543.003"
+  ],
+  "attack_vraies": [
+   "T1543.003"
+  ],
+  "attack_en_trop": [],
+  "attack_ratees": [],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 0,
+  "comportements_inferes": 0,
+  "rejets": []
+ },
+ "T04": {
+  "echantillon": "T04",
+  "mode": "regles",
+  "modele": "",
+  "json_valide": true,
+  "temps_s": 0.0,
+  "attack_attendues": [
+   "T1037.001"
+  ],
+  "attack_trouvees": [
+   "T1037.001"
+  ],
+  "attack_vraies": [
+   "T1037.001"
+  ],
+  "attack_en_trop": [],
+  "attack_ratees": [],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 0,
+  "comportements_inferes": 0,
+  "rejets": []
+ },
+ "T05": {
+  "echantillon": "T05",
+  "mode": "regles",
+  "modele": "",
+  "json_valide": true,
+  "temps_s": 0.0,
+  "attack_attendues": [
+   "T1112"
+  ],
+  "attack_trouvees": [],
+  "attack_vraies": [],
+  "attack_en_trop": [],
+  "attack_ratees": [
+   "T1112"
+  ],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 0,
+  "comportements_inferes": 0,
+  "rejets": []
+ },
+ "T06": {
+  "echantillon": "T06",
+  "mode": "regles",
+  "modele": "",
+  "json_valide": true,
+  "temps_s": 0.0,
+  "attack_attendues": [
+   "T1059.001"
+  ],
+  "attack_trouvees": [
+   "T1059.001"
+  ],
+  "attack_vraies": [
+   "T1059.001"
+  ],
+  "attack_en_trop": [],
+  "attack_ratees": [],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 0,
+  "comportements_inferes": 0,
+  "rejets": []
+ },
+ "T07": {
+  "echantillon": "T07",
+  "mode": "regles",
+  "modele": "",
+  "json_valide": true,
+  "temps_s": 0.0,
+  "attack_attendues": [
+   "T1082"
+  ],
+  "attack_trouvees": [
+   "T1082"
+  ],
+  "attack_vraies": [
+   "T1082"
+  ],
+  "attack_en_trop": [],
+  "attack_ratees": [],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 0,
+  "comportements_inferes": 0,
+  "rejets": []
+ },
+ "T08": {
+  "echantillon": "T08",
+  "mode": "regles",
+  "modele": "",
+  "json_valide": true,
+  "temps_s": 0.0,
+  "attack_attendues": [
+   "T1016"
+  ],
+  "attack_trouvees": [
+   "T1016"
+  ],
+  "attack_vraies": [
+   "T1016"
+  ],
+  "attack_en_trop": [],
+  "attack_ratees": [],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 0,
+  "comportements_inferes": 0,
+  "rejets": []
+ },
+ "T09": {
+  "echantillon": "T09",
+  "mode": "regles",
+  "modele": "",
+  "json_valide": true,
+  "temps_s": 0.0,
+  "attack_attendues": [
+   "T1560"
+  ],
+  "attack_trouvees": [
+   "T1560"
+  ],
+  "attack_vraies": [
+   "T1560"
+  ],
+  "attack_en_trop": [],
+  "attack_ratees": [],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 0,
+  "comportements_inferes": 0,
+  "rejets": []
+ },
+ "T10": {
+  "echantillon": "T10",
+  "mode": "regles",
+  "modele": "",
+  "json_valide": true,
+  "temps_s": 0.0,
+  "attack_attendues": [
+   "T1105"
+  ],
+  "attack_trouvees": [],
+  "attack_vraies": [],
+  "attack_en_trop": [],
+  "attack_ratees": [
+   "T1105"
+  ],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 0,
+  "comportements_inferes": 0,
+  "rejets": []
+ },
+ "T11": {
+  "echantillon": "T11",
+  "mode": "regles",
+  "modele": "",
+  "json_valide": true,
+  "temps_s": 0.0,
+  "attack_attendues": [],
+  "attack_trouvees": [],
+  "attack_vraies": [],
+  "attack_en_trop": [],
+  "attack_ratees": [],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 0,
+  "comportements_inferes": 0,
+  "rejets": []
+ },
+ "T12": {
+  "echantillon": "T12",
+  "mode": "regles",
+  "modele": "",
+  "json_valide": true,
+  "temps_s": 0.0,
+  "attack_attendues": [
+   "T1082",
+   "T1547.001"
+  ],
+  "attack_trouvees": [
+   "T1082",
+   "T1547.001"
+  ],
+  "attack_vraies": [
+   "T1082",
+   "T1547.001"
+  ],
+  "attack_en_trop": [],
+  "attack_ratees": [],
+  "iocs_trouves": 3,
+  "iocs_attendus": 3,
+  "comportements_observes": 0,
+  "comportements_inferes": 0,
+  "rejets": []
+ }
+}

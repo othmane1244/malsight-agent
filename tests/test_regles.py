@@ -57,6 +57,28 @@ def test_regle_negative(kind, valeur):
     assert appliquer(_dyn((kind, valeur, "sample_tree"))) == []
 
 
+def test_service_exige_une_creation():
+    """Une mise à jour par un service d'un objet existant ne déclenche pas la règle ; une création, si."""
+    tache = r"HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache"
+
+    def obs(valeur, ops, attribution="service_window", kind="registry"):
+        return Observation(kind=kind, value=valeur, operations=ops, attribution=attribution,
+                           processes=["svchost.exe (1448)"])
+
+    mise_a_jour = DynamicData(observations=[obs(tache + r"\Tasks\{GUID}\DynamicInfo", ["RegSetValue"])])
+    assert appliquer(mise_a_jour) == []
+    creation = DynamicData(observations=[obs(tache + r"\Tree\Nouvelle", ["RegCreateKey"]),
+                                         obs(tache + r"\Tree\Nouvelle\Id", ["RegSetValue"])])
+    assert [t.id for t in appliquer(creation)] == ["T1053.005"]
+    service = r"HKLM\System\CurrentControlSet\Services\Nouveau"
+    valeur_sous_cle_creee = DynamicData(observations=[obs(service, ["RegCreateKey"]),
+                                                      obs(service + r"\ImagePath", ["RegSetValue", "EID 13"])])
+    assert [t.id for t in appliquer(valeur_sous_cle_creee)] == ["T1543.003"]
+    # Dans l'arbre de l'échantillon, une simple écriture suffit
+    arbre = DynamicData(observations=[obs(tache + r"\Tasks\{GUID}\DynamicInfo", ["RegSetValue"], "sample_tree")])
+    assert [t.id for t in appliquer(arbre)] == ["T1053.005"]
+
+
 def test_chaque_regle_est_sourcee():
     for r in REGLES:
         assert r.sources and all(s.startswith("https://") for s in r.sources), r.id

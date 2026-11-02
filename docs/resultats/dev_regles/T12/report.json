@@ -1,0 +1,233 @@
+{
+  "sample": {
+    "filename": "T12_scenario_combine.ps1",
+    "sha256": "561a7e11d3359407846f22cabacbe578fe4b49555660b122e90cd9c2d1d39586",
+    "md5": "acbdc6e0398ec6b1e8d774cd8e32b8bf",
+    "size": 1904,
+    "file_type": "unknown"
+  },
+  "executive_summary": "Rapport généré sans LLM : faits extraits uniquement.",
+  "behaviors": [],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "561a7e11d3359407846f22cabacbe578fe4b49555660b122e90cd9c2d1d39586",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "acbdc6e0398ec6b1e8d774cd8e32b8bf",
+      "source": "fichier"
+    },
+    {
+      "type": "domain",
+      "value": "c2.malsight.lab",
+      "source": "extraction"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\malsight_t12_info.txt",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\MalsightTest12",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1082",
+      "name": "System Information Discovery",
+      "tactic": "discovery",
+      "source": "rule",
+      "confidence": "high",
+      "evidence": "règle R-T1082-processus : \"C:\\Windows\\system32\\systeminfo.exe\" (powershell.exe (7444))"
+    },
+    {
+      "id": "T1547.001",
+      "name": "Registry Run Keys / Startup Folder",
+      "tactic": "persistence, privilege-escalation",
+      "source": "rule",
+      "confidence": "high",
+      "evidence": "règle R-T1547.001-registre : HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\MalsightTest12 (powershell.exe (7444))"
+    }
+  ],
+  "countermeasures": [
+    {
+      "id": "D3-PSA",
+      "name": "Process Spawn Analysis",
+      "technique": "T1082",
+      "tactic": "Detect",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SCA",
+      "name": "System Call Analysis",
+      "technique": "T1082",
+      "tactic": "Detect",
+      "artifact": "System Call",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EAL",
+      "name": "Executable Allowlisting",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EDL",
+      "name": "Executable Denylisting",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-HBPI",
+      "name": "Hardware-based Process Isolation",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:Hardware-basedProcessIsolation/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SCF",
+      "name": "System Call Filtering",
+      "technique": "T1082",
+      "tactic": "Isolate",
+      "artifact": "System Call",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallFiltering/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-DE",
+      "name": "Decoy Environment",
+      "technique": "T1082",
+      "tactic": "Deceive",
+      "artifact": "Decoy Artifact",
+      "url": "https://d3fend.mitre.org/technique/d3f:DecoyEnvironment/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FE",
+      "name": "File Encryption",
+      "technique": "T1547.001",
+      "tactic": "Harden",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileEncryption/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-DA",
+      "name": "Dynamic Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:DynamicAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EFA",
+      "name": "Emulated File Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:EmulatedFileAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FA",
+      "name": "File Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-FIM",
+      "name": "File Integrity Monitoring",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SICA",
+      "name": "System Init Config Analysis",
+      "technique": "T1547.001",
+      "tactic": "Detect",
+      "artifact": "System Init Configuration",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemInitConfigAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CF",
+      "name": "Content Filtering",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentFiltering/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CM",
+      "name": "Content Modification",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentModification/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-CQ",
+      "name": "Content Quarantine",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ContentQuarantine/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EAL",
+      "name": "Executable Allowlisting",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EDL",
+      "name": "Executable Denylisting",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "Executable File",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-LFP",
+      "name": "Local File Permissions",
+      "technique": "T1547.001",
+      "tactic": "Isolate",
+      "artifact": "File",
+      "url": "https://d3fend.mitre.org/technique/d3f:LocalFilePermissions/",
+      "source": "d3fend"
+    }
+  ],
+  "recommendations": [],
+  "uncertainties": [],
+  "rejected_claims": []
+}

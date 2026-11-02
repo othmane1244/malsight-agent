@@ -1,0 +1,101 @@
+{
+  "sample": {
+    "filename": "T03_service.ps1",
+    "sha256": "bd8fd8f188f1c0310a195806b74e512c7fb0eacca6daeadbf2dafa54c2ffa01f",
+    "md5": "bbe26e04013dda9baceada038738c305",
+    "size": 942,
+    "file_type": "unknown"
+  },
+  "executive_summary": "Rapport généré sans LLM : faits extraits uniquement.",
+  "behaviors": [],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "bd8fd8f188f1c0310a195806b74e512c7fb0eacca6daeadbf2dafa54c2ffa01f",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "bbe26e04013dda9baceada038738c305",
+      "source": "fichier"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\System\\CurrentControlSet\\Services\\MalsightTest",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\DisplayName",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\ErrorControl",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\ImagePath",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\ObjectName",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\Start",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\Type",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1543.003",
+      "name": "Windows Service",
+      "tactic": "persistence, privilege-escalation",
+      "source": "rule",
+      "confidence": "high",
+      "evidence": "règle R-T1543.003-registre : HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\ImagePath (services.exe (852))"
+    }
+  ],
+  "countermeasures": [
+    {
+      "id": "D3-SCP",
+      "name": "System Configuration Permissions",
+      "technique": "T1543.003",
+      "tactic": "Harden",
+      "artifact": "System Configuration Database",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemConfigurationPermissions/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-RD",
+      "name": "Restore Database",
+      "technique": "T1543.003",
+      "tactic": "Restore",
+      "artifact": "Database",
+      "url": "https://d3fend.mitre.org/technique/d3f:RestoreDatabase/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-DI",
+      "name": "Data Inventory",
+      "technique": "T1543.003",
+      "tactic": "Model",
+      "artifact": "Database",
+      "url": "https://d3fend.mitre.org/technique/d3f:DataInventory/",
+      "source": "d3fend"
+    }
+  ],
+  "recommendations": [],
+  "uncertainties": [],
+  "rejected_claims": []
+}

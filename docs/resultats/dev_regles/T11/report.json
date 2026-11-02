@@ -1,0 +1,34 @@
+{
+  "sample": {
+    "filename": "T11_temoin_negatif.ps1",
+    "sha256": "412fabad6e7a7f182f34e56502ddd3c4adaef3f8d69333338b2502e600094258",
+    "md5": "9d45396a8fdc603d82da39de93d48f97",
+    "size": 1116,
+    "file_type": "unknown"
+  },
+  "executive_summary": "Rapport généré sans LLM : faits extraits uniquement.",
+  "behaviors": [],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "412fabad6e7a7f182f34e56502ddd3c4adaef3f8d69333338b2502e600094258",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "9d45396a8fdc603d82da39de93d48f97",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\journal_t11.txt",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [],
+  "countermeasures": [],
+  "recommendations": [],
+  "uncertainties": [],
+  "rejected_claims": []
+}

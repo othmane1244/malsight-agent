@@ -101,12 +101,30 @@ REGLES: tuple[Regle, ...] = (
 )
 
 
+CREATIONS = {"RegCreateKey", "CreateFile", "EID 11", "EID 12"}   # opérations qui créent un artefact
+
+
+def _cree_pendant_l_analyse(o, crees: set[str]) -> bool:
+    """L'artefact, ou l'une de ses clés / dossiers parents, a été créé pendant l'analyse."""
+    v = o.value.lower()
+    return v in crees or any(v.startswith(c + "\\") for c in crees)
+
+
 def appliquer(dyn: DynamicData, regles: tuple[Regle, ...] = REGLES) -> list[AttackTechnique]:
-    """Techniques ATT&CK déduites des observations, avec la règle et l'artefact en preuve."""
+    """Techniques ATT&CK déduites des observations, avec la règle et l'artefact en preuve.
+
+    Écriture d'un service intermédiaire (`service_window`) : la règle ne s'applique que si
+    l'artefact ou un parent a été CRÉÉ pendant l'analyse. Un service qui met à jour l'état d'un
+    objet existant (ex. dernière exécution d'une tâche système) n'est pas une action de
+    l'échantillon ; enregistrer une tâche ou un service crée, lui, de nouvelles clés.
+    """
+    crees = {o.value.lower().rstrip("\\") for o in dyn.observations if CREATIONS & set(o.operations)}
     trouvees: dict[str, AttackTechnique] = {}
     for o in dyn.observations:
         for r in regles:
             if r.kind != o.kind or not r.motif.search(o.value):
+                continue
+            if o.attribution == "service_window" and o.kind != "process" and not _cree_pendant_l_analyse(o, crees):
                 continue
             if r.technique in trouvees:
                 continue
