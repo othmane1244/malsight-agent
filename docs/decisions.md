@@ -283,3 +283,59 @@ Restore).
   date de téléchargement ; les tests utilisent une réponse réelle figée (fixture).
 - Une contre-mesure D3FEND est générique : la pertinence de chaque recommandation reste à
   valider par l'analyste (rapport « à valider avant diffusion »).
+
+---
+
+## D7 : règles déterministes artefact -> technique ATT&CK
+
+- **Date** : 2026-11-03
+- **Statut** : acceptée
+
+### Contexte
+
+Première série de l'agent (gemma4:e4b, jeu de développement) : **2/12** techniques attendues,
+alors que le récit des comportements est souvent juste (T03, T12). Erreurs dominantes :
+technique voisine (A), technique inventée (B), récit sans technique (D). Voir `docs/journal.md`
+(3 novembre) et `docs/resultats/dev_gemma4/`.
+
+### Décision
+
+`src/malsight/attack/regles.py` : règles déterministes appliquées aux observations dynamiques
+déjà attribuées à l'échantillon (arbre de processus ou service intermédiaire), source `rule`,
+confiance haute. Chaque règle est **générique et sourcée** : les artefacts (clés, dossiers,
+exécutables, options) sont repris des sources, pas d'un échantillon.
+
+| Règle | Technique | Artefact | Sources |
+| --- | --- | --- | --- |
+| R-T1547.001-registre | T1547.001 | valeur sous `...\CurrentVersion\Run`, `RunOnce`, `RunOnceEx`, `RunServices`, `RunServicesOnce` (HKCU/HKLM, WOW6432Node) | [ATT&CK T1547.001](https://attack.mitre.org/techniques/T1547/001/) ; Sigma `registry_set_asep_reg_keys_modification_currentversion` |
+| R-T1547.001-demarrage | T1547.001 | fichier dans `...\Start Menu\Programs\Startup\` | ATT&CK T1547.001 |
+| R-T1053.005-fichier | T1053.005 | fichier dans `Windows\System32\Tasks\` (ou SysWOW64) | [ATT&CK T1053.005](https://attack.mitre.org/techniques/T1053/005/) ; Sigma `file_event_win_susp_task_write` |
+| R-T1053.005-registre | T1053.005 | clé `Schedule\TaskCache\Tree\` ou `\Tasks\` | ATT&CK T1053.005 ; Sigma `registry_set_taskcache_entry` |
+| R-T1053.005-schtasks | T1053.005 | `schtasks.exe /create` | Sigma `proc_creation_win_schtasks_creation` |
+| R-T1543.003-registre | T1543.003 | valeur `Services\<nom>\ImagePath` | [ATT&CK T1543.003](https://attack.mitre.org/techniques/T1543/003/) ; Sigma `registry_set_asep_reg_keys_modification_currentcontrolset` |
+| R-T1543.003-sc | T1543.003 | `sc.exe create` | Sigma `proc_creation_win_sc_create_service` |
+| R-T1037.001-registre | T1037.001 | `HKCU\Environment\UserInitMprLogonScript` | [ATT&CK T1037.001](https://attack.mitre.org/techniques/T1037/001/) ; Sigma `registry_set_persistence_logon_scripts_userinitmprlogonscript` |
+| R-T1082-processus | T1082 | `systeminfo.exe`, `hostname.exe` | [ATT&CK T1082](https://attack.mitre.org/techniques/T1082/) ; Sigma `proc_creation_win_systeminfo_execution`, `proc_creation_win_hostname_execution` |
+| R-T1016-processus | T1016 | `ipconfig`, `route`, `arp`, `nbtstat`, `netsh interface show` | [ATT&CK T1016](https://attack.mitre.org/techniques/T1016/) ; Sigma `proc_creation_win_susp_network_command` |
+| R-T1059.001-encodee | T1059.001 | PowerShell avec `-EncodedCommand` (et abréviations `-e`, `-enc`...) | [ATT&CK T1059.001](https://attack.mitre.org/techniques/T1059/001/) ; Sigma `proc_creation_win_powershell_encode` |
+| R-T1560-archive | T1560 | archive créée (`.zip`, `.7z`, `.rar`, `.cab`, `.tar`, `.gz`) | [ATT&CK T1560](https://attack.mitre.org/techniques/T1560/) |
+
+Chemins Sigma complets : `https://github.com/SigmaHQ/sigma/blob/master/rules/windows/...`
+(liens dans le code). Autres corrections du même lot : le vérificateur prend toujours nom et
+tactique dans la base ATT&CK officielle ; nom et description officiels des techniques
+candidates et identifiées dans le contexte du LLM ; provenance (`sample_tree` /
+`service_window`) dans le contexte et consigne de regroupement des comportements ; un ID
+D3FEND inventé est retiré de la recommandation au lieu de la rejeter entière.
+
+### Garde-fous contre le sur-ajustement (D4)
+
+- Règles écrites **après** le commit du jeu de validation (43ef7d7) et **sans** l'exécuter.
+- **Aucune règle** pour les techniques propres au jeu de validation (T1033 de T15,
+  T1546.013 de T16) : le savoir de leur existence ne doit pas créer de règle. Un test le vérifie.
+- **Listes reprises telles quelles des sources**, sans retrait ni ajout : la liste ATT&CK de
+  T1547.001 cite `RunOnce` (utilisée par T13) ; on la garde complète, sans la compléter ni la
+  réduire pour favoriser ou handicaper la validation.
+- **Pas de règle** pour T1112 (*Modify Registry*, trop générique : toute écriture de registre)
+  ni pour T1105 (seule une requête DNS est observable sans réseau) : laissées au LLM.
+- Évaluation en trois modes (`malsight serie --mode llm | regles | hybride`) pour mesurer
+  l'apport de chaque composant ; mesure finale sur le jeu de validation.

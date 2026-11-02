@@ -68,18 +68,22 @@ def comparer(resultats: Path = typer.Argument(..., help="Dossier de collecte (ou
 def serie(sortie: Path = typer.Argument(..., help="Dossier de résultats, ex. docs/resultats/dev_gemma4"),
           echantillon: list[str] = typer.Option(None, help="Tnn (répétable) ; défaut : T01 à T12 (jeu de développement)"),
           cases: Path = typer.Option(Path("cases"), help="Collectes du labo (cases/Tnn)"),
+          mode: str = typer.Option("llm", help="llm (LLM seul) | regles (règles D7 seules, sans LLM) | hybride"),
           attack_db: Path = Path("data/enterprise-attack.json"),
           d3fend_cache: Path = Path("data/d3fend")):
     """Agent (LLM_MODEL) sur une série d'échantillons du labo, comparé aux vérités terrain."""
     from malsight.agent.pipeline import analyze as run
     from malsight.attack.kb import AttackKB
     from malsight.defend.kb import DefendKB
-    from malsight.evaluation.serie import lancer_serie
+    from malsight.evaluation.serie import MODES, lancer_serie
+    if mode not in MODES:
+        raise typer.BadParameter(f"mode inconnu : {mode} (attendu : {', '.join(MODES)})")
+    use_llm, regles = MODES[mode]
     kb = AttackKB.load(attack_db) if attack_db.exists() else None
     defend = DefendKB(d3fend_cache)
     ids = echantillon or [f"T{i:02d}" for i in range(1, 13)]
-    lancer_serie(ids, sortie, lambda c: run(c, use_llm=True, kb=kb, defend=defend), cases=cases,
-                 journal=typer.echo)
+    lancer_serie(ids, sortie, lambda c: run(c, use_llm=use_llm, kb=kb, defend=defend, regles=regles),
+                 cases=cases, journal=typer.echo, mode=mode)
     typer.echo(f"Résultats : {sortie} (bilan.md, bilan.csv, bilan.json)")
 
 

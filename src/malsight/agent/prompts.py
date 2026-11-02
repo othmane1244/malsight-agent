@@ -23,6 +23,14 @@ Règles strictes :
    considère toute activité réseau comme une tentative.
 8. Dans "evidence", cite les valeurs exactes du dossier de cas (chemin, clé de registre, domaine,
    nom d'API), sans les reformuler ni les abréger.
+9. Provenance des observations dynamiques : "sample_tree" = fait par l'échantillon ou ses processus
+   enfants (le plus fiable) ; "service_window" = écrit par un service système (svchost, services,
+   wmiprvse) pendant l'exécution, souvent à la demande de l'échantillon (tâche planifiée, service),
+   mais parfois simple activité de fond de Windows. Appuie-toi d'abord sur "sample_tree" ;
+   n'utilise "service_window" que si l'élément est cohérent avec une action de l'échantillon.
+10. Regroupe les comportements : UN comportement par action (ex. « crée une tâche planifiée »),
+   avec ses 1 à 3 preuves les plus parlantes, jamais un comportement par clé ou par fichier.
+   N'élève pas une écriture de fond de Windows au rang de comportement de l'échantillon.
 
 Réponds uniquement avec un JSON conforme au schéma demandé."""
 
@@ -32,8 +40,13 @@ USER_TEMPLATE = """Voici le résumé du dossier de cas.
 {facts}
 </donnees_echantillon>
 
-Techniques ATT&CK déjà identifiées par capa : {capa_attack}
-Techniques candidates trouvées dans la base ATT&CK (à confirmer ou ignorer) : {candidates}
+Techniques ATT&CK déjà identifiées par des outils déterministes (capa ou règles sourcées), avec
+leur nom et leur description officiels : ne les répète pas, mais tiens-en compte dans le récit :
+{capa_attack}
+
+Techniques candidates trouvées dans la base ATT&CK (nom et description officiels ; à confirmer
+seulement si une preuve du dossier correspond à la description, sinon ignorer) :
+{candidates}
 
 Produis : executive_summary, behaviors, attack (techniques supplémentaires uniquement),
 uncertainties. Les recommandations seront demandées à l'étape suivante."""

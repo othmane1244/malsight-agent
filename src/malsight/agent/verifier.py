@@ -81,14 +81,18 @@ def _verify_countermeasures(report: Report, defend) -> list[str]:
         else:
             kept.append(c)
     report.countermeasures = kept
-    # Recommandations : un ID D3FEND cité doit exister dans le cache
+    # Recommandations : un ID D3FEND absent du cache est RETIRÉ du texte (la recommandation reste)
     from malsight.defend.kb import D3ID
     kept_recs = []
     for rec in report.recommendations:
-        inconnus = [i for i in D3ID.findall(rec) if i not in connus]
-        if inconnus:
-            rejected.append(f"Recommandation citant un ID D3FEND absent du cache ({', '.join(inconnus)}) : {rec}")
-        else:
+        inconnus = sorted({i for i in D3ID.findall(rec) if i not in connus})
+        for i in inconnus:
+            rejected.append(f"ID D3FEND absent du cache retiré d'une recommandation : {i}")
+            rec = re.sub(r"\s*\(\s*" + re.escape(i) + r"\s*\)", "", rec)      # « (D3-XXX) »
+            rec = re.sub(r"\b" + re.escape(i) + r"\b", "", rec)              # « D3-XXX » nu
+        rec = re.sub(r"\(\s*[,;]?\s*\)", "", rec)                            # parenthèses vidées
+        rec = re.sub(r"\s{2,}", " ", rec).replace(" .", ".").replace(" ,", ",").strip()
+        if rec:
             kept_recs.append(rec)
     report.recommendations = kept_recs
     return rejected
@@ -127,8 +131,14 @@ def verify(report: Report, case: Case, kb=None, defend=None) -> Report:
             rejected.append(f"Technique sans preuve : {t.id}")
             continue
         if kb is not None:
-            t.name = t.name or kb.name(t.id)
-            t.tactic = t.tactic or kb.tactic(t.id)
+            # Toujours le nom et la tactique officiels : jamais ceux écrits par le LLM
+            nom_officiel = kb.name(t.id)
+            if t.name and nom_officiel and t.name.strip().lower() != nom_officiel.lower() \
+                    and nom_officiel.lower() not in t.name.lower():
+                report.uncertainties.append(
+                    f"Nom ATT&CK corrigé pour {t.id} : « {t.name} » -> « {nom_officiel} » (base officielle)")
+            t.name = nom_officiel or t.name
+            t.tactic = kb.tactic(t.id) or t.tactic
         seen.add(t.id)
         kept_attack.append(t)
     report.attack = kept_attack

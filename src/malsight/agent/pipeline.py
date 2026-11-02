@@ -29,8 +29,8 @@ class LLMRecommendations(BaseModel):
     recommendations: list[str] = Field(default_factory=list)
 
 
-def deterministic_report(case: Case, tools: CaseTools) -> Report:
-    """Partie du rapport qui ne dépend d'aucun LLM."""
+def deterministic_report(case: Case, tools: CaseTools, regles: bool = False) -> Report:
+    """Partie du rapport qui ne dépend d'aucun LLM : IOC, API, capa et (option) règles D7."""
     report = Report(sample=case.sample)
     report.iocs = [IOC(type="sha256", value=case.sample.sha256, source="fichier"),
                    IOC(type="md5", value=case.sample.md5, source="fichier")]
@@ -41,7 +41,18 @@ def deterministic_report(case: Case, tools: CaseTools) -> Report:
         for tid in m.attack_ids:
             report.attack.append(AttackTechnique(id=tid, source="capa", confidence="high",
                                                  evidence=f"règle capa : {m.rule}"))
+    if regles:
+        from malsight.attack.regles import appliquer
+        report.attack += appliquer(case.dynamic)
     return report
+
+
+def _fiche(kb, tid: str, n: int = 300) -> dict:
+    """Nom et début de la description officielle d'une technique (contexte du LLM)."""
+    if kb is None or not getattr(kb, "techniques", None) or tid not in kb.techniques:
+        return {"id": tid}
+    t = kb.techniques[tid]
+    return {"id": tid, "name": t["name"], "description": " ".join(t.get("description", "").split())[:n]}
 
 
 def _llm():
@@ -93,24 +104,27 @@ def llm_draft(case: Case, tools: CaseTools, report: Report, kb=None, llm=None) -
         "dynamic": tools.get_dynamic_summary(),
         "iocs": tools.get_iocs(),
     }
-    capa_ids = sorted({t.id for t in report.attack})
+    identifiees = [_fiche(kb, t.id) | {"source": t.source, "evidence": t.evidence} for t in report.attack]
     candidates = []
     if kb is not None:
         query = " ".join([m.rule for m in case.capa] + [a["category"] for a in facts["sensitive_apis"]])
-        candidates = kb.search(query, k=8)
+        deja = {t.id for t in report.attack}
+        candidates = [_fiche(kb, tid) for tid, _ in kb.search(query, k=8) if tid not in deja]
     user = prompts.USER_TEMPLATE.format(
         facts=json.dumps(facts, ensure_ascii=False, indent=1, default=str)[:60000],
-        capa_attack=capa_ids or "aucune", candidates=candidates or "aucune")
+        capa_attack=json.dumps(identifiees, ensure_ascii=False, indent=1) if identifiees else "aucune",
+        candidates=json.dumps(candidates, ensure_ascii=False, indent=1) if candidates else "aucune")
     llm = (llm or _llm()).with_structured_output(LLMDraft)
     return llm.invoke([("system", prompts.SYSTEM_PROMPT), ("user", user)])
 
 
-def analyze(case: Case, use_llm: bool = True, kb=None, defend=None, llm=None) -> Report:
-    """1. faits déterministes ; 2. brouillon LLM (résumé, comportements, ATT&CK) ; 3. vérification ;
-    4. contre-mesures D3FEND des techniques retenues (cache local) ; 5. recommandations LLM avec ces
-    contre-mesures en contexte ; 6. vérification finale (IDs ATT&CK et D3FEND compris)."""
+def analyze(case: Case, use_llm: bool = True, kb=None, defend=None, llm=None, regles: bool = False) -> Report:
+    """1. faits déterministes (et règles D7 si `regles`) ; 2. brouillon LLM (résumé, comportements,
+    ATT&CK) ; 3. vérification ; 4. contre-mesures D3FEND des techniques retenues (cache local) ;
+    5. recommandations LLM avec ces contre-mesures en contexte ; 6. vérification finale.
+    Modes d'évaluation : llm (use_llm, sans règles), regles (règles seules), hybride (les deux)."""
     tools = CaseTools(case)
-    report = deterministic_report(case, tools)
+    report = deterministic_report(case, tools, regles=regles)
     if use_llm:
         draft = llm_draft(case, tools, report, kb, llm=llm)
         report.executive_summary = draft.executive_summary

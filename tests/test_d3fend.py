@@ -91,7 +91,8 @@ def test_verificateur_rejette_les_ids_d3fend_hors_cache(case, defend):
                  ["Restreindre les permissions (D3-LFP).", "Activer D3-XYZ partout."])
     r = verifier.verify(r, case, kb=None, defend=defend)
     assert {c.id for c in r.countermeasures} == {c.id for c in bons}
-    assert r.recommendations == ["Restreindre les permissions (D3-LFP)."]
+    # L'ID inventé est retiré, la recommandation reste (correction du 3 novembre)
+    assert r.recommendations == ["Restreindre les permissions (D3-LFP).", "Activer partout."]
     assert any("D3-XYZ" in m and "absent du cache" in m for m in r.rejected_claims)
     assert any("ne relie pas" in m for m in r.rejected_claims)
 
@@ -130,7 +131,8 @@ def test_pipeline_donne_les_contre_mesures_au_llm(case, kb, defend):
     assert "D3-SICA" in llm.prompts[1] and "Local File Permissions" in llm.prompts[1]   # contexte D3FEND
     assert "<donnees_echantillon>" in llm.prompts[1]                                    # IOC délimités
     assert {c.technique for c in r.countermeasures} == {"T1547.001"}
-    assert r.recommendations == ["Surveiller les écritures dans les clés Run (D3-SICA)."]
+    assert r.recommendations == ["Surveiller les écritures dans les clés Run (D3-SICA).",
+                                 "Appliquer sur les postes."]
     assert any("D3-INVENTE" in m for m in r.rejected_claims)
 
 

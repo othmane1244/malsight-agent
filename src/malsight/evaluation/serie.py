@@ -20,6 +20,9 @@ from pathlib import Path
 from malsight.evaluation.comparer import correspond
 from malsight.schemas import Case, Report
 
+# mode -> (LLM utilisé, règles D7 appliquées)
+MODES = {"llm": (True, False), "regles": (False, True), "hybride": (True, True)}
+
 COLONNES = [
     ("echantillon", "Échantillon"), ("attack_attendues", "ATT&CK attendues"),
     ("attack_trouvees", "ATT&CK trouvées"), ("attack_vraies", "Vraies"), ("attack_en_trop", "En trop"),
@@ -49,7 +52,8 @@ def evaluer(report: Report, verite: dict) -> dict:
 def lancer_serie(echantillons: list[str], sortie: Path, analyser: Callable[[Case], Report],
                  cases: Path = Path("cases"), verites: Path = Path("lab/verite-terrain"),
                  dossier_echantillons: Path = Path("lab/echantillons-test"),
-                 construire: Callable[..., Case] | None = None, journal: Callable[[str], None] = print) -> dict:
+                 construire: Callable[..., Case] | None = None, journal: Callable[[str], None] = print,
+                 mode: str = "llm") -> dict:
     """Analyse chaque échantillon en séquence ; une erreur de l'agent est notée sans arrêter la série."""
     from malsight.normalize import build_case
     from malsight.report.render import to_markdown
@@ -61,7 +65,8 @@ def lancer_serie(echantillons: list[str], sortie: Path, analyser: Callable[[Case
         case = construire(dossier_echantillons / vt["echantillon"], labo=cases / tid)
         d = sortie / tid
         d.mkdir(exist_ok=True)
-        ligne: dict = {"echantillon": tid, "modele": os.getenv("LLM_MODEL", "")}
+        uses_llm = MODES.get(mode, (True, False))[0]
+        ligne: dict = {"echantillon": tid, "mode": mode, "modele": os.getenv("LLM_MODEL", "") if uses_llm else ""}
         t0 = time.time()
         try:
             r = analyser(case)

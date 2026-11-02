@@ -48,8 +48,17 @@ class CaseTools:
             iocs[key] = sorted(set(iocs.get(key, [])) | set(vals))
         return {k: v for k, v in iocs.items() if v}
 
-    def get_dynamic_summary(self, top: int = 30) -> dict:
+    def get_dynamic_summary(self, top: int = 30, max_observations: int = 60) -> dict:
         d = self.case.dynamic
+        if d.observations:
+            # Labo (Sysmon + Procmon) : observations avec leur provenance, arbre de l'échantillon d'abord
+            obs = sorted(d.observations, key=lambda o: o.attribution != "sample_tree")[:max_observations]
+            return {
+                "observations": [{"kind": o.kind, "value": o.value, "attribution": o.attribution,
+                                  "sources": o.sources, "process": (o.processes or [""])[0]} for o in obs],
+                "n_observations": len(d.observations),
+                "top_api_calls": Counter(c.api for c in d.api_calls).most_common(top),
+            }
         return {
             "top_api_calls": Counter(c.api for c in d.api_calls).most_common(top),
             "files_written": d.files_written[:50],

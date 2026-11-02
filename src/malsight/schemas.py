@@ -90,7 +90,7 @@ class AttackTechnique(BaseModel):
     id: str
     name: str = ""
     tactic: str = ""
-    source: Literal["capa", "llm"]
+    source: Literal["capa", "rule", "llm"]        # rule : règle déterministe sourcée (D7)
     confidence: Confidence
     evidence: str
 
