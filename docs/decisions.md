@@ -141,7 +141,13 @@ Le mode manuel (`lab/analyse.wsb`) reste disponible.
 
 - Exception à la règle « aucune exécution d'échantillon » de `CLAUDE.md`, limitée à ce script
   et à la Windows Sandbox. Le pipeline Python (`src/`) n'exécute toujours rien.
-- **Claude ne lance ce script qu'avec l'accord explicite de l'utilisateur, un échantillon à
-  la fois** ; un accord pour un échantillon ne vaut pas pour le suivant.
+- **Claude ne lance ce script qu'avec l'accord explicite de l'utilisateur, pour des
+  échantillons nommés** : un seul (« OK pour T04 ») ou une liste (« OK pour T04, T05, T06 »).
+  L'accord ne vaut que pour les échantillons cités, jamais pour une plage implicite
+  (« la suite », « tous ») ni pour un échantillon ajouté ou modifié après l'accord.
+- **Liste d'échantillons** : lancement un par un, dans l'ordre, `malsight comparer` après
+  chacun, et **arrêt au premier échec** (analyse en erreur, délai dépassé ou IOC manquant) :
+  Claude le signale et ne lance pas les suivants. *(Précision ajoutée le 2026-11-02, après
+  la validation de T02 et T03 en mode automatique.)*
 - Les tests (`tests/test_lancer_analyse.py`) n'utilisent que `-SansLancer` : ils ne lancent
   jamais de sandbox.
