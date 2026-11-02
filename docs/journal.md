@@ -7,6 +7,48 @@ est dans les [issues](https://github.com/othmane1244/malsight-agent/issues) et l
 
 ---
 
+## 2026-11-02 (fin de journée) : essai 2 de T01 réussi
+
+### Fait
+- Essai 2 avec les corrections du commit f5d278d : #4 **fermée** (6/6 critères).
+
+  | Vérification | Essai 1 | Essai 2 |
+  | --- | --- | --- |
+  | Préparation de la sandbox | lancée à la main | automatique, aucun journal d'erreur (*) |
+  | Sysmon : 3 IOC de T01 (EID 13, 11, 22) | ✅ (116 événements) | ✅ (105 événements) |
+  | Signature de `procmon.PML` | octets nuls (non finalisé) | `PML_` (164 Mo) |
+  | `procmon.csv` | absent | 70 Mo (`RegSetValue`, `CreateFile`/`WriteFile`) |
+  | SHA-256 du manifeste = dépôt | ✅ | ✅ |
+
+  (*) Indice dans Sysmon : la ligne de commande parente est exactement celle de la LogonCommand
+  (`-NoProfile`, absent de la commande manuelle du README). À confirmer par l'équipe.
+- **Parseur Sysmon (#8)** : `load_sysmon_csv` + normalisation `HKU\<SID>\` → `HKCU\`, testé sur
+  une fixture anonymisée tirée de l'essai 2 (`tests/fixtures/sysmon_T01.csv`) ; les 3 IOC de
+  `lab/verite-terrain/T01.json` sont retrouvés.
+- Résultats archivés hors git dans `cases/essai1/` et `cases/essai2/`.
+
+### Constats utiles pour le bilan J2 (D1)
+- **Le DNS est capté par Sysmon même sans réseau** : la requête `test.malsight.lab` apparaît
+  en EID 22 (résolution en échec), alors qu'elle est absente de Procmon. Sans INetSim, on voit
+  donc **quels domaines** un échantillon cherche à joindre, mais pas ce qu'il ferait ensuite
+  (connexion, échange HTTP). C'est l'argument à peser au bilan J2 pour l'option VM + INetSim (#5).
+- Procmon écrit déjà les clés en `HKCU\`, Sysmon en `HKU\<SID>\` : seul Sysmon est à normaliser.
+- Le CSV Procmon suit la langue de Windows (virgule décimale, espace dans les milliers, heure
+  sans date) et pèse ~70 Mo pour 4 minutes : filtrage par processus nécessaire (détails dans #8).
+- La colonne `Task` du CSV Sysmon est fausse (« Sysmon config state changed » partout) : le
+  parseur s'appuie sur `EventID`.
+- T01 tourne dans la même console PowerShell que `setup-sandbox.ps1` (même PID) : on ne peut pas
+  isoler l'échantillon par son seul PID.
+
+### Bloquant
+- Aucun.
+
+### Priorité
+1. Échantillons T02 à T10 (#6), après validation de la liste.
+2. Parseur Procmon et fusion avec Sysmon (#8).
+
+---
+
 ## 2026-11-02 (après-midi) : premier essai réel de T01
 
 ### Constats
