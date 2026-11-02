@@ -7,6 +7,35 @@ est dans les [issues](https://github.com/othmane1244/malsight-agent/issues) et l
 
 ---
 
+## 2026-11-02 (soir) : T02, premier échantillon en mode automatique
+
+### Fait
+- **Mode automatique validé (D3)** : `lancer-analyse.ps1 -Echantillon T02` a tout enchaîné sans
+  intervention (prérequis, sandbox, exécution PID 8080 code 0, attente 90 s, collecte,
+  `auto.json`, extinction). PML finalisé, SHA-256 identique au dépôt. Archivé dans `cases/T02/`.
+- **T02 : 2/2 IOC retrouvés** (`malsight comparer cases/T02`) :
+
+  | IOC attendu | Sysmon | Procmon |
+  | --- | --- | --- |
+  | `C:\Windows\System32\Tasks\MalsightTest` | EID 11 (svchost.exe) | CreateFile, WriteFile (svchost.exe) |
+  | `HKLM\…\Schedule\TaskCache\Tree\MalsightTest` | — (hors config, attendu) | RegCreateKey, RegSetValue ×3 (svchost.exe) |
+- **Commande `malsight comparer`** : tableau IOC attendu / trouvé / source à partir d'un dossier
+  de collecte ; T01 (essai 2) 3/3, T02 2/2.
+- Règle d'évasion précisée (D2, T05 gardé), tests PowerShell marqués `slow` (CI verte, 44 tests).
+
+### Constats
+- **Attribution** : la persistance de T02 est écrite par `svchost.exe` (service Planificateur de
+  tâches), pas par le processus de l'échantillon. Filtrer les journaux par PID seul ferait
+  perdre cette preuve : à prendre en compte pour la fusion Sysmon + Procmon (#8).
+- Le parseur Sysmon garde encore beaucoup de bruit système (WMIADAP, `Perflib`, `taskhostw`,
+  `__PSScriptPolicyTest_*.ps1`) : le témoin négatif T11 servira à le mesurer.
+
+### Priorité
+1. T03 à T12 en mode automatique, un par un, avec `malsight comparer` après chacun (#6).
+2. Parseur Procmon et fusion avec Sysmon (#8).
+
+---
+
 ## 2026-11-02 (fin de journée) : essai 2 de T01 réussi
 
 ### Fait
