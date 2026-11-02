@@ -47,3 +47,25 @@ def test_verifier_keeps_backslash_iocs(case, kb):
     kinds = {i.type for i in r.iocs}
     assert {"registry_key", "file_path", "mutex"} <= kinds
     assert not r.rejected_claims
+
+
+def test_llm_ollama_contexte_et_limite_explicites(monkeypatch):
+    """Contexte, limite de génération et délai explicites (pas les valeurs par défaut d'Ollama)."""
+    import langchain_ollama
+
+    from malsight.agent import pipeline
+    recus = {}
+
+    class FauxChatOllama:
+        def __init__(self, **kw):
+            recus.update(kw)
+
+    monkeypatch.setattr(langchain_ollama, "ChatOllama", FauxChatOllama)
+    monkeypatch.setenv("LLM_PROVIDER", "ollama")
+    monkeypatch.delenv("LLM_NUM_CTX", raising=False)
+    pipeline._llm()
+    assert recus["num_ctx"] == 8192 and recus["num_predict"] == 2048
+    assert recus["client_kwargs"]["timeout"] == 600.0
+    monkeypatch.setenv("LLM_NUM_CTX", "16384")
+    pipeline._llm()
+    assert recus["num_ctx"] == 16384

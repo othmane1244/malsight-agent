@@ -60,8 +60,13 @@ def _llm():
     model = os.getenv("LLM_MODEL", "gemma4:e4b")
     if provider == "ollama":
         from langchain_ollama import ChatOllama
+        # Valeurs explicites : le contexte par défaut d'Ollama (4096 tokens) est partagé entre le
+        # prompt et la réponse, et la génération n'a pas de limite (risque de boucle en sortie JSON).
         return ChatOllama(model=model, temperature=0.1,
-                          base_url=os.getenv("OLLAMA_HOST", "http://localhost:11434"))
+                          base_url=os.getenv("OLLAMA_HOST", "http://localhost:11434"),
+                          num_ctx=int(os.getenv("LLM_NUM_CTX", "8192")),
+                          num_predict=int(os.getenv("LLM_NUM_PREDICT", "2048")),
+                          client_kwargs={"timeout": float(os.getenv("LLM_TIMEOUT_S", "600"))})
     if provider == "anthropic":
         from langchain_anthropic import ChatAnthropic
         return ChatAnthropic(model=model, temperature=0.1)
