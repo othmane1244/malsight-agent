@@ -7,6 +7,38 @@ est dans les [issues](https://github.com/othmane1244/malsight-agent/issues) et l
 
 ---
 
+## 2026-11-02 (après-midi) : premier essai réel de T01
+
+### Constats
+- **Sysmon fonctionne** : 116 événements, les 3 IOC de T01 sont présents.
+  - EID 13 : `HKU\S-1-5-21-…-504\Software\Microsoft\Windows\CurrentVersion\Run\MalsightTest`
+    → `notepad.exe`. La clé est en `HKU\<SID>\`, pas en `HKCU\` : normalisation prévue dans #8.
+  - EID 11 : `C:\travail\malsight_test.txt` (règle maison `sysmon-malsight.xml` validée).
+  - EID 22 : `test.malsight.lab`.
+- **LogonCommand** : `setup-sandbox.ps1` ne s'est pas lancé (ou a échoué sans message visible)
+  et a dû être lancé à la main. Cause : `sysmonconfig-export.xml` manquait dans `C:\labo\entree\outils`.
+- **ExecutionPolicy et `C:\travail`** : il a fallu les régler et le créer à la main.
+- **Procmon** : `procmon.PML is not a Process Monitor backing file (signature missing)`. Le PML
+  (220 Mo) commence par des octets nuls : en-tête jamais finalisé. Causes probables : écriture
+  directe dans `C:\resultats` (dossier partagé avec l'hôte) et conversion lancée avant la fin
+  de l'arrêt de Procmon.
+
+### Corrections
+- `lab/scripts/verifier-prerequis.ps1` : vérification côté hôte avant `analyse.wsb` (outils,
+  config Sysmon valide, scripts à jour par rapport au dépôt, résultats vidés), testée.
+- `analyse.wsb` : la LogonCommand passe par `cmd /c start` pour ouvrir une vraie fenêtre ;
+  `setup-sandbox.ps1` affiche les erreurs en rouge et copie son journal dans `C:\resultats`.
+- `setup-sandbox.ps1` : ExecutionPolicy Bypass pour la session, création de `C:\travail`.
+- Procmon : capture en local (`C:\labo-outils\procmon.PML`), `Wait-Process` après `/Terminate`,
+  conversion CSV en local, copie vers `C:\resultats` seulement à la fin ; contrôle de la
+  signature `PML_`.
+
+### Priorité
+1. Refaire l'essai T01 avec les scripts corrigés et cocher le dernier critère de #4.
+2. Utiliser les journaux de T01 comme fixture du parseur Sysmon (#8).
+
+---
+
 ## 2026-11-02
 
 ### Fait

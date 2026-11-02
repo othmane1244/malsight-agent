@@ -8,10 +8,11 @@
 | Fichier | Rôle |
 | --- | --- |
 | `analyse.wsb` | Configuration Windows Sandbox : réseau, vGPU et presse-papiers coupés, dossiers mappés |
-| `scripts/setup-sandbox.ps1` | Lancé au démarrage de la sandbox : installe Sysmon, démarre Procmon, affiche les consignes |
+| `scripts/verifier-prerequis.ps1` | À lancer **sur l'hôte** avant `analyse.wsb` : outils, config Sysmon, scripts à jour, résultats vidés |
+| `scripts/setup-sandbox.ps1` | Lancé au démarrage de la sandbox : ExecutionPolicy, `C:\travail`, Sysmon, Procmon (capture locale), consignes ; erreur visible en rouge |
 | `sysmon-malsight.xml` | Règles Sysmon maison (événement 11 dans `C:\travail\`), fusionnées dans la config SwiftOnSecurity |
 | `scripts/Merge-SysmonConfig.ps1` | Fusion des règles maison dans la config Sysmon de base (appelé par `setup-sandbox.ps1`) |
-| `scripts/collect.ps1` | Lancé après l'exécution : arrête Procmon, exporte Sysmon (EVTX + CSV), range les résultats |
+| `scripts/collect.ps1` | Lancé après l'exécution : arrête Procmon et attend sa fin, convertit le PML en local, exporte Sysmon (EVTX + CSV), copie le tout dans les résultats |
 
 Aucun outil, échantillon ni journal n'est versionné : tout vit dans `C:\labo`, hors du dépôt.
 
@@ -41,24 +42,37 @@ Aucun outil, échantillon ni journal n'est versionné : tout vit dans `C:\labo`,
 5. Échantillons de test de l'équipe (`lab/echantillons-test/`, vérité terrain dans
    `lab/verite-terrain/`) : copier T01 avec
    `Copy-Item .\lab\echantillons-test\T01_persistance_run.ps1 C:\labo\entree\samples\ -Force`,
-   puis dans la sandbox le lancer avec
-   `powershell -NoProfile -ExecutionPolicy Bypass -File C:\travail\T01_persistance_run.ps1`.
+   puis dans la sandbox le lancer avec `& C:\travail\T01_persistance_run.ps1`
+   (la fenêtre de `setup-sandbox.ps1` a déjà ExecutionPolicy Bypass).
 
 ## Procédure d'analyse (par échantillon)
 
-1. Double-cliquer sur `lab\analyse.wsb`. La sandbox démarre et `setup-sandbox.ps1` s'exécute
-   dans une fenêtre PowerShell : Sysmon s'installe, Procmon capture vers
-   `C:\resultats\procmon_<date>.PML`.
-2. Attendre le message **« Sandbox prête »**.
-3. Dans la sandbox, copier l'échantillon en local puis l'exécuter :
+0. Sur l'hôte, depuis la racine du dépôt, vérifier les prérequis (code de sortie 0 attendu) :
 
    ```powershell
-   New-Item -ItemType Directory -Force C:\travail
-   Copy-Item C:\entree\samples\<fichier> C:\travail\
+   .\lab\scripts\verifier-prerequis.ps1
    ```
 
-   Lancer `C:\travail\<fichier>`, puis attendre 2 à 3 minutes.
-4. Dans la fenêtre PowerShell, lancer la collecte :
+   Il signale les outils manquants, un `sysmonconfig-export.xml` absent ou invalide, des scripts
+   copiés qui ne sont plus à jour, et un dossier de résultats non vidé.
+1. Double-cliquer sur `lab\analyse.wsb`. La sandbox démarre et `setup-sandbox.ps1` s'exécute
+   dans une fenêtre PowerShell « MalSight » : ExecutionPolicy Bypass pour la session, création
+   de `C:\travail`, installation de Sysmon, capture Procmon **en local**
+   (`C:\labo-outils\procmon.PML`).
+2. Attendre le message vert **« Sandbox prête »**. En cas de message rouge **« ÉCHEC »**, ne rien
+   exécuter : le journal est dans `C:\labo-outils\setup.log` et copié sur l'hôte dans
+   `C:\labo\resultats\setup-erreur_<date>.log`. Si aucune fenêtre n'apparaît, lancer à la main :
+   `powershell -ExecutionPolicy Bypass -NoExit -File C:\entree\scripts\setup-sandbox.ps1`.
+3. Dans la même fenêtre, copier l'échantillon en local puis l'exécuter :
+
+   ```powershell
+   Copy-Item C:\entree\samples\<fichier> C:\travail\
+   & C:\travail\<fichier>
+   ```
+
+   Attendre ensuite 2 à 3 minutes.
+4. Dans la même fenêtre, lancer la collecte. Elle arrête Procmon, attend la fin du processus,
+   convertit le PML en CSV en local, puis copie tout vers `C:\resultats` :
 
    ```powershell
    C:\entree\scripts\collect.ps1 -Echantillon <fichier>

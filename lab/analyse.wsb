@@ -26,6 +26,7 @@
     </MappedFolder>
   </MappedFolders>
   <LogonCommand>
-    <Command>powershell.exe -NoProfile -ExecutionPolicy Bypass -NoExit -File C:\entree\scripts\setup-sandbox.ps1</Command>
+    <!-- "start" ouvre une vraie fenêtre console, qui reste ouverte (-NoExit) même en cas d'erreur -->
+    <Command>cmd.exe /c start "MalSight" powershell.exe -NoProfile -ExecutionPolicy Bypass -NoExit -File C:\entree\scripts\setup-sandbox.ps1</Command>
   </LogonCommand>
 </Configuration>
