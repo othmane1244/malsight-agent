@@ -88,43 +88,48 @@ def serie(sortie: Path = typer.Argument(..., help="Dossier de résultats, ex. do
 
 
 @app.command()
-def injection(echantillon: str = typer.Option("T11", help="Cas réel servant de base (défaut : témoin négatif T11)"),
+def injection(base_connues: str = typer.Option("T11", help="Base des variantes 1 à 4 (défaut : témoin négatif T11)"),
+              base_inedites: str = typer.Option("T01", help="Base des variantes inédites 5a / 5b (domaine, clé Run)"),
               sortie: Path = typer.Option(None, help="Dossier de résultats (défaut : docs/resultats/injection_<modèle>)"),
               mode: str = typer.Option("hybride", help="llm | hybride"),
+              depuis_rapports: bool = typer.Option(False, help="Recalculer critères et tableau à partir des rapports "
+                                                              "déjà enregistrés, sans relancer l'agent"),
               cases: Path = Path("cases"), attack_db: Path = Path("data/enterprise-attack.json"),
               d3fend_cache: Path = Path("data/d3fend")):
-    """Test anti-injection (#12) : rapport sur le cas d'origine et sur le cas piégé, puis critères."""
+    """Test anti-injection (#12) : variantes 1 à 4 (connues) et 5a / 5b (inédites) ; critères et
+    classement (le LLM a résisté / le LLM a obéi mais le vérificateur a bloqué / échec)."""
     import json
     import os
 
     from malsight.agent.pipeline import analyze as run
     from malsight.attack.kb import AttackKB
     from malsight.defend.kb import DefendKB
-    from malsight.evaluation.injection import evaluer_injection, pieger
+    from malsight.evaluation.injection import (ECHEC, VARIANTES, VARIANTES_INEDITES, ecrire_resultats,
+                                               evaluer_injection, recharger)
     from malsight.evaluation.serie import MODES
     from malsight.normalize import build_case
-    from malsight.report.render import to_markdown
     use_llm, regles = MODES[mode]
     kb = AttackKB.load(attack_db) if attack_db.exists() else None
     defend = DefendKB(d3fend_cache)
-    vt = json.loads(Path(f"lab/verite-terrain/{echantillon}.json").read_text(encoding="utf-8"))
-    case = build_case(Path("lab/echantillons-test") / vt["echantillon"], labo=cases / echantillon)
-    ref, pie, criteres = evaluer_injection(case, lambda c: run(c, use_llm=use_llm, kb=kb, defend=defend, regles=regles))
-    modele = os.getenv("LLM_MODEL", "gemma4:e4b")
+
+    def charger(tid):
+        vt = json.loads(Path(f"lab/verite-terrain/{tid}.json").read_text(encoding="utf-8"))
+        return build_case(Path("lab/echantillons-test") / vt["echantillon"], labo=cases / tid)
+
+    def analyser(c):
+        return run(c, use_llm=use_llm, kb=kb, defend=defend, regles=regles)
+
+    modele = os.getenv("LLM_MODEL", "gemma4:e4b") if use_llm else "sans LLM"
     sortie = sortie or Path("docs/resultats") / f"injection_{modele.replace(':', '_')}"
-    sortie.mkdir(parents=True, exist_ok=True)
-    for nom, r in (("origine", ref), ("piege", pie)):
-        (sortie / f"report_{nom}.json").write_text(r.model_dump_json(indent=2), encoding="utf-8")
-        (sortie / f"rapport_{nom}.md").write_text(to_markdown(r), encoding="utf-8")
-    (sortie / "cas_piege_observations.json").write_text(
-        json.dumps([o.model_dump() for o in pieger(case).dynamic.observations[:3]], ensure_ascii=False, indent=1),
-        encoding="utf-8")
-    lignes = [f"# Test anti-injection : {echantillon}, mode {mode}, modèle {modele}", "",
-              "| Critère | Respecté |", "| --- | --- |"]
-    lignes += [f"| {k} | {'oui' if v else '**NON**'} |" for k, v in criteres.items()]
-    (sortie / "criteres.md").write_text("\n".join(lignes) + "\n", encoding="utf-8")
+    if depuis_rapports:
+        ref_c, res_c, ref_i, res_i = recharger(sortie, base_connues, base_inedites)
+    else:
+        ref_c, res_c = evaluer_injection(charger(base_connues), analyser, variantes=VARIANTES)
+        ref_i, res_i = evaluer_injection(charger(base_inedites), analyser, variantes={}, inedites=VARIANTES_INEDITES)
+    lignes = ecrire_resultats(sortie, f"# Test anti-injection : mode {mode}, modèle {modele}",
+                              base_connues, ref_c, res_c, base_inedites, ref_i, res_i)
     typer.echo("\n".join(lignes))
-    if not all(criteres.values()):
+    if any(res["classement"] == ECHEC for res in [*res_c.values(), *res_i.values()]):
         raise typer.Exit(1)
 
 

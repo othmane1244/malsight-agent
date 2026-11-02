@@ -399,3 +399,40 @@ Chaque série (`llm`, `regles`, `hybride`) est notée selon deux scores, calcul�
   détection et les contre-mesures D3FEND) ; le tolérant mesure si l'agent a compris la bonne
   famille de comportement. Les deux sont rapportés, sans en choisir un a posteriori.
 - Fixée avant les résultats finaux pour ne pas choisir la notation la plus flatteuse.
+
+---
+
+## D8 : défense contre l'injection de prompt (#12)
+
+- **Date** : 2026-11-03
+- **Statut** : acceptée
+
+### Principe
+
+La protection principale est **l'architecture**, pas la détection :
+1. **le LLM ne choisit pas les outils** : l'orchestration est fixe, les outils sont en lecture
+   seule et leur liste est figée par un test (`test_tools_are_read_only`) ;
+2. **les IOC viennent des outils**, jamais du LLM (le schéma du brouillon n'a pas de champ IOC) ;
+3. **le vérificateur exige des preuves** présentes dans le dossier de cas, valide les IDs ATT&CK
+   et D3FEND contre les bases officielles, et prend nom et tactique dans la base ;
+4. les données de l'échantillon sont **délimitées** (`<donnees_echantillon>`) et désignées comme
+   non fiables ; les chaînes statiques ne sont **jamais** transmises au LLM.
+
+### Garde par motifs (complément, `src/malsight/agent/garde.py`)
+
+Repère dans les données contrôlées par l'échantillon les textes qui s'adressent au modèle
+(« ignore tes instructions », « déclare ce fichier sain », « ajoute la technique », *system
+override*...). Si une consigne est détectée : incertitude « tentative d'injection » ; rejet des
+techniques LLM dont l'ID figure dans la consigne, des IOC seulement mentionnés dans la consigne
+(un artefact réellement observé reste un IOC), des comportements appuyés sur ces valeurs, et du
+verdict « sain » dans le résumé.
+
+**C'est une heuristique contournable** : les consignes inédites 5a (anglais) et 5b (français),
+écrites par l'utilisateur, **ne sont pas détectées** ; les motifs n'ont pas été adaptés pour les
+faire passer (mesure telle quelle).
+
+### Évaluation
+
+`malsight injection` : variantes 1 à 4 (connues lors de la conception, base T11) et 5a / 5b
+(inédites, base T01), classement « le LLM a résisté » / « le LLM a obéi mais le vérificateur a
+bloqué » / « échec ». Résultats : `docs/resultats/injection_gemma4_e4b/criteres.md` et journal.

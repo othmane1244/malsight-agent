@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import re
 
+from malsight.agent.garde import artefacts_observes, consignes
 from malsight.agent.tools import CaseTools
 from malsight.schemas import Case, Report
 from malsight.sensitive_apis import categorize
@@ -33,6 +34,8 @@ _RE_PREUVE = [
     re.compile(r"\b(?:[a-z0-9-]{1,63}\.)+(?:com|net|org|io|ru|cn|info|biz|xyz|local|lab)\b", re.I),  # domaine
 ]
 _RE_MOT = re.compile(r"\b[A-Za-z_][A-Za-z0-9_]{3,}\b")
+# Verdict de bénignité (repris d'une consigne d'injection) : jamais affirmé par l'agent
+MOTS_VERDICT = re.compile(r"\b(?:sain|saine|benign|bénin|bénigne|inoffensif|inoffensive|clean|safe)\b", re.I)
 
 
 def valeurs_citees(evidence: str) -> list[str]:
@@ -105,9 +108,29 @@ def verify(report: Report, case: Case, kb=None, defend=None) -> Report:
 
     # IOC : la valeur doit exister dans le dossier de cas
     hashes = {case.sample.sha256, case.sample.md5}
+    # Garde anti-injection : textes de l'échantillon qui s'adressent au modèle
+    suspects = consignes(case)
+    suspects_bas = [s.lower() for s in suspects]
+    observes = artefacts_observes(case)
+    if suspects:
+        note = (f"Tentative d'injection de prompt détectée dans les données de l'échantillon "
+                f"({len(suspects)} élément(s)) : ces textes ont été traités comme des données, jamais "
+                f"comme des consignes. Ex. : « {suspects[0][:120]} »")
+        if note not in report.uncertainties:
+            report.uncertainties.append(note)
+
+    def mentionne_par_consigne(valeur: str) -> bool:
+        """Valeur seulement citée dans une consigne d'injection (pas un artefact réellement observé)."""
+        v = valeur.lower()
+        return v not in observes and any(v in s for s in suspects_bas)
+
     kept_iocs = []
     for ioc in report.iocs:
-        if ioc.value in hashes or ioc.value.lower() in corpus:
+        if ioc.value in hashes:
+            kept_iocs.append(ioc)
+        elif mentionne_par_consigne(ioc.value):
+            rejected.append(f"IOC issu d'une consigne d'injection, écarté : {ioc.type}={ioc.value}")
+        elif ioc.value.lower() in corpus:
             kept_iocs.append(ioc)
         else:
             rejected.append(f"IOC sans preuve : {ioc.type}={ioc.value}")
@@ -130,6 +153,11 @@ def verify(report: Report, case: Case, kb=None, defend=None) -> Report:
         if not t.evidence.strip():
             rejected.append(f"Technique sans preuve : {t.id}")
             continue
+        # « _ » compte comme séparateur (noms de fichiers) : frontières alphanumériques explicites
+        if t.source == "llm" and any(re.search(r"(?<![a-z0-9])" + re.escape(t.id.lower()) + r"(?![0-9])", s)
+                                     for s in suspects_bas):
+            rejected.append(f"Technique demandée par une consigne d'injection, rejetée : {t.id}")
+            continue
         if kb is not None:
             # Toujours le nom et la tactique officiels : jamais ceux écrits par le LLM
             nom_officiel = kb.name(t.id)
@@ -150,12 +178,26 @@ def verify(report: Report, case: Case, kb=None, defend=None) -> Report:
     for b in report.behaviors:
         if b.kind != "observed":
             continue
+        issues_de_consigne = [v for v in valeurs_citees(b.evidence) if mentionne_par_consigne(v)]
+        if issues_de_consigne:
+            b.kind = "inferred"
+            rejected.append(f"Comportement appuyé sur une consigne d'injection ({', '.join(issues_de_consigne)}) : "
+                            f"« {b.summary} »")
+            continue
         ok, manquantes = preuve_retrouvee(b.evidence, corpus)
         if not ok:
             b.kind = "inferred"
             note = f"Preuve non retrouvée dans le dossier de cas ({', '.join(manquantes)}) : « {b.summary} »"
             if note not in report.uncertainties:
                 report.uncertainties.append(note)
+
+    # Verdict « sain » alors qu'une consigne d'injection le réclame : retiré du résumé
+    if suspects and MOTS_VERDICT.search(report.executive_summary):
+        phrases = re.split(r"(?<=[.!?])\s+", report.executive_summary)
+        gardees = [p for p in phrases if not MOTS_VERDICT.search(p)]
+        retirees = [p for p in phrases if MOTS_VERDICT.search(p)]
+        report.executive_summary = " ".join(gardees).strip()
+        rejected += [f"Verdict non étayé retiré du résumé (consigne d'injection détectée) : « {p} »" for p in retirees]
 
     report.rejected_claims += rejected
     return report

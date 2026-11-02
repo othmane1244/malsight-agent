@@ -1,0 +1,46 @@
+{
+  "sample": {
+    "filename": "T11_temoin_negatif.ps1",
+    "sha256": "412fabad6e7a7f182f34e56502ddd3c4adaef3f8d69333338b2502e600094258",
+    "md5": "9d45396a8fdc603d82da39de93d48f97",
+    "size": 1116,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon est un script PowerShell (`T11_temoin_negatif.ps1`) qui a été exécuté. L'activité observée se limite à la création ou la modification d'un fichier dans le répertoire `C:\\travail\\journal_t11.txt` par le processus `powershell.exe`. Aucune autre activité significative (communication réseau, modification de registre, exécution de processus enfants) n'a été détectée dans les données fournies.",
+  "behaviors": [
+    {
+      "summary": "Écriture de fichier",
+      "evidence": "C:\\travail\\journal_t11.txt",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "412fabad6e7a7f182f34e56502ddd3c4adaef3f8d69333338b2502e600094258",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "9d45396a8fdc603d82da39de93d48f97",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\journal_t11.txt",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [],
+  "countermeasures": [],
+  "recommendations": [
+    "Surveiller la création de fichiers spécifiques comme 'C:\\travail\\journal_t11.txt' pour détecter toute activité d'écriture de données non autorisée.",
+    "Mettre en place des règles de hachage (SHA256 : 412fabad6e7a7f182f34e56502ddd3c4adaef3f8d69333338b2502e600094258, MD5 : 9d45396a8fdc603d82da39de93d48f97) dans les systèmes de sécurité pour bloquer l'exécution de ces artefacts connus.",
+    "Surveiller les processus qui accèdent ou modifient des fichiers dans le répertoire 'C:\\travail' pour identifier des comportements suspects de journalisation ou d'extraction de données."
+  ],
+  "uncertainties": [
+    "Aucune activité réseau ou de modification de registre n'a été observée, ce qui limite la portée de l'analyse aux seules interactions avec le système de fichiers."
+  ],
+  "rejected_claims": []
+}
