@@ -11,15 +11,15 @@
 
 ## Résumé
 
-L'échantillon, un script PowerShell nommé "T01_persistance_run.ps1", a été observé en exécution par `powershell.exe`. Il a effectué des actions visant à établir une persistance et à interagir avec des ressources système et réseau. Spécifiquement, il a créé une clé de registre de démarrage utilisateur et a tenté de résoudre un domaine spécifique.
+L'échantillon, un script PowerShell nommé "T01_persistance_run.ps1", a été observé en exécution par `powershell.exe`. Il a effectué des actions visant à établir une persistance et à interagir avec des ressources système et réseau. Spécifiquement, il a créé une entrée de registre pour la persistance au démarrage et a tenté de résoudre un domaine spécifique.
 
 ## Comportements
 
 | Comportement | Preuve | Statut |
 | --- | --- | --- |
-| Établir la persistance via une clé de registre de démarrage utilisateur. | `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\MalsightTest` | observé |
+| Établir la persistance via une clé de registre de démarrage. | `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\MalsightTest` | observé |
 | Créer ou écrire un fichier local. | `C:\travail\malsight_test.txt` | observé |
-| Tenter de communiquer avec un domaine spécifique. | `test.malsight.lab` | observé |
+| Tenter de communiquer avec un domaine externe. | `test.malsight.lab` | observé |
 
 ## Indicateurs de compromission (IOC)
 
@@ -64,11 +64,11 @@ ATT&CK retenues (source : d3fend, cache local ; IDs vérifiés).
 
 ## Recommandations
 
-- Surveiller la création de clés de registre dans les chemins de démarrage utilisateur, spécifiquement `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`, pour détecter l'ajout de clés pointant vers des exécutables (Détection Sysmon : Event ID 12 ou 13, filtrer sur les chemins de registre de démarrage).
-- Mettre en place une surveillance des modifications de fichiers critiques ou des chemins de démarrage pour détecter les ajouts non autorisés (D3-FIM).
-- Appliquer des politiques de contrôle des applications pour restreindre l'exécution de scripts PowerShell depuis des chemins non standard ou des clés de registre de démarrage (D3-EAL).
-- Surveiller les tentatives d'exécution de fichiers à partir de chemins temporaires ou de dossiers utilisateurs non habituels.
-- Analyser les processus qui tentent d'exécuter des commandes PowerShell en utilisant des arguments suspects ou des chemins de registre spécifiques.
+- Surveiller la création de clés de registre dans les chemins de démarrage utilisateur, spécifiquement HKCU\Software\Microsoft\Windows\CurrentVersion\Run, pour détecter l'ajout de clés non autorisées (D3-FIM).
+- Mettre en place des règles de détection (Sysmon/Audit) pour surveiller l'exécution de processus via les clés de registre de démarrage (HKCU\Software\Microsoft\Windows\CurrentVersion\Run), en particulier lorsqu'ils pointent vers des exécutables ou des scripts non reconnus.
+- Appliquer le principe du moindre privilège pour limiter les droits d'écriture dans les clés de registre de démarrage utilisateur (HKCU\Software\Microsoft\Windows\CurrentVersion\Run) pour empêcher l'installation persistante (D3-LFP).
+- Utiliser des solutions de contrôle des applications (Application Whitelisting) pour restreindre l'exécution des exécutables non approuvés, y compris ceux lancés via des clés de registre (D3-EAL).
+- Surveiller les tentatives de communication réseau vers des domaines spécifiques comme 'test.malsight.lab' pour détecter des communications suspectes, même si elles sont des tentatives (D3-DA).
 
 ## Incertitudes
 

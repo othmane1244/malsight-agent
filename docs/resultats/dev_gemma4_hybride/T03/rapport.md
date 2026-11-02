@@ -11,13 +11,13 @@
 
 ## Résumé
 
-L'échantillon analysé n'a pas d'activité d'exécution directe visible dans les données fournies. Cependant, des modifications de registre ont été observées via `services.exe` (processus système), indiquant une tentative de persistance en créant ou en modifiant un service Windows nommé `MalsightTest`. Cette activité est fortement corrélée à la technique de persistance T1543.003 (Windows Service).
+L'échantillon analysé n'a pas d'activité d'exécution directe visible dans les données fournies. Cependant, des modifications de registre ont été observées via `services.exe` (processus système) qui consistent à créer et configurer un service Windows nommé `MalsightTest`. Cette action est une technique de persistance visant à faire exécuter un payload en arrière-plan au démarrage du système.
 
 ## Comportements
 
 | Comportement | Preuve | Statut |
 | --- | --- | --- |
-| Création/Modification d'un service Windows pour la persistance | `HKLM\System\CurrentControlSet\Services\MalsightTest` | observé |
+| Création et configuration d'un service Windows pour la persistance. | `HKLM\System\CurrentControlSet\Services\MalsightTest (Création de la clé de service), HKLM\System\CurrentControlSet\Services\MalsightTest\Type, HKLM\System\CurrentControlSet\Services\MalsightTest\Start, HKLM\System\CurrentControlSet\Services\MalsightTest\ErrorControl, HKLM\System\CurrentControlSet\Services\MalsightTest\ImagePath, HKLM\System\CurrentControlSet\Services\MalsightTest\DisplayName, HKLM\System\CurrentControlSet\Services\MalsightTest\ObjectName` | observé |
 
 ## Indicateurs de compromission (IOC)
 
@@ -58,13 +58,12 @@ ATT&CK retenues (source : d3fend, cache local ; IDs vérifiés).
 ## Recommandations
 
 - Surveiller la création ou la modification de services système dans les chemins critiques comme HKLM\System\CurrentControlSet\Services, en particulier les clés nommées 'MalsightTest'. (D3-SCP)
-- Surveiller les modifications des clés de registre de services (ex: HKLM\System\CurrentControlSet\Services\MalsightTest\ImagePath, HKLM\System\CurrentControlSet\Services\MalsightTest\Start) pour détecter des changements non autorisés. (D3-SCP)
-- Mettre en place des politiques de durcissement pour restreindre la création de services système non signés ou non documentés dans le registre. (D3-SCP)
-- Analyser les artefacts avec les hachages SHA256 (bd8fd8f188f1c0310a195806b74e512c7fb0eacca6daeadbf2dafa54c2ffa01f) et MD5 (bbe26e04013dda9baceada038738c305) pour identifier leur nature et leur comportement connu. (D3-DI)
-- Surveiller les tentatives d'écriture ou de modification des clés de registre listées (HKLM\System\CurrentControlSet\Services\MalsightTest\*) pour détecter toute activité suspecte. (D3-SCP)
-- Utiliser des règles de détection basées sur les chemins de registre spécifiques (ex: HKLM\System\CurrentControlSet\Services\MalsightTest\*) pour alerter sur la présence de services potentiellement malveillants. (D3-SCP)
+- Détecter toute tentative de modification des clés de registre associées à la définition d'un service (ex: HKLM\System\CurrentControlSet\Services\MalsightTest\ImagePath, HKLM\System\CurrentControlSet\Services\MalsightTest\Start), car ces modifications sont typiques de l'établissement de persistance via des services. (D3-SCP)
+- Surveiller l'exécution de processus depuis des chemins inhabituels ou non standard pour les services système, comme l'utilisation de 'services.exe' avec des arguments ou des chemins non attendus. (D3-SCP)
+- Utiliser des règles de détection basées sur les hachages SHA256 (bd8fd8f188f1c0310a195806b74e512c7fb0eacca6daeadbf2dafa54c2ffa01f) et MD5 (bbe26e04013dda9baceada038738c305) pour bloquer l'exécution de fichiers connus. (D3-DI)
+- Mettre en place des politiques de durcissement pour restreindre les droits d'écriture sur les clés de registre système critiques (HKLM\System\CurrentControlSet\Services), limitant ainsi la capacité d'un processus non autorisé à créer ou modifier des services. (D3-SCP)
+- Surveiller les événements de création de tâches planifiées ou de services qui pointent vers des exécutables suspects ou qui modifient des clés de registre système de manière non standard. (D3-SCP)
 
 ## Incertitudes
 
-- L'attribution de l'activité de modification de registre au processus `services.exe (852)` est notée comme 'service_window', ce qui signifie que l'action pourrait être une activité normale du système plutôt qu'une action directe de l'échantillon lui-même. L'échantillon n'a pas été vu exécuter ces commandes de registre directement.
-- Aucune activité réseau (connexion établie, résolution DNS) n'a été observée, ce qui limite la compréhension des objectifs de communication de l'échantillon.
+- L'activité observée (création de service) est attribuée à `services.exe` (processus système) et non directement à l'exécutable de l'échantillon, ce qui rend difficile de déterminer si l'échantillon a initié cette action ou si elle est une activité de fond du système.

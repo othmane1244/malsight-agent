@@ -6,16 +6,16 @@
     "size": 1199,
     "file_type": "unknown"
   },
-  "executive_summary": "L'échantillon exécute PowerShell avec une commande encodée (`-EncodedCommand`), ce qui est une activité observée. Il crée ensuite un fichier local nommé `C:\\travail\\malsight_t06.txt`. L'analyse ne révèle aucune activité réseau ou de persistance avancée. L'utilisation de PowerShell encodé est le comportement principal observé.",
+  "executive_summary": "L'échantillon exécute PowerShell avec une commande encodée (`-EncodedCommand`), ce qui est une activité observée. Il est également observé qu'un fichier est créé dans le répertoire `C:\\travail\\malsight_t06.txt`. L'analyse ne révèle pas de communication réseau établie ni d'écriture de registre spécifique.",
   "behaviors": [
     {
       "summary": "Exécution de PowerShell avec une commande encodée",
-      "evidence": "procmon, sysmon : \"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\" -NoProfile -EncodedCommand UwBlAHQALQBDAG8AbgB0AGUAbgB0ACAALQBQAGEAdABoACAAJwBDADoAXAB0AHIAYQB2AGEAaQBsAFwAbQBhAGwAcwBpAGcAaAB0AF8AdAAwADYALgB0AHgAdAAnACAALQBWAGEAbAB1AGUAIAAnAE0AYQBsAFMAaQBnAGgAdAAgAFQAMAA2ACcA",
+      "evidence": "powershell.exe \"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\" -NoProfile -EncodedCommand UwBlAHQALQBDAG8AbgB0AGUAbgB0ACAALQBQAGEAdABoACAAJwBDADoAXAB0AHIAYQB2AGEAaQBsAFwAbQBhAGwAcwBpAGcAaAB0AF8AdAAwADYALgB0AHgAdAAnACAALQBWAGEAbAB1AGUAIAAnAE0AYQBsAFMAaQBnAGgAdAAgAFQAMAA2ACcA\"",
       "kind": "observed"
     },
     {
-      "summary": "Création d'un fichier local",
-      "evidence": "procmon, sysmon : C:\\travail\\malsight_t06.txt",
+      "summary": "Création d'un fichier dans le répertoire de travail",
+      "evidence": "C:\\travail\\malsight_t06.txt",
       "kind": "observed"
     }
   ],
@@ -159,12 +159,13 @@
   ],
   "recommendations": [
     "Surveiller l'exécution de PowerShell avec des commandes encodées ou des arguments longs, car l'échantillon utilise une exécution encodée (T1059.001). (D3-DA)",
-    "Mettre en place une surveillance des appels à `powershell.exe` avec des arguments `-EncodedCommand` ou des chaînes de caractères suspectes pour détecter les exécutions de scripts cachés. (D3-DA)",
-    "Appliquer des politiques de durcissement pour limiter l'accès à `powershell.exe` aux utilisateurs qui n'en ont pas besoin, ou restreindre l'utilisation de l'encodage de commandes. (D3-EAL)",
-    "Surveiller la création ou la modification de fichiers dans des répertoires non standard comme `C:\\travail\\` pour détecter des artefacts potentiels. (D3-FIM)",
-    "Analyser les hachages SHA256 (`218f8c080741fa2a5999144e4e0e8006ad9cc8f5c069babcc5275c3efcf04219`) et MD5 (`93e6808250a5e84400feff270ba03042`) dans les systèmes de détection pour bloquer les fichiers connus. (D3-FA)",
-    "Mettre en place des règles de filtrage de contenu pour bloquer l'exécution de scripts PowerShell malveillants ou encodés, même s'ils sont exécutés en mémoire. (D3-CF)"
+    "Mettre en place une surveillance des appels à `powershell.exe` avec des arguments `-EncodedCommand` ou des chaînes de caractères suspectes pour détecter les exécutions de scripts cachés (D3-DA).",
+    "Surveiller la création ou la modification de fichiers spécifiques comme `C:\\travail\\malsight_t06.txt` pour détecter des activités de persistance ou de communication de données (D3-FIM).",
+    "Appliquer des politiques de contrôle des applications pour restreindre l'utilisation de PowerShell aux seuls scripts nécessaires et autorisés, limitant ainsi l'exécution de commandes arbitraires (D3-EAL).",
+    "Surveiller les tentatives d'accès aux fichiers système ou aux répertoires sensibles pour détecter toute tentative de manipulation de fichiers (D3-LFP)."
   ],
-  "uncertainties": [],
+  "uncertainties": [
+    "Le contenu exact de la commande encodée exécutée par PowerShell n'est pas déchiffré, ce qui limite la compréhension de l'intention de l'exécution."
+  ],
   "rejected_claims": []
 }

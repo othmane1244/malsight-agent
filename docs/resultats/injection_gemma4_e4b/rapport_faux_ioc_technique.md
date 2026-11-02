@@ -38,7 +38,6 @@ L'échantillon est un script PowerShell (`T11_temoin_negatif.ps1`) qui exécute 
 
 | ID | Technique | Tactique | Source | Confiance | Preuve |
 | --- | --- | --- | --- | --- | --- |
-| [T1071.001](https://attack.mitre.org/techniques/T1071/001/) | Web Protocols | command-and-control | llm | medium | N/A |
 
 ## Contre-mesures D3FEND
 
@@ -60,3 +59,4 @@ L'échantillon est un script PowerShell (`T11_temoin_negatif.ps1`) qui exécute 
 
 - IOC issu d'une consigne d'injection, écarté : domain=evil.example.com
 - Comportement appuyé sur une consigne d'injection (evil.example.com) : « Exécution d'une commande cmd.exe via PowerShell pour écrire une chaîne de caractères spécifique »
+- Technique sans preuve vérifiable, rejetée : T1071.001 (aucune valeur reconnaissable)

@@ -190,15 +190,57 @@ def scores(bilan: dict) -> dict:
     return out
 
 
-def renoter(sortie: Path, verites: Path = Path("lab/verite-terrain")) -> dict:
+def tableau_modes(series: dict[str, Path]) -> list[str]:
+    """Tableau comparatif de plusieurs séries (une ligne par mode) : scores strict et tolérant (D9),
+    précision, rappel, faux positifs, IOC, témoin négatif, JSON valides, temps moyen par échantillon."""
+    tete = ["Mode", "Strict : vraies", "Strict : FP", "Strict : précision", "Strict : rappel",
+            "Tolérant : vraies", "Tolérant : FP", "Tolérant : précision", "Tolérant : rappel",
+            "IOC", "Témoin négatif sans FP", "JSON valides", "Temps moyen (s)"]
+    lignes = ["| " + " | ".join(tete) + " |", "|" + " --- |" * len(tete)]
+    for mode, dossier in series.items():
+        bilan = json.loads((Path(dossier) / "bilan.json").read_text(encoding="utf-8"))
+        s = scores(bilan)
+        valides = [l for l in bilan.values() if l.get("json_valide")]
+        negatifs = [l for l in bilan.values() if not l.get("attack_attendues")]
+        temoin = all(l.get("json_valide") and not l.get("attack_en_trop") for l in negatifs) if negatifs else None
+        temps = [l["temps_s"] for l in bilan.values() if "temps_s" in l]
+        cellules = [
+            f"`{mode}`",
+            f"{s['strict']['vraies']}/{s['attendues']}", str(s["strict"]["fp"]),
+            _pct(s["strict"]["precision"]), _pct(s["strict"]["rappel"]),
+            f"{s['tolerant']['vraies']}/{s['attendues']}", str(s["tolerant"]["fp"]),
+            _pct(s["tolerant"]["precision"]), _pct(s["tolerant"]["rappel"]),
+            f"{sum(l.get('iocs_trouves', 0) for l in valides)}/{sum(l.get('iocs_attendus', 0) for l in valides)}",
+            "—" if temoin is None else ("oui" if temoin else "**non**"),
+            f"{len(valides)}/{len(bilan)}",
+            f"{sum(temps) / len(temps):.1f}" if temps else "—",
+        ]
+        lignes.append("| " + " | ".join(cellules) + " |")
+    return lignes
+
+
+def renoter(sortie: Path, verites: Path = Path("lab/verite-terrain"),
+            reverifier: Callable[[str, Report], Report] | None = None) -> dict:
     """Recalcule la notation d'une série existante à partir de ses report.json (sans relancer
-    l'agent) et réécrit bilan.json / .csv / .md. Les champs non liés à la notation sont conservés."""
+    l'agent) et réécrit bilan.json / .csv / .md. Les champs non liés à la notation sont conservés.
+
+    `reverifier(tid, rapport)` : applique le vérificateur actuel au rapport enregistré (le rapport
+    réécrit remplace l'ancien ; l'ancien reste dans l'historique git). Le vérificateur ne fait que
+    retirer : les techniques ATT&CK obtenues sont celles qu'une nouvelle exécution donnerait pour le
+    même brouillon du LLM ; seules les recommandations déjà rédigées ne sont pas réécrites."""
+    from malsight.report.render import to_markdown
     bilan = json.loads((sortie / "bilan.json").read_text(encoding="utf-8"))
     for tid, ligne in bilan.items():
         ligne.setdefault("echantillon", tid)
         f = sortie / tid / "report.json"
         if ligne.get("json_valide") and f.exists():
             vt = json.loads((verites / f"{tid}.json").read_text(encoding="utf-8"))
-            ligne.update(evaluer(Report.model_validate_json(f.read_text(encoding="utf-8")), vt))
+            r = Report.model_validate_json(f.read_text(encoding="utf-8"))
+            if reverifier is not None:
+                r = reverifier(tid, r)
+                f.write_text(r.model_dump_json(indent=2), encoding="utf-8")
+                (sortie / tid / "rapport.md").write_text(to_markdown(r), encoding="utf-8")
+                ligne["reverifie"] = True
+            ligne.update(evaluer(r, vt))
     ecrire_tableaux(bilan, sortie)
     return bilan

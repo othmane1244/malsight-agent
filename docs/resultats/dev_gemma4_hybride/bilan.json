@@ -4,7 +4,7 @@
   "mode": "hybride",
   "modele": "gemma4:e4b",
   "json_valide": true,
-  "temps_s": 107.7,
+  "temps_s": 115.5,
   "attack_attendues": [
    "T1547.001"
   ],
@@ -32,7 +32,7 @@
   "mode": "hybride",
   "modele": "gemma4:e4b",
   "json_valide": true,
-  "temps_s": 122.2,
+  "temps_s": 142.5,
   "attack_attendues": [
    "T1053.005"
   ],
@@ -51,7 +51,7 @@
   "attack_ratees_tol": [],
   "iocs_trouves": 2,
   "iocs_attendus": 2,
-  "comportements_observes": 1,
+  "comportements_observes": 2,
   "comportements_inferes": 0,
   "rejets": []
  },
@@ -60,7 +60,7 @@
   "mode": "hybride",
   "modele": "gemma4:e4b",
   "json_valide": true,
-  "temps_s": 118.3,
+  "temps_s": 120.4,
   "attack_attendues": [
    "T1543.003"
   ],
@@ -88,7 +88,7 @@
   "mode": "hybride",
   "modele": "gemma4:e4b",
   "json_valide": true,
-  "temps_s": 127.4,
+  "temps_s": 130.1,
   "attack_attendues": [
    "T1037.001"
   ],
@@ -116,7 +116,7 @@
   "mode": "hybride",
   "modele": "gemma4:e4b",
   "json_valide": true,
-  "temps_s": 131.5,
+  "temps_s": 128.0,
   "attack_attendues": [
    "T1112"
   ],
@@ -148,7 +148,7 @@
   "mode": "hybride",
   "modele": "gemma4:e4b",
   "json_valide": true,
-  "temps_s": 140.7,
+  "temps_s": 127.7,
   "attack_attendues": [
    "T1059.001"
   ],
@@ -176,7 +176,7 @@
   "mode": "hybride",
   "modele": "gemma4:e4b",
   "json_valide": true,
-  "temps_s": 126.4,
+  "temps_s": 118.4,
   "attack_attendues": [
    "T1082"
   ],
@@ -204,22 +204,27 @@
   "mode": "hybride",
   "modele": "gemma4:e4b",
   "json_valide": true,
-  "temps_s": 145.0,
+  "temps_s": 141.6,
   "attack_attendues": [
    "T1016"
   ],
   "attack_trouvees": [
-   "T1016"
+   "T1016",
+   "T1547.001"
   ],
   "attack_vraies": [
    "T1016"
   ],
-  "attack_en_trop": [],
+  "attack_en_trop": [
+   "T1547.001"
+  ],
   "attack_ratees": [],
   "attack_vraies_tol": [
    "T1016"
   ],
-  "attack_en_trop_tol": [],
+  "attack_en_trop_tol": [
+   "T1547.001"
+  ],
   "attack_ratees_tol": [],
   "iocs_trouves": 1,
   "iocs_attendus": 1,
@@ -232,7 +237,7 @@
   "mode": "hybride",
   "modele": "gemma4:e4b",
   "json_valide": true,
-  "temps_s": 117.9,
+  "temps_s": 112.8,
   "attack_attendues": [
    "T1560"
   ],
@@ -260,39 +265,45 @@
   "mode": "hybride",
   "modele": "gemma4:e4b",
   "json_valide": true,
-  "temps_s": 148.3,
+  "temps_s": 125.5,
   "attack_attendues": [
    "T1105"
   ],
   "attack_trouvees": [
-   "T1547.002"
+   "T1566.001"
   ],
   "attack_vraies": [],
   "attack_en_trop": [
-   "T1547.002"
+   "T1566.001"
   ],
   "attack_ratees": [
    "T1105"
   ],
   "attack_vraies_tol": [],
   "attack_en_trop_tol": [
-   "T1547.002"
+   "T1566.001"
   ],
   "attack_ratees_tol": [
    "T1105"
   ],
   "iocs_trouves": 1,
   "iocs_attendus": 1,
-  "comportements_observes": 1,
-  "comportements_inferes": 1,
-  "rejets": []
+  "comportements_observes": 0,
+  "comportements_inferes": 2,
+  "rejets": [
+   "ID D3FEND absent du cache retiré d'une recommandation : D3-REG",
+   "ID D3FEND absent du cache retiré d'une recommandation : D3-NET",
+   "ID D3FEND absent du cache retiré d'une recommandation : D3-FILE",
+   "ID D3FEND absent du cache retiré d'une recommandation : D3-PRIV",
+   "ID D3FEND absent du cache retiré d'une recommandation : D3-EXEC"
+  ]
  },
  "T11": {
   "echantillon": "T11",
   "mode": "hybride",
   "modele": "gemma4:e4b",
   "json_valide": true,
-  "temps_s": 84.2,
+  "temps_s": 98.3,
   "attack_attendues": [],
   "attack_trouvees": [],
   "attack_vraies": [],
@@ -312,7 +323,7 @@
   "mode": "hybride",
   "modele": "gemma4:e4b",
   "json_valide": true,
-  "temps_s": 140.1,
+  "temps_s": 137.2,
   "attack_attendues": [
    "T1082",
    "T1547.001"
@@ -335,7 +346,7 @@
   "attack_ratees_tol": [],
   "iocs_trouves": 3,
   "iocs_attendus": 3,
-  "comportements_observes": 3,
+  "comportements_observes": 4,
   "comportements_inferes": 0,
   "rejets": []
  }

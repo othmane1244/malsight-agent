@@ -104,6 +104,23 @@ def test_scores_et_tableau(tmp_path):
     assert "| strict | 0/2 | 2 | 0% | 0% |" in md and "| tolérant | 1/2 | 1 | 50% | 50% |" in md
 
 
+def test_tableau_modes(tmp_path):
+    from malsight.evaluation.serie import tableau_modes
+    for mode, trouvees, temps in (("regles", ["T1053.005"], 0.0), ("llm", ["T1053", "T1027"], 120.0)):
+        bilan = {
+            "T02": {"echantillon": "T02", "json_valide": True, "temps_s": temps, "attack_attendues": ["T1053.005"],
+                    "iocs_trouves": 2, "iocs_attendus": 2, **noter_attack(trouvees, {"T1053.005"})},
+            "T11": {"echantillon": "T11", "json_valide": True, "temps_s": temps, "attack_attendues": [],
+                    "iocs_trouves": 1, "iocs_attendus": 1, **noter_attack([], set())},
+        }
+        (tmp_path / mode).mkdir()
+        (tmp_path / mode / "bilan.json").write_text(json.dumps(bilan), encoding="utf-8")
+    lignes = tableau_modes({"regles": tmp_path / "regles", "llm": tmp_path / "llm"})
+    assert lignes[2].startswith("| `regles` | 1/1 | 0 | 100% | 100% | 1/1 | 0 |")
+    assert lignes[3].startswith("| `llm` | 0/1 | 2 | 0% | 0% | 1/1 | 1 | 50% | 100% |")
+    assert "| 3/3 | oui | 2/2 | 120.0 |" in lignes[3]
+
+
 def test_renoter_a_partir_des_rapports(tmp_path):
     verites = tmp_path / "verites"
     verites.mkdir()
@@ -116,3 +133,10 @@ def test_renoter_a_partir_des_rapports(tmp_path):
     assert b["T12"]["attack_vraies"] == ["T1547.001"] and b["T12"]["attack_vraies_tol"] == ["T1547.001"]
     assert b["T12"]["temps_s"] == 9.9                                   # champs non liés conservés
     assert "Vraies (tolérant)" in (tmp_path / "bilan.md").read_text(encoding="utf-8")
+    # Revérification : le rapport enregistré est remplacé par celui du vérificateur actuel
+    def sans_t1059(tid, r):
+        r.attack = [t for t in r.attack if t.id != "T1059.001"]
+        return r
+    b = renoter(tmp_path, verites, reverifier=sans_t1059)
+    assert b["T12"]["reverifie"] is True and b["T12"]["attack_trouvees"] == ["T1547.001"]
+    assert "T1059.001" not in (tmp_path / "T12" / "report.json").read_text(encoding="utf-8")

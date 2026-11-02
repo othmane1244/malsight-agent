@@ -1,39 +1,44 @@
-# Comparaison des 3 modes : jeu de développement T01 à T12
+# Comparaison des 3 modes : jeu de développement T01 à T12 (tableau final)
 
-**Modèle : gemma4:e4b** (Ollama, contexte 8192) · notation D9 · 12 techniques attendues
-(T11 = témoin négatif, aucune). Détails par échantillon : `dev_regles/`, `dev_gemma4_llm/`,
-`dev_gemma4_hybride/` (`bilan.md`, `report.json`, `rapport.md`).
+**Modèle : gemma4:e4b** (Ollama, contexte 8192) · notation D9 · vérificateur avec preuve
+vérifiable des techniques LLM (D8) · 12 techniques attendues (T11 = témoin négatif, aucune).
+Généré par `malsight modes regles=dev_regles llm=dev_gemma4_llm hybride=dev_gemma4_hybride`.
+Détails par échantillon : `dev_regles/`, `dev_gemma4_llm/`, `dev_gemma4_hybride/`.
 
-| Mode | Strict (vraies / FP) | Tolérant (vraies / FP) | Précision strict | Rappel strict | T11 sans FP | IOC | JSON valides | Temps total |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `regles` (règles D7 seules, sans LLM) | **10/12 · 0** | **10/12 · 0** | **100 %** | 83 % | oui | 17/17 | 12/12 | < 1 s |
-| `llm` (LLM seul) | 4/12 · 8 | 5/12 · 7 | 33 % | 33 % | oui | 17/17 | 12/12 | 1 879 s |
-| `hybride` (règles + LLM) | **10/12** · 2 | **10/12** · 2 | 83 % | 83 % | oui | 17/17 | 12/12 | 1 510 s |
-| *historique : LLM seul, contexte 4096, avant D7* | *2/12 · 9* | *3/12 · 8* | *18 %* | *17 %* | *oui* | *17/17* | *12/12* | *1 467 s* |
+| Mode | Strict : vraies | Strict : FP | Strict : précision | Strict : rappel | Tolérant : vraies | Tolérant : FP | Tolérant : précision | Tolérant : rappel | IOC | Témoin négatif sans FP | JSON valides | Temps moyen (s) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `regles` | 10/12 | 0 | 100% | 83% | 10/12 | 0 | 100% | 83% | 17/17 | oui | 12/12 | 0.0 |
+| `llm` | 4/12 | 4 | 50% | 33% | 4/12 | 4 | 50% | 33% | 17/17 | oui | 12/12 | 156.6 |
+| `hybride` | 10/12 | 3 | 77% | 83% | 10/12 | 3 | 77% | 83% | 17/17 | oui | 12/12 | 124.8 |
+
+## Comment ces séries ont été obtenues
+
+- `regles` : sans LLM, déterministe.
+- `llm` : série du 3 novembre (contexte 8192), **revérifiée** avec le vérificateur actuel à partir
+  des rapports enregistrés (`malsight bilan --reverifier`) : le vérificateur ne fait que retirer,
+  les techniques sont celles qu'une nouvelle exécution donnerait pour le même brouillon du LLM.
+  Avant revérification : 4/12 strict avec 8 FP (5/12 et 7 FP en tolérant).
+- `hybride` : **relancée** entièrement avec le vérificateur actuel. Le LLM n'est pas déterministe :
+  d'une exécution à l'autre, les techniques qu'il propose varient (le FP de T08 est nouveau).
 
 ## Lecture
 
-- **Les règles portent la justesse ATT&CK** : 10/12 sans aucun faux positif. Les 2 techniques
-  ratées (T1112 de T05, T1105 de T10) n'ont volontairement pas de règle (D7).
-- **Le LLM seul reste faible sur le mapping** (4/12 strict) malgré un contexte suffisant :
-  techniques voisines (T1082 au lieu de T1016, T1074 au lieu de T1560, T1547.001 au lieu de
-  T1037.001) ou sans lien (T1047, T1027). Mais il réussit T12 (T1082 et T1547.001 dans le même
-  récit) et ne propose rien sur le témoin négatif T11.
-- **Le mode hybride n'ajoute aucune vraie technique aux règles** : le LLM ne trouve ni T1112 ni
-  T1105, et ajoute **2 faux positifs** dont la preuve ne soutient pas la technique :
-  - T05 : T1547.001 (*Registry Run Keys*) avec pour preuve `HKCU\Software\MalsightTest`, qui
-    n'est pas une clé Run ;
-  - T10 : T1547.002 (*Authentication Package*) avec pour preuve le domaine `update.malsight.lab`.
-- **L'apport du LLM est ailleurs** : résumé, comportements regroupés et décrits (24 observés,
-  1 inféré en hybride contre 24 / 17 en LLM seul), recommandations avec contre-mesures D3FEND.
-- Le contexte 8192 a amélioré le LLM seul (2/12 -> 4/12 strict) mais l'essentiel du gain vient
-  des règles.
+- **Les règles portent la justesse ATT&CK** : 10/12, aucun faux positif. T1112 (T05) et T1105
+  (T10) n'ont volontairement pas de règle (D7).
+- **La preuve vérifiable (D8) a divisé par deux les faux positifs du LLM seul** (8 -> 4), sans
+  perdre de vraie technique : les techniques à preuve « N/A » ou sans valeur sont rejetées.
+- **Le mode hybride n'apporte aucune vraie technique au-delà des règles** et garde **3 faux
+  positifs** dont la preuve cite une valeur réelle mais **sans rapport avec la technique** :
+  T05 T1547.001 (clé `HKCU\Software\MalsightTest`, pas une clé Run), T08 T1547.001 (un fichier
+  texte), T10 T1566.001 *Spearphishing Attachment* (un domaine). Le vérificateur contrôle que la
+  preuve existe, pas qu'elle soutient la technique.
+- **Témoin négatif T11** : aucun faux positif dans les 3 modes. **IOC** : 17/17 partout (les IOC
+  viennent des outils). **JSON** : 12/12 partout.
+- **Apport du LLM** : résumé, comportements regroupés, recommandations avec contre-mesures D3FEND.
 
-## Pistes (non appliquées, à décider)
+## Piste (non appliquée, à décider)
 
-1. **Cohérence technique / preuve** : en mode hybride, une technique proposée par le LLM et
-   couverte par une règle D7 n'est retenue que si la règle s'est déclenchée (supprimerait le FP de
-   T05). Les techniques sans règle (T1547.002 de T10) resteraient au LLM.
-2. **Confiance du LLM** : n'afficher les techniques `source = llm` que comme « à valider » quand
-   aucune règle ni capa ne les confirme (elles ne compteraient plus dans le score principal).
-3. Mesurer d'abord ces pistes sur le jeu de développement uniquement (D4).
+Cohérence technique / règle : une technique proposée par le LLM et **couverte par une règle D7**
+n'est retenue que si la règle s'est déclenchée sur ce cas. Supprimerait les FP de T05 et T08
+(T1547.001) ; T1566.001 (T10), sans règle, resterait au LLM. À mesurer d'abord sur le jeu de
+développement (D4).

@@ -11,14 +11,15 @@
 
 ## Résumé
 
-L'échantillon exécute des actions de découverte d'informations système et établit une persistance sur la machine analysée. Il exécute `systeminfo.exe` pour collecter des informations système et ajoute une clé de registre de démarrage (`HKCU\Software\Microsoft\Windows\CurrentVersion\Run\MalsightTest12`) pour assurer la persistance. De plus, il tente de communiquer avec un domaine externe (`c2.malsight.lab`).
+L'échantillon exécute des actions de découverte d'informations système et établit une persistance en modifiant une clé de registre de démarrage. Il tente également de communiquer avec un domaine externe. Les actions observées incluent l'exécution de `systeminfo.exe`, l'écriture d'un fichier local et la modification d'une clé de registre de démarrage.
 
 ## Comportements
 
 | Comportement | Preuve | Statut |
 | --- | --- | --- |
-| Collecte d'informations système | `Exécution de "C:\Windows\system32\systeminfo.exe" par powershell.exe (7444) (procmon, sysmon)` | observé |
-| Établissement de la persistance via le registre de démarrage | `Écriture de la clé de registre HKCU\Software\Microsoft\Windows\CurrentVersion\Run\MalsightTest12 par powershell.exe (7444) (procmon, sysmon)` | observé |
+| Exécution d'outils système pour la découverte d'informations système | `Exécution de "C:\Windows\system32\systeminfo.exe" par powershell.exe (7444) (procmon, sysmon)` | observé |
+| Établissement d'une persistance via une clé de registre de démarrage | `Écriture de la clé de registre HKCU\Software\Microsoft\Windows\CurrentVersion\Run\MalsightTest12 par powershell.exe (7444) (procmon, sysmon)` | observé |
+| Création d'un fichier local | `Création du fichier C:\travail\malsight_t12_info.txt par powershell.exe (7444) (procmon, sysmon)` | observé |
 | Tentative de communication réseau avec un domaine C2 | `Observation du domaine c2.malsight.lab par powershell.exe (7444) (sysmon)` | observé |
 
 ## Indicateurs de compromission (IOC)
@@ -72,12 +73,11 @@ ATT&CK retenues (source : d3fend, cache local ; IDs vérifiés).
 
 ## Recommandations
 
-- Surveiller l'exécution de `systeminfo.exe` (T1082) en analysant les arguments passés ou le contexte de son lancement, car il est utilisé pour la collecte d'informations système. (D3-PSA)
-- Mettre en place une surveillance des modifications des clés de registre de démarrage (Run Keys) telles que `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\*` pour détecter l'ajout de chemins suspects. (D3-FIM)
-- Implémenter des politiques de contrôle des applications (Application Whitelisting) pour restreindre l'exécution de binaires système comme `systeminfo.exe` aux contextes attendus, afin de détecter les usages abusifs. (D3-EAL)
-- Surveiller les tentatives de création de clés de registre dans les chemins de démarrage utilisateur (HKCU\Software\Microsoft\Windows\CurrentVersion\Run) pour détecter les persistance malveillante. (D3-FIM)
-- Bloquer ou surveiller les connexions réseau sortantes vers des domaines connus de Command and Control (C2) tels que `c2.malsight.lab` au niveau du pare-feu ou de la résolution DNS. (Aucun D3FEND spécifique)
-- Analyser les processus qui accèdent ou écrivent dans des fichiers spécifiques comme `C:\travail\malsight_t12_info.txt` pour comprendre le flux de données collectées. (D3-PSA)
+- Surveiller l'exécution de commandes système comme `systeminfo.exe` (T1082) en analysant les appels système (D3-SCA) pour détecter des comportements anormaux ou des chaînes de caractères suspectes.
+- Mettre en place une surveillance des modifications des clés de registre de démarrage (HKCU\Software\Microsoft\Windows\CurrentVersion\Run) pour détecter l'ajout de clés non autorisées (D3-FIM).
+- Appliquer le principe du moindre privilège pour limiter les droits d'écriture dans les clés de registre de démarrage utilisateur (HKCU\Software\Microsoft\Windows\CurrentVersion\Run) (D3-LFP).
+- Utiliser des mécanismes de détection des processus (Process Spawn Analysis) pour surveiller le lancement de `powershell.exe` à partir de contextes inattendus ou avec des arguments suspects (D3-PSA).
+- Considérer l'utilisation de l'Allowlisting pour les exécutables système connus (D3-EAL) afin de bloquer l'exécution de binaires non autorisés ou modifiés.
 
 ## Incertitudes
 

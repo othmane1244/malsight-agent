@@ -112,126 +112,8 @@
     }
   ],
   "sensitive_apis": [],
-  "attack": [
-    {
-      "id": "T1053",
-      "name": "Scheduled Task/Job",
-      "tactic": "execution, persistence, privilege-escalation",
-      "source": "llm",
-      "confidence": "medium",
-      "evidence": "Aucune preuve directe fournie dans les données pour cette technique."
-    }
-  ],
-  "countermeasures": [
-    {
-      "id": "D3-FE",
-      "name": "File Encryption",
-      "technique": "T1053",
-      "tactic": "Harden",
-      "artifact": "File",
-      "url": "https://d3fend.mitre.org/technique/d3f:FileEncryption/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-FA",
-      "name": "File Analysis",
-      "technique": "T1053",
-      "tactic": "Detect",
-      "artifact": "File",
-      "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-FIM",
-      "name": "File Integrity Monitoring",
-      "technique": "T1053",
-      "tactic": "Detect",
-      "artifact": "File",
-      "url": "https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-PLA",
-      "name": "Process Lineage Analysis",
-      "technique": "T1053",
-      "tactic": "Detect",
-      "artifact": "Process",
-      "url": "https://d3fend.mitre.org/technique/d3f:ProcessLineageAnalysis/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-PSA",
-      "name": "Process Spawn Analysis",
-      "technique": "T1053",
-      "tactic": "Detect",
-      "artifact": "Process",
-      "url": "https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-PSMD",
-      "name": "Process Self-Modification Detection",
-      "technique": "T1053",
-      "tactic": "Detect",
-      "artifact": "Process",
-      "url": "https://d3fend.mitre.org/technique/d3f:ProcessSelf-ModificationDetection/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-SCA",
-      "name": "System Call Analysis",
-      "technique": "T1053",
-      "tactic": "Detect",
-      "artifact": "System Call",
-      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallAnalysis/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-SDM",
-      "name": "System Daemon Monitoring",
-      "technique": "T1053",
-      "tactic": "Detect",
-      "artifact": "Operating System Process",
-      "url": "https://d3fend.mitre.org/technique/d3f:SystemDaemonMonitoring/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-SJA",
-      "name": "Scheduled Job Analysis",
-      "technique": "T1053",
-      "tactic": "Detect",
-      "artifact": "Job Schedule",
-      "url": "https://d3fend.mitre.org/technique/d3f:ScheduledJobAnalysis/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-ABPI",
-      "name": "Application-based Process Isolation",
-      "technique": "T1053",
-      "tactic": "Isolate",
-      "artifact": "Process",
-      "url": "https://d3fend.mitre.org/technique/d3f:Application-basedProcessIsolation/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-CF",
-      "name": "Content Filtering",
-      "technique": "T1053",
-      "tactic": "Isolate",
-      "artifact": "File",
-      "url": "https://d3fend.mitre.org/technique/d3f:ContentFiltering/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-CM",
-      "name": "Content Modification",
-      "technique": "T1053",
-      "tactic": "Isolate",
-      "artifact": "File",
-      "url": "https://d3fend.mitre.org/technique/d3f:ContentModification/",
-      "source": "d3fend"
-    }
-  ],
+  "attack": [],
+  "countermeasures": [],
   "recommendations": [
     "Surveiller les modifications des clés de registre liées au planificateur de tâches, en particulier sous `HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\` pour détecter l'ajout ou la modification de tâches (D3-SJA).",
     "Surveiller les appels d'API ou les événements système liés à la création ou à la modification de tâches planifiées, en ciblant les chemins de registre comme `HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\` (D3-SJA).",
@@ -244,5 +126,19 @@
     "Toutes les modifications de registre et la création de fichiers sont attribuées à `service_window` via `svchost.exe (1448)`, ce qui rend difficile de déterminer si l'échantillon a initié ces actions ou si elles sont des activités système de fond.",
     "L'échantillon lui-même n'a pas d'appels API ou de règles CAPA enregistrées dans les données fournies."
   ],
-  "rejected_claims": []
+  "rejected_claims": [
+    "Technique sans preuve vérifiable, rejetée : T1053 (aucune valeur reconnaissable)",
+    "Contre-mesure D3-FE pour une technique non retenue : T1053",
+    "Contre-mesure D3-FA pour une technique non retenue : T1053",
+    "Contre-mesure D3-FIM pour une technique non retenue : T1053",
+    "Contre-mesure D3-PLA pour une technique non retenue : T1053",
+    "Contre-mesure D3-PSA pour une technique non retenue : T1053",
+    "Contre-mesure D3-PSMD pour une technique non retenue : T1053",
+    "Contre-mesure D3-SCA pour une technique non retenue : T1053",
+    "Contre-mesure D3-SDM pour une technique non retenue : T1053",
+    "Contre-mesure D3-SJA pour une technique non retenue : T1053",
+    "Contre-mesure D3-ABPI pour une technique non retenue : T1053",
+    "Contre-mesure D3-CF pour une technique non retenue : T1053",
+    "Contre-mesure D3-CM pour une technique non retenue : T1053"
+  ]
 }

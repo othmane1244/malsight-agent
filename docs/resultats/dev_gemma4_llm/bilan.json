@@ -25,7 +25,8 @@
    "T1547.001"
   ],
   "attack_en_trop_tol": [],
-  "attack_ratees_tol": []
+  "attack_ratees_tol": [],
+  "reverifie": true
  },
  "T02": {
   "echantillon": "T02",
@@ -36,13 +37,9 @@
   "attack_attendues": [
    "T1053.005"
   ],
-  "attack_trouvees": [
-   "T1053"
-  ],
+  "attack_trouvees": [],
   "attack_vraies": [],
-  "attack_en_trop": [
-   "T1053"
-  ],
+  "attack_en_trop": [],
   "attack_ratees": [
    "T1053.005"
   ],
@@ -50,12 +47,27 @@
   "iocs_attendus": 2,
   "comportements_observes": 3,
   "comportements_inferes": 0,
-  "rejets": [],
-  "attack_vraies_tol": [
+  "rejets": [
+   "Technique sans preuve vérifiable, rejetée : T1053 (aucune valeur reconnaissable)",
+   "Contre-mesure D3-FE pour une technique non retenue : T1053",
+   "Contre-mesure D3-FA pour une technique non retenue : T1053",
+   "Contre-mesure D3-FIM pour une technique non retenue : T1053",
+   "Contre-mesure D3-PLA pour une technique non retenue : T1053",
+   "Contre-mesure D3-PSA pour une technique non retenue : T1053",
+   "Contre-mesure D3-PSMD pour une technique non retenue : T1053",
+   "Contre-mesure D3-SCA pour une technique non retenue : T1053",
+   "Contre-mesure D3-SDM pour une technique non retenue : T1053",
+   "Contre-mesure D3-SJA pour une technique non retenue : T1053",
+   "Contre-mesure D3-ABPI pour une technique non retenue : T1053",
+   "Contre-mesure D3-CF pour une technique non retenue : T1053",
+   "Contre-mesure D3-CM pour une technique non retenue : T1053"
+  ],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": [
    "T1053.005"
   ],
-  "attack_en_trop_tol": [],
-  "attack_ratees_tol": []
+  "reverifie": true
  },
  "T03": {
   "echantillon": "T03",
@@ -83,7 +95,8 @@
    "T1543.003"
   ],
   "attack_en_trop_tol": [],
-  "attack_ratees_tol": []
+  "attack_ratees_tol": [],
+  "reverifie": true
  },
  "T04": {
   "echantillon": "T04",
@@ -115,7 +128,8 @@
   ],
   "attack_ratees_tol": [
    "T1037.001"
-  ]
+  ],
+  "reverifie": true
  },
  "T05": {
   "echantillon": "T05",
@@ -147,7 +161,8 @@
   ],
   "attack_ratees_tol": [
    "T1112"
-  ]
+  ],
+  "reverifie": true
  },
  "T06": {
   "echantillon": "T06",
@@ -158,13 +173,9 @@
   "attack_attendues": [
    "T1059.001"
   ],
-  "attack_trouvees": [
-   "T1027"
-  ],
+  "attack_trouvees": [],
   "attack_vraies": [],
-  "attack_en_trop": [
-   "T1027"
-  ],
+  "attack_en_trop": [],
   "attack_ratees": [
    "T1059.001"
   ],
@@ -172,14 +183,15 @@
   "iocs_attendus": 1,
   "comportements_observes": 2,
   "comportements_inferes": 0,
-  "rejets": [],
-  "attack_vraies_tol": [],
-  "attack_en_trop_tol": [
-   "T1027"
+  "rejets": [
+   "Technique sans preuve vérifiable, rejetée : T1027 (aucune valeur reconnaissable)"
   ],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [],
   "attack_ratees_tol": [
    "T1059.001"
-  ]
+  ],
+  "reverifie": true
  },
  "T07": {
   "echantillon": "T07",
@@ -190,13 +202,9 @@
   "attack_attendues": [
    "T1082"
   ],
-  "attack_trouvees": [
-   "T1047"
-  ],
+  "attack_trouvees": [],
   "attack_vraies": [],
-  "attack_en_trop": [
-   "T1047"
-  ],
+  "attack_en_trop": [],
   "attack_ratees": [
    "T1082"
   ],
@@ -204,14 +212,15 @@
   "iocs_attendus": 1,
   "comportements_observes": 3,
   "comportements_inferes": 0,
-  "rejets": [],
-  "attack_vraies_tol": [],
-  "attack_en_trop_tol": [
-   "T1047"
+  "rejets": [
+   "Technique sans preuve vérifiable, rejetée : T1047 (aucune valeur reconnaissable)"
   ],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [],
   "attack_ratees_tol": [
    "T1082"
-  ]
+  ],
+  "reverifie": true
  },
  "T08": {
   "echantillon": "T08",
@@ -222,13 +231,9 @@
   "attack_attendues": [
    "T1016"
   ],
-  "attack_trouvees": [
-   "T1082"
-  ],
+  "attack_trouvees": [],
   "attack_vraies": [],
-  "attack_en_trop": [
-   "T1082"
-  ],
+  "attack_en_trop": [],
   "attack_ratees": [
    "T1016"
   ],
@@ -236,14 +241,22 @@
   "iocs_attendus": 1,
   "comportements_observes": 3,
   "comportements_inferes": 0,
-  "rejets": [],
-  "attack_vraies_tol": [],
-  "attack_en_trop_tol": [
-   "T1082"
+  "rejets": [
+   "Technique sans preuve vérifiable, rejetée : T1082 (aucune valeur reconnaissable)",
+   "Contre-mesure D3-PSA pour une technique non retenue : T1082",
+   "Contre-mesure D3-SCA pour une technique non retenue : T1082",
+   "Contre-mesure D3-EAL pour une technique non retenue : T1082",
+   "Contre-mesure D3-EDL pour une technique non retenue : T1082",
+   "Contre-mesure D3-HBPI pour une technique non retenue : T1082",
+   "Contre-mesure D3-SCF pour une technique non retenue : T1082",
+   "Contre-mesure D3-DE pour une technique non retenue : T1082"
   ],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [],
   "attack_ratees_tol": [
    "T1016"
-  ]
+  ],
+  "reverifie": true
  },
  "T09": {
   "echantillon": "T09",
@@ -275,7 +288,8 @@
   ],
   "attack_ratees_tol": [
    "T1560"
-  ]
+  ],
+  "reverifie": true
  },
  "T10": {
   "echantillon": "T10",
@@ -307,7 +321,8 @@
   ],
   "attack_ratees_tol": [
    "T1105"
-  ]
+  ],
+  "reverifie": true
  },
  "T11": {
   "echantillon": "T11",
@@ -327,7 +342,8 @@
   "rejets": [],
   "attack_vraies_tol": [],
   "attack_en_trop_tol": [],
-  "attack_ratees_tol": []
+  "attack_ratees_tol": [],
+  "reverifie": true
  },
  "T12": {
   "echantillon": "T12",
@@ -359,6 +375,7 @@
    "T1547.001"
   ],
   "attack_en_trop_tol": [],
-  "attack_ratees_tol": []
+  "attack_ratees_tol": [],
+  "reverifie": true
  }
 }

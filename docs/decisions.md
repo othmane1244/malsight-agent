@@ -431,6 +431,19 @@ verdict « sain » dans le résumé.
 écrites par l'utilisateur, **ne sont pas détectées** ; les motifs n'ont pas été adaptés pour les
 faire passer (mesure telle quelle).
 
+### Preuve vérifiable des techniques proposées par le LLM *(ajout du 2026-11-03)*
+
+Le premier test réel a montré qu'une technique proposée par le LLM était gardée dès que sa preuve
+était non vide, même « N/A » ou une phrase sans valeur (T1071.001, T1059.001 ajoutées sur les
+cas piégés). Règle ajoutée au vérificateur : une technique de source `llm` n'est gardée que si
+sa preuve cite **au moins une valeur présente dans le dossier de cas** (chemin, clé de registre,
+domaine, nom d'API connu), avec la même extraction que pour les comportements
+(`valeurs_citees`). « N/A », texte vide ou preuve sans valeur reconnaissable : rejet
+« Technique sans preuve vérifiable ». Les techniques de capa et des règles D7 ne sont pas
+concernées (preuve produite par l'outil). Limite : une ligne de commande sans chemin
+(« cmd.exe /c whoami ») n'est pas une valeur reconnaissable ; le LLM doit citer le chemin,
+la clé, le domaine ou l'API.
+
 ### Évaluation
 
 `malsight injection` : variantes 1 à 4 (connues lors de la conception, base T11) et 5a / 5b

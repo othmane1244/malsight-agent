@@ -38,7 +38,6 @@ L'échantillon, un script PowerShell nommé "T07_decouverte_systeme.ps1", exécu
 
 | ID | Technique | Tactique | Source | Confiance | Preuve |
 | --- | --- | --- | --- | --- | --- |
-| [T1047](https://attack.mitre.org/techniques/T1047/) | Windows Management Instrumentation | execution | llm | medium | L'utilisation de commandes système comme systeminfo.exe est typique de la collecte d'informations système. |
 
 ## Contre-mesures D3FEND
 
@@ -54,3 +53,7 @@ L'échantillon, un script PowerShell nommé "T07_decouverte_systeme.ps1", exécu
 ## Incertitudes
 
 - Le fichier "C:\Windows\system32\HOSTNAME.EXE" est exécuté, mais sa fonction réelle n'est pas détaillée par les données fournies.
+
+## Affirmations rejetées par le vérificateur
+
+- Technique sans preuve vérifiable, rejetée : T1047 (aucune valeur reconnaissable)

@@ -42,22 +42,10 @@ L'échantillon, un script PowerShell nommé "T08_decouverte_reseau.ps1", exécut
 
 | ID | Technique | Tactique | Source | Confiance | Preuve |
 | --- | --- | --- | --- | --- | --- |
-| [T1082](https://attack.mitre.org/techniques/T1082/) | System Information Discovery | discovery | llm | medium | L'utilisation de commandes comme ipconfig.exe et route print est typique de la collecte d'informations système. |
 
 ## Contre-mesures D3FEND
 
-Contre-mesures défensives [MITRE D3FEND](https://d3fend.mitre.org) associées aux techniques
-ATT&CK retenues (source : d3fend, cache local ; IDs vérifiés).
-
-| Technique ATT&CK | Contre-mesure D3FEND | Tactique | Artefact |
-| --- | --- | --- | --- |
-| [T1082](https://attack.mitre.org/techniques/T1082/) | [D3-PSA Process Spawn Analysis](https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/) | Detect | Create Process |
-| [T1082](https://attack.mitre.org/techniques/T1082/) | [D3-SCA System Call Analysis](https://d3fend.mitre.org/technique/d3f:SystemCallAnalysis/) | Detect | System Call |
-| [T1082](https://attack.mitre.org/techniques/T1082/) | [D3-EAL Executable Allowlisting](https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/) | Isolate | Create Process |
-| [T1082](https://attack.mitre.org/techniques/T1082/) | [D3-EDL Executable Denylisting](https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/) | Isolate | Create Process |
-| [T1082](https://attack.mitre.org/techniques/T1082/) | [D3-HBPI Hardware-based Process Isolation](https://d3fend.mitre.org/technique/d3f:Hardware-basedProcessIsolation/) | Isolate | Create Process |
-| [T1082](https://attack.mitre.org/techniques/T1082/) | [D3-SCF System Call Filtering](https://d3fend.mitre.org/technique/d3f:SystemCallFiltering/) | Isolate | System Call |
-| [T1082](https://attack.mitre.org/techniques/T1082/) | [D3-DE Decoy Environment](https://d3fend.mitre.org/technique/d3f:DecoyEnvironment/) | Deceive | Decoy Artifact |
+- Aucune (aucune technique ATT&CK retenue, ou cache D3FEND absent : `malsight download-d3fend`).
 
 ## Recommandations
 
@@ -70,3 +58,14 @@ ATT&CK retenues (source : d3fend, cache local ; IDs vérifiés).
 ## Incertitudes
 
 - Le rôle exact de l'écriture du fichier "C:\travail\malsight_t08.txt" n'est pas clair sans connaître le contenu ou la destination finale des données collectées.
+
+## Affirmations rejetées par le vérificateur
+
+- Technique sans preuve vérifiable, rejetée : T1082 (aucune valeur reconnaissable)
+- Contre-mesure D3-PSA pour une technique non retenue : T1082
+- Contre-mesure D3-SCA pour une technique non retenue : T1082
+- Contre-mesure D3-EAL pour une technique non retenue : T1082
+- Contre-mesure D3-EDL pour une technique non retenue : T1082
+- Contre-mesure D3-HBPI pour une technique non retenue : T1082
+- Contre-mesure D3-SCF pour une technique non retenue : T1082
+- Contre-mesure D3-DE pour une technique non retenue : T1082

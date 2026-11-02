@@ -6,15 +6,15 @@
     "size": 1058,
     "file_type": "unknown"
   },
-  "executive_summary": "L'échantillon, exécuté via PowerShell, a interagi avec le système de registre pour créer des clés sous `HKCU\\Software\\MalsightTest` et `HKCU\\Software\\MalsightTest\\Config` (attribution : sample_tree). De plus, des modifications de registre ont été observées sur des clés liées aux notifications système de Windows (attribution : service_window). Aucune activité réseau, appel d'API sensible ou règle CAPA n'ont été observés. L'activité principale concerne la persistance ou la configuration de données utilisateur spécifiques.",
+  "executive_summary": "L'échantillon, exécuté via PowerShell, a interagi avec le système de registre pour créer des clés sous `HKCU\\Software\\MalsightTest` et `HKCU\\Software\\MalsightTest\\Config` (attribution : sample_tree). De plus, des modifications de registre ont été observées sur des chemins liés aux notifications système de Windows (`service_window`). Aucune activité réseau, appel API sensible, ou règle CAPA n'a été détectée. L'activité observée est principalement limitée à la modification de clés de registre utilisateur.",
   "behaviors": [
     {
-      "summary": "Écriture de clés de registre spécifiques pour un test ou une configuration.",
+      "summary": "Modification de clés de registre utilisateur pour un test spécifique.",
       "evidence": "HKCU\\Software\\MalsightTest",
       "kind": "observed"
     },
     {
-      "summary": "Écriture de clés de registre de configuration pour un test ou une configuration.",
+      "summary": "Modification de clés de registre utilisateur pour un test spécifique.",
       "evidence": "HKCU\\Software\\MalsightTest\\Config",
       "kind": "observed"
     },
@@ -198,14 +198,15 @@
     }
   ],
   "recommendations": [
-    "Surveiller la création ou la modification des clés de registre de démarrage utilisateur, telles que HKCU\\Software\\MalsightTest, pour détecter les tentatives de persistance (D3-FIM).",
-    "Surveiller les modifications des clés de registre système sensibles, en particulier celles liées aux notifications ou aux tâches planifiées, pour détecter les changements non autorisés (D3-FIM).",
-    "Mettre en place des politiques de contrôle des applications pour restreindre l'exécution de fichiers provenant de chemins temporaires ou non standard, afin de limiter l'impact potentiel (D3-EAL).",
-    "Configurer des règles de détection basées sur les chemins de registre spécifiques listés (ex: HKCU\\Software\\MalsightTest) pour alerter en cas de création ou de modification (D3-FIM).",
-    "Analyser les comportements d'écriture dans les bases de données locales de notifications (ex: C:\\Users\\WDAGUtilityAccount\\AppData\\Local\\Microsoft\\Windows\\Notifications\\wpndatabase.db-wal) pour identifier des activités suspectes (D3-DA)."
+    "Surveiller la création ou la modification des clés de registre de démarrage utilisateur, telles que HKCU\\Software\\MalsightTest, pour détecter des tentatives de persistance non autorisées (D3-FIM).",
+    "Surveiller les modifications des clés de registre système sensibles, en particulier celles liées aux notifications ou aux tâches planifiées, pour détecter des changements de configuration (D3-SICA).",
+    "Mettre en place des politiques de contrôle des applications pour restreindre l'exécution de fichiers provenant de chemins temporaires ou d'AppData, afin de limiter l'impact potentiel (D3-EAL).",
+    "Utiliser des solutions de détection basées sur les signatures de hachage (SHA256: 5bd166c11137cafde8f578e7a72d88f0632df4a1bf3a368bef4e1e96e5dd4b7e, MD5: abd04bcc990942fbf87ef91ba187bc1e) pour bloquer l'exécution d'artefacts connus (D3-DA).",
+    "Implémenter des règles de surveillance des modifications de clés de registre spécifiques (ex: HKCU\\Software\\MalsightTest) pour détecter les mécanismes de persistance (D3-FIM).",
+    "Durcir les droits d'accès aux clés de registre critiques (ex: HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\...) pour empêcher leur modification par des processus non système (D3-LFP)."
   ],
   "uncertainties": [
-    "L'attribution des modifications de registre sur les clés de notifications système (ex: `HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power`) est attribuée à `service_window` (svchost.exe), ce qui suggère une activité système de fond plutôt qu'une action directe de l'échantillon, bien que l'échantillon puisse avoir déclenché cette activité."
+    "L'activité de modification des clés de registre liées aux notifications système (ex: `HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications\\Backup\\Windows.SystemToast.Power`) est attribuée à `service_window` et pourrait représenter une activité normale de fond de Windows, bien que l'échantillon ait été exécuté en même temps que ces observations."
   ],
   "rejected_claims": []
 }

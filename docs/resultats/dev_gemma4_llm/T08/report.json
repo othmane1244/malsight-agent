@@ -62,81 +62,8 @@
     }
   ],
   "sensitive_apis": [],
-  "attack": [
-    {
-      "id": "T1082",
-      "name": "System Information Discovery",
-      "tactic": "discovery",
-      "source": "llm",
-      "confidence": "medium",
-      "evidence": "L'utilisation de commandes comme ipconfig.exe et route print est typique de la collecte d'informations système."
-    }
-  ],
-  "countermeasures": [
-    {
-      "id": "D3-PSA",
-      "name": "Process Spawn Analysis",
-      "technique": "T1082",
-      "tactic": "Detect",
-      "artifact": "Create Process",
-      "url": "https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-SCA",
-      "name": "System Call Analysis",
-      "technique": "T1082",
-      "tactic": "Detect",
-      "artifact": "System Call",
-      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallAnalysis/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-EAL",
-      "name": "Executable Allowlisting",
-      "technique": "T1082",
-      "tactic": "Isolate",
-      "artifact": "Create Process",
-      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-EDL",
-      "name": "Executable Denylisting",
-      "technique": "T1082",
-      "tactic": "Isolate",
-      "artifact": "Create Process",
-      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-HBPI",
-      "name": "Hardware-based Process Isolation",
-      "technique": "T1082",
-      "tactic": "Isolate",
-      "artifact": "Create Process",
-      "url": "https://d3fend.mitre.org/technique/d3f:Hardware-basedProcessIsolation/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-SCF",
-      "name": "System Call Filtering",
-      "technique": "T1082",
-      "tactic": "Isolate",
-      "artifact": "System Call",
-      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallFiltering/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-DE",
-      "name": "Decoy Environment",
-      "technique": "T1082",
-      "tactic": "Deceive",
-      "artifact": "Decoy Artifact",
-      "url": "https://d3fend.mitre.org/technique/d3f:DecoyEnvironment/",
-      "source": "d3fend"
-    }
-  ],
+  "attack": [],
+  "countermeasures": [],
   "recommendations": [
     "Surveiller l'exécution de commandes système de découverte d'informations comme `ipconfig.exe` et `route print` (T1082) en analysant les appels système (D3-SCA) pour détecter des séquences inhabituelles ou des processus non autorisés.",
     "Mettre en place une surveillance des modifications des clés de registre spécifiques telles que `HKLM\\SOFTWARE\\Microsoft\\RFC1156Agent` et ses sous-clés (IOC) pour détecter toute tentative de persistance ou de configuration non désirée.",
@@ -147,5 +74,14 @@
   "uncertainties": [
     "Le rôle exact de l'écriture du fichier \"C:\\travail\\malsight_t08.txt\" n'est pas clair sans connaître le contenu ou la destination finale des données collectées."
   ],
-  "rejected_claims": []
+  "rejected_claims": [
+    "Technique sans preuve vérifiable, rejetée : T1082 (aucune valeur reconnaissable)",
+    "Contre-mesure D3-PSA pour une technique non retenue : T1082",
+    "Contre-mesure D3-SCA pour une technique non retenue : T1082",
+    "Contre-mesure D3-EAL pour une technique non retenue : T1082",
+    "Contre-mesure D3-EDL pour une technique non retenue : T1082",
+    "Contre-mesure D3-HBPI pour une technique non retenue : T1082",
+    "Contre-mesure D3-SCF pour une technique non retenue : T1082",
+    "Contre-mesure D3-DE pour une technique non retenue : T1082"
+  ]
 }

@@ -122,7 +122,10 @@ def injection(base_connues: str = typer.Option("T11", help="Base des variantes 1
     modele = os.getenv("LLM_MODEL", "gemma4:e4b") if use_llm else "sans LLM"
     sortie = sortie or Path("docs/resultats") / f"injection_{modele.replace(':', '_')}"
     if depuis_rapports:
-        ref_c, res_c, ref_i, res_i = recharger(sortie, base_connues, base_inedites)
+        from malsight.agent.verifier import verify
+        ref_c, res_c, ref_i, res_i = recharger(
+            sortie, base_connues, base_inedites, cas_connues=charger(base_connues), cas_inedites=charger(base_inedites),
+            verifier=lambda r, c: verify(r, c, kb, defend))
     else:
         ref_c, res_c = evaluer_injection(charger(base_connues), analyser, variantes=VARIANTES)
         ref_i, res_i = evaluer_injection(charger(base_inedites), analyser, variantes={}, inedites=VARIANTES_INEDITES)
@@ -134,13 +137,41 @@ def injection(base_connues: str = typer.Option("T11", help="Base des variantes 1
 
 
 @app.command()
-def bilan(sortie: list[Path] = typer.Argument(..., help="Dossier(s) de série, ex. docs/resultats/dev_regles")):
+def bilan(sortie: list[Path] = typer.Argument(..., help="Dossier(s) de série, ex. docs/resultats/dev_regles"),
+          reverifier: bool = typer.Option(False, help="Appliquer le vérificateur actuel aux rapports enregistrés"),
+          cases: Path = Path("cases"), attack_db: Path = Path("data/enterprise-attack.json"),
+          d3fend_cache: Path = Path("data/d3fend")):
     """Recalcule la notation (D9 : strict / tolérant) de séries existantes, sans relancer l'agent."""
     from malsight.evaluation.serie import renoter, scores
+    fonction = None
+    if reverifier:
+        from malsight.agent.verifier import verify
+        from malsight.attack.kb import AttackKB
+        from malsight.defend.kb import DefendKB
+        from malsight.normalize import build_case
+        kb = AttackKB.load(attack_db) if attack_db.exists() else None
+        defend = DefendKB(d3fend_cache)
+
+        def fonction(tid, rapport):
+            import json as _json
+            vt = _json.loads(Path(f"lab/verite-terrain/{tid}.json").read_text(encoding="utf-8"))
+            case = build_case(Path("lab/echantillons-test") / vt["echantillon"], labo=cases / tid)
+            return verify(rapport, case, kb, defend)
     for s in sortie:
-        sc = scores(renoter(s))
+        sc = scores(renoter(s, reverifier=fonction))
         typer.echo(f"{s} : strict {sc['strict']['vraies']}/{sc['attendues']} (FP {sc['strict']['fp']}), "
                    f"tolérant {sc['tolerant']['vraies']}/{sc['attendues']} (FP {sc['tolerant']['fp']})")
+
+
+@app.command()
+def modes(serie: list[str] = typer.Argument(..., help="mode=dossier, ex. regles=docs/resultats/dev_regles"),
+          sortie: Path = typer.Option(None, help="Fichier Markdown où écrire le tableau")):
+    """Tableau comparatif des modes (strict / tolérant, précision, rappel, FP, IOC, temps moyen)."""
+    from malsight.evaluation.serie import tableau_modes
+    lignes = tableau_modes({m: Path(d) for m, d in (s.split("=", 1) for s in serie)})
+    if sortie:
+        sortie.write_text("\n".join(lignes) + "\n", encoding="utf-8")
+    typer.echo("\n".join(lignes))
 
 
 @app.command("download-attack")

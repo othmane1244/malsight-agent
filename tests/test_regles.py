@@ -99,12 +99,39 @@ def test_regle_preuve_et_source():
 # ---------- Vérificateur : nom et tactique officiels ----------
 
 def test_nom_et_tactique_toujours_officiels(kb):
+    cle = r"HKCU\Software\Microsoft\Windows\CurrentVersion\Run\X"
     r = Report(sample=SAMPLE, attack=[AttackTechnique(
         id="T1547.001", name="PowerShell: Encoded Command Execution", tactic="execution",
-        source="llm", confidence="medium", evidence="x")])
-    r = verify(r, Case(sample=SAMPLE), kb)
+        source="llm", confidence="medium", evidence=cle)])
+    r = verify(r, Case(sample=SAMPLE, dynamic=DynamicData(registry_keys_set=[cle])), kb)
     assert r.attack[0].name == "Registry Run Keys / Startup Folder" and r.attack[0].tactic == "persistence"
     assert any("Nom ATT&CK corrigé" in u for u in r.uncertainties)
+
+
+@pytest.mark.parametrize("preuve, gardee", [
+    ("N/A", False),
+    ("N/A (Technique déjà identifiée par capa)", False),
+    ("Le script semble mettre en place une persistance", False),          # phrase sans valeur
+    (r"HKCU\Software\Microsoft\Windows\CurrentVersion\Run\Inventee", False),  # valeur absente du cas
+    (r'registry_keys_set: ["HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\X"]', True),
+    (r"Valeur Run HKCU\Software\Microsoft\Windows\CurrentVersion\Run\X vers notepad", True),
+])
+def test_technique_llm_exige_une_valeur_du_dossier(kb, preuve, gardee):
+    cle = r"HKCU\Software\Microsoft\Windows\CurrentVersion\Run\X"
+    case = Case(sample=SAMPLE, dynamic=DynamicData(registry_keys_set=[cle]))
+    r = verify(Report(sample=SAMPLE, attack=[AttackTechnique(
+        id="T1547.001", source="llm", confidence="medium", evidence=preuve)]), case, kb)
+    assert ([t.id for t in r.attack] == ["T1547.001"]) is gardee
+    if not gardee:
+        assert any("sans preuve vérifiable" in m for m in r.rejected_claims)
+
+
+def test_techniques_regles_et_capa_non_concernees(kb):
+    r = verify(Report(sample=SAMPLE, attack=[
+        AttackTechnique(id="T1547.001", source="rule", confidence="high", evidence="règle R-T1547.001-registre : x"),
+        AttackTechnique(id="T1059.003", source="capa", confidence="high", evidence="règle capa : run cmd")]),
+        Case(sample=SAMPLE), kb)
+    assert [t.id for t in r.attack] == ["T1547.001", "T1059.003"]
 
 
 # ---------- Contexte du LLM : descriptions, provenance, règles ----------

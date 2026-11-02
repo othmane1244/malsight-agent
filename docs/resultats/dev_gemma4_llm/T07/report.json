@@ -42,16 +42,7 @@
     }
   ],
   "sensitive_apis": [],
-  "attack": [
-    {
-      "id": "T1047",
-      "name": "Windows Management Instrumentation",
-      "tactic": "execution",
-      "source": "llm",
-      "confidence": "medium",
-      "evidence": "L'utilisation de commandes système comme systeminfo.exe est typique de la collecte d'informations système."
-    }
-  ],
+  "attack": [],
   "countermeasures": [],
   "recommendations": [
     "Surveiller l'exécution de `systeminfo.exe` ou de commandes WMI suspectes (T1047) en analysant les arguments passés, car cela peut indiquer une collecte d'informations système.",
@@ -62,5 +53,7 @@
   "uncertainties": [
     "Le fichier \"C:\\Windows\\system32\\HOSTNAME.EXE\" est exécuté, mais sa fonction réelle n'est pas détaillée par les données fournies."
   ],
-  "rejected_claims": []
+  "rejected_claims": [
+    "Technique sans preuve vérifiable, rejetée : T1047 (aucune valeur reconnaissable)"
+  ]
 }

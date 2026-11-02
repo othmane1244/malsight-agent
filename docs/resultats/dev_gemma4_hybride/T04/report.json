@@ -6,10 +6,10 @@
     "size": 998,
     "file_type": "unknown"
   },
-  "executive_summary": "L'échantillon, un script PowerShell nommé `T04_script_logon.ps1`, a été analysé. L'activité observée se concentre sur la modification de clés de registre associées aux scripts de connexion utilisateur et au cache des tâches planifiées. Spécifiquement, il est observé que l'échantillon écrit dans la clé de registre `HKCU\\Environment\\UserInitMprLogonScript` via `powershell.exe`, ce qui est corrélé à la technique T1037.001 (Logon Script (Windows)). Une autre modification de registre est observée sur une clé de tâche planifiée système (`HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo`) attribuée à `svchost.exe`, mais aucune action malveillante ou de persistance n'est déduite de cette seconde observation.",
+  "executive_summary": "L'échantillon, un script PowerShell nommé `T04_script_logon.ps1`, a été analysé. L'activité observée se concentre sur la modification de clés de registre associées aux scripts de connexion utilisateur et au cache des tâches planifiées. Spécifiquement, il est observé que l'échantillon tente d'écrire dans la clé de registre `HKCU\\Environment\\UserInitMprLogonScript` via `powershell.exe`, ce qui est corrélé à la technique T1037.001 (Logon Script (Windows)). Une autre modification de registre est observée sur une clé de cache de tâches planifiées (`HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo`) attribuée à `svchost.exe`, mais cette activité est considérée comme une activité de fond de Windows ou un processus système et n'est pas directement attribuée à l'action de l'échantillon.",
   "behaviors": [
     {
-      "summary": "Modification du registre pour exécuter un script au démarrage de session utilisateur.",
+      "summary": "Modification de la variable d'environnement de script de connexion utilisateur.",
       "evidence": "HKCU\\Environment\\UserInitMprLogonScript",
       "kind": "observed"
     }
@@ -159,14 +159,12 @@
   ],
   "recommendations": [
     "Surveiller les modifications des clés de registre de démarrage utilisateur, telles que HKCU\\Environment\\UserInitMprLogonScript, pour détecter l'exécution de scripts non autorisés (D3-FIM).",
-    "Mettre en place des politiques de sécurité pour restreindre l'exécution de scripts via des chemins de démarrage utilisateur (ex: HKCU\\Environment\\UserInitMprLogonScript) (D3-EAL).",
-    "Utiliser des règles de détection (ex: Sysmon) pour alerter sur l'écriture de données dans les clés de registre de planification des tâches, comme HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo, en dehors des processus système connus (D3-DA).",
-    "Appliquer le principe du moindre privilège pour limiter les droits d'écriture dans les clés de registre critiques de l'environnement utilisateur et système (D3-LFP).",
-    "Surveiller l'exécution de `powershell.exe` lorsqu'il est appelé à partir de chemins de registre de démarrage (D3-DA)."
+    "Mettre en place des politiques de sécurité pour restreindre l'exécution de scripts via des chemins de registre spécifiques comme HKCU\\Environment\\UserInitMprLogonScript (D3-EAL).",
+    "Utiliser des outils de détection des comportements pour identifier l'écriture de scripts dans des emplacements de démarrage système ou utilisateur (D3-DA).",
+    "Surveiller les tentatives d'accès ou de modification des clés de registre liées aux tâches planifiées, telles que HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo (D3-FIM)."
   ],
   "uncertainties": [
-    "L'observation de la modification de la clé de registre `HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo` est attribuée à `service_window` (svchost.exe) et ne permet pas de déterminer si elle est liée à une action malveillante ou si elle représente une activité système normale.",
-    "Aucune activité réseau n'a été observée, et toutes les activités réseau sont considérées comme des tentatives par défaut."
+    "L'écriture dans la clé de registre HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo est attribuée à svchost.exe et pourrait représenter une activité système normale plutôt qu'une action directe de l'échantillon."
   ],
   "rejected_claims": []
 }

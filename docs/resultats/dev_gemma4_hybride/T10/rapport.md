@@ -11,14 +11,14 @@
 
 ## Résumé
 
-L'échantillon, exécuté via `powershell.exe`, a principalement interagi avec le registre Windows pour configurer des paramètres de traçage PowerShell (RASAPI32 et RASMANCS). Il a également tenté de communiquer avec le domaine `update.malsight.lab`. Aucune activité de création de fichier, de modification de clé de registre critique ou de communication réseau réussie n'a été observée. L'activité suggère une tentative de configuration ou de reconnaissance des mécanismes de traçage de PowerShell.
+L'échantillon, exécuté via `powershell.exe`, a principalement interagi avec le registre Windows pour configurer des paramètres de traçage PowerShell (RASAPI32 et RASMANCS). Il a également tenté de communiquer avec le domaine `update.malsight.lab`. Aucune activité de création de fichier, de modification de clé de registre critique, ou de communication réseau réussie n'a été observée. L'activité suggère une tentative de configuration ou de reconnaissance des mécanismes de traçage de PowerShell.
 
 ## Comportements
 
 | Comportement | Preuve | Statut |
 | --- | --- | --- |
 | Configuration des paramètres de traçage PowerShell | `HKLM\Software\Microsoft\Tracing\powershell_RASAPI32` | inféré |
-| Tentative de communication réseau avec un domaine externe | `update.malsight.lab` | observé |
+| Tentative de résolution DNS et de connexion à un domaine externe | `update.malsight.lab` | inféré |
 
 ## Indicateurs de compromission (IOC)
 
@@ -55,37 +55,29 @@ L'échantillon, exécuté via `powershell.exe`, a principalement interagi avec l
 
 | ID | Technique | Tactique | Source | Confiance | Preuve |
 | --- | --- | --- | --- | --- | --- |
-| [T1547.002](https://attack.mitre.org/techniques/T1547/002/) | Authentication Package | persistence, privilege-escalation | llm | medium | update.malsight.lab |
+| [T1566.001](https://attack.mitre.org/techniques/T1566/001/) | Spearphishing Attachment | initial-access | llm | medium | update.malsight.lab |
 
 ## Contre-mesures D3FEND
 
-Contre-mesures défensives [MITRE D3FEND](https://d3fend.mitre.org) associées aux techniques
-ATT&CK retenues (source : d3fend, cache local ; IDs vérifiés).
-
-| Technique ATT&CK | Contre-mesure D3FEND | Tactique | Artefact |
-| --- | --- | --- | --- |
-| [T1547.002](https://attack.mitre.org/techniques/T1547/002/) | [D3-FE File Encryption](https://d3fend.mitre.org/technique/d3f:FileEncryption/) | Harden | File |
-| [T1547.002](https://attack.mitre.org/techniques/T1547/002/) | [D3-SU Software Update](https://d3fend.mitre.org/technique/d3f:SoftwareUpdate/) | Harden | Software |
-| [T1547.002](https://attack.mitre.org/techniques/T1547/002/) | [D3-DA Dynamic Analysis](https://d3fend.mitre.org/technique/d3f:DynamicAnalysis/) | Detect | Executable File |
-| [T1547.002](https://attack.mitre.org/techniques/T1547/002/) | [D3-EFA Emulated File Analysis](https://d3fend.mitre.org/technique/d3f:EmulatedFileAnalysis/) | Detect | Executable File |
-| [T1547.002](https://attack.mitre.org/techniques/T1547/002/) | [D3-FA File Analysis](https://d3fend.mitre.org/technique/d3f:FileAnalysis/) | Detect | File |
-| [T1547.002](https://attack.mitre.org/techniques/T1547/002/) | [D3-FIM File Integrity Monitoring](https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/) | Detect | File |
-| [T1547.002](https://attack.mitre.org/techniques/T1547/002/) | [D3-SICA System Init Config Analysis](https://d3fend.mitre.org/technique/d3f:SystemInitConfigAnalysis/) | Detect | System Init Configuration |
-| [T1547.002](https://attack.mitre.org/techniques/T1547/002/) | [D3-CF Content Filtering](https://d3fend.mitre.org/technique/d3f:ContentFiltering/) | Isolate | File |
-| [T1547.002](https://attack.mitre.org/techniques/T1547/002/) | [D3-CM Content Modification](https://d3fend.mitre.org/technique/d3f:ContentModification/) | Isolate | File |
-| [T1547.002](https://attack.mitre.org/techniques/T1547/002/) | [D3-CQ Content Quarantine](https://d3fend.mitre.org/technique/d3f:ContentQuarantine/) | Isolate | File |
-| [T1547.002](https://attack.mitre.org/techniques/T1547/002/) | [D3-EAL Executable Allowlisting](https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/) | Isolate | Executable File |
-| [T1547.002](https://attack.mitre.org/techniques/T1547/002/) | [D3-EDL Executable Denylisting](https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/) | Isolate | Executable File |
+- Aucune (aucune technique ATT&CK retenue, ou cache D3FEND absent : `malsight download-d3fend`).
 
 ## Recommandations
 
-- Surveiller les modifications des clés de registre liées au traçage de PowerShell, telles que 'HKLM\SOFTWARE\Microsoft\Tracing\powershell_RASAPI32\ConsoleTracingMask' ou 'HKLM\SOFTWARE\Microsoft\Tracing\powershell_RASMANCS\EnableConsoleTracing', pour détecter toute tentative d'activation ou de modification non autorisée (D3-FIM).
-- Mettre en place des règles de détection (Sysmon/Sigma) pour alerter sur l'accès ou la modification des clés de registre spécifiques au traçage de PowerShell (ex: 'HKLM\SOFTWARE\Microsoft\Tracing\powershell_RASAPI32*') (D3-FIM).
-- Bloquer ou surveiller les connexions sortantes vers le domaine 'update.malsight.lab' (D3-CQ).
-- Surveiller les tentatives de création de fichiers dans des chemins spécifiques comme 'C:\travail\outil.txt' ou les tentatives de téléchargement de fichiers depuis des URL suspectes (D3-DA).
-- Appliquer le principe du moindre privilège pour limiter les droits d'écriture et de modification des clés de registre système critiques (D3-FE).
-- Considérer l'utilisation de politiques de durcissement pour restreindre l'exécution de scripts ou d'outils en utilisant des mécanismes de *Content Filtering* (D3-CF) ou *Executable Allowlisting* (D3-EAL).
+- Surveiller les modifications des clés de registre liées au traçage de PowerShell, telles que HKLM\SOFTWARE\Microsoft\Tracing\powershell_RASAPI32\* ou HKLM\SOFTWARE\Microsoft\Tracing\powershell_RASMANCS\*.
+- Mettre en place des règles de détection pour les accès aux domaines suspects comme 'update.malsight.lab'.
+- Surveiller la création de fichiers dans des chemins inhabituels ou liés à des téléchargements suspects, comme 'C:\travail\outil.txt'.
+- Appliquer le principe du moindre privilège pour limiter les droits d'écriture et de modification des clés de registre système liées au traçage.
+- Surveiller l'exécution de fichiers provenant de sources externes ou de chemins non standard.
 
 ## Incertitudes
 
-- L'activité réseau observée est une tentative de résolution DNS pour le domaine `update.malsight.lab`, mais il n'y a pas de preuve de connexion établie ou de données échangées.
+- L'activité réseau observée est limitée à une seule entrée de domaine (`update.malsight.lab`) et ne confirme pas une connexion établie ou un transfert de données, ce qui est considéré comme une tentative.
+- L'ensemble des modifications de registre concernent des clés de traçage PowerShell, ce qui pourrait être une activité légitime de configuration ou une tentative de persistance/reconnaissance des mécanismes de sécurité.
+
+## Affirmations rejetées par le vérificateur
+
+- ID D3FEND absent du cache retiré d'une recommandation : D3-REG
+- ID D3FEND absent du cache retiré d'une recommandation : D3-NET
+- ID D3FEND absent du cache retiré d'une recommandation : D3-FILE
+- ID D3FEND absent du cache retiré d'une recommandation : D3-PRIV
+- ID D3FEND absent du cache retiré d'une recommandation : D3-EXEC

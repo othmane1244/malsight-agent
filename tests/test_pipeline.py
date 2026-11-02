@@ -32,7 +32,7 @@ def test_verifier_rejects_hallucinations(case, kb):
               IOC(type="domain", value="update.demo.lab", source="llm")]
     r.attack = [AttackTechnique(id="T9999", source="llm", confidence="low", evidence="x"),
                 AttackTechnique(id="T1059.003", source="llm", confidence="medium",
-                                evidence="cmd.exe /c whoami")]
+                                evidence="appel CreateProcessW (cmd.exe /c whoami)")]
     r.behaviors = [Behavior(summary="Chiffre des fichiers", evidence="CryptEncrypt")]
     r = verify(r, case, kb)
     assert [i.value for i in r.iocs] == ["update.demo.lab"]

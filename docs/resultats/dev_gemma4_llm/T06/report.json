@@ -37,16 +37,7 @@
     }
   ],
   "sensitive_apis": [],
-  "attack": [
-    {
-      "id": "T1027",
-      "name": "Obfuscated Files or Information",
-      "tactic": "stealth",
-      "source": "llm",
-      "confidence": "medium",
-      "evidence": "L'utilisation de l'argument `-EncodedCommand` avec PowerShell pour exécuter une chaîne de caractères encodée est une technique courante pour masquer l'intention réelle de la commande."
-    }
-  ],
+  "attack": [],
   "countermeasures": [],
   "recommendations": [
     "Surveiller l'utilisation de PowerShell avec l'argument `-EncodedCommand` via Sysmon (Event ID 1) pour détecter l'exécution de commandes encodées. (D3-PS) (D3-LFP)",
@@ -55,5 +46,7 @@
     "Surveiller les accès aux fichiers spécifiques comme `C:\\travail\\malsight_t06.txt` pour détecter toute lecture ou modification non autorisée."
   ],
   "uncertainties": [],
-  "rejected_claims": []
+  "rejected_claims": [
+    "Technique sans preuve vérifiable, rejetée : T1027 (aucune valeur reconnaissable)"
+  ]
 }

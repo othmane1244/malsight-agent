@@ -18,8 +18,8 @@ L'échantillon exécute des opérations de collecte et d'archivage de données. 
 | Comportement | Preuve | Statut |
 | --- | --- | --- |
 | Création et remplissage d'un répertoire de collecte de données. | `Création du répertoire `C:\travail\collecte` (via `procmon`, `sysmon` avec `powershell.exe (7900)`).` | observé |
-| Collecte de fichiers multiples dans le répertoire de travail. | `Les fichiers `C:\travail\collecte\document1.txt`, `C:\travail\collecte\document2.txt`, et `C:\travail\collecte\document3.txt` sont présents dans le répertoire de collecte (via `procmon`, `sysmon` avec `powershell.exe (7900)`).` | observé |
-| Archivage des données collectées. | `Création du fichier compressé `C:\travail\collecte.zip` dans le répertoire `C:\travail\collecte` (via `procmon`, `sysmon` avec `powershell.exe (7900)`).` | observé |
+| Collecte de plusieurs fichiers de données dans le répertoire créé. | `Présence des fichiers `C:\travail\collecte\document1.txt`, `C:\travail\collecte\document2.txt`, et `C:\travail\collecte\document3.txt` (via `procmon`, `sysmon` avec `powershell.exe (7900)`).` | observé |
+| Archivage des données collectées dans un fichier compressé. | `Création du fichier `C:\travail\collecte.zip` dans le répertoire `C:\travail\collecte` (via `procmon`, `sysmon` avec `powershell.exe (7900)`).` | observé |
 
 ## Indicateurs de compromission (IOC)
 
@@ -66,11 +66,11 @@ ATT&CK retenues (source : d3fend, cache local ; IDs vérifiés).
 
 ## Recommandations
 
-- Surveiller la création et la compression de fichiers dans des répertoires spécifiques comme `C:\travail\collecte` (Détection Sysmon : Event ID 11/12 pour la création de fichiers compressés ou l'utilisation de `powershell.exe` avec des arguments de compression).
-- Mettre en place une surveillance des opérations de compression de données (ex. ZIP) pour détecter l'archivage de données collectées (T1560) (D3-FA).
-- Appliquer des politiques de contrôle des répertoires pour limiter l'écriture et la création de fichiers compressés dans des emplacements non autorisés (D3-LFP).
-- Surveiller les processus qui accèdent à plusieurs fichiers texte (`document1.txt`, `document2.txt`, `document3.txt`) avant de les archiver, afin de détecter le comportement de collecte de données (D3-FA).
-- Envisager de détecter les tentatives de création de fichiers d'archives contenant des données collectées (D3-FIM).
+- Surveiller la création et la compression de fichiers dans des répertoires spécifiques comme `C:\travail\collecte` (Détection Sysmon : Event ID 11/12 pour la création de fichiers et l'activité ZIP/compression).
+- Mettre en place une surveillance des processus exécutant des commandes de compression (ex: `powershell.exe` avec des arguments liés à `zip` ou `archive`) pour détecter l'empaquetage de données (D3-FA).
+- Appliquer des politiques de contrôle des répertoires pour limiter l'écriture et la création de fichiers compressés dans des chemins non autorisés (D3-LFP).
+- Surveiller les tentatives de collecte de données en regroupant les activités de lecture de multiples fichiers (`document1.txt`, `document2.txt`, `document3.txt`) dans un même répertoire avant leur archivage (D3-FIM).
+- Envisager des mécanismes de détection basés sur le comportement de regroupement de données (Data Staging) plutôt que sur des IOC spécifiques, car l'archivage est une activité de préparation à l'exfiltration (D3-FA).
 
 ## Incertitudes
 

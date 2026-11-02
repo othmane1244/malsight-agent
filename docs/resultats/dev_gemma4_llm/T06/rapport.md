@@ -37,7 +37,6 @@ L'échantillon exécute PowerShell avec une commande encodée (`-EncodedCommand`
 
 | ID | Technique | Tactique | Source | Confiance | Preuve |
 | --- | --- | --- | --- | --- | --- |
-| [T1027](https://attack.mitre.org/techniques/T1027/) | Obfuscated Files or Information | stealth | llm | medium | L'utilisation de l'argument `-EncodedCommand` avec PowerShell pour exécuter une chaîne de caractères encodée est une technique courante pour masquer l'intention réelle de la commande. |
 
 ## Contre-mesures D3FEND
 
@@ -53,3 +52,7 @@ L'échantillon exécute PowerShell avec une commande encodée (`-EncodedCommand`
 ## Incertitudes
 
 - Aucune signalée.
+
+## Affirmations rejetées par le vérificateur
+
+- Technique sans preuve vérifiable, rejetée : T1027 (aucune valeur reconnaissable)

@@ -6,11 +6,16 @@
     "size": 1119,
     "file_type": "unknown"
   },
-  "executive_summary": "L'échantillon, nommé T02_tache_planifiee.ps1, n'a pas d'appels d'API sensibles ni de règles CAPA spécifiques. L'analyse dynamique montre que des opérations de modification de registre et la création d'un fichier de tâche planifiée ont eu lieu, toutes attribuées à `svchost.exe (1448)` via `service_window`. Ces activités sont cohérentes avec la persistance via le Planificateur de tâches de Windows, comme indiqué par la règle CAPA T1053.005.",
+  "executive_summary": "L'échantillon n'a pas d'activité API ou de règles CAPA détectables. L'analyse dynamique montre que des modifications et des écritures de clés de registre liées au Planificateur de tâches de Windows ont eu lieu, spécifiquement dans les chemins `HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\...`. Ces écritures, ainsi que la création d'un fichier de tâche (`C:\\Windows\\System32\\Tasks\\MalsightTest`), sont attribuées à `svchost.exe (1448)` et sont cohérentes avec l'utilisation du Planificateur de tâches. L'activité observée est principalement une interaction avec les mécanismes de planification système.",
   "behaviors": [
     {
-      "summary": "Création et modification de tâches planifiées dans le registre et le système de fichiers.",
-      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest (service_window), HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F} (service_window), C:\\Windows\\System32\\Tasks\\MalsightTest (service_window)",
+      "summary": "Écriture de clés de registre liées au Planificateur de tâches",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{A0A2225E-7E5D-4CAE-B899-09B3E96B259D}\\DynamicInfo (service_window), HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest (service_window), HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest\\SD (service_window), HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest\\Id (service_window), HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest\\Index (service_window), HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F} (service_window), HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Path (service_window), HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Hash (service_window), HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Schema (service_window), HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\URI (service_window), HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Triggers (service_window), HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\Actions (service_window), HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{7497102D-8538-4CE3-BADF-E83613BEE80F}\\DynamicInfo (service_window)",
+      "kind": "observed"
+    },
+    {
+      "summary": "Création d'un fichier de tâche planifiée",
+      "evidence": "C:\\Windows\\System32\\Tasks\\MalsightTest (service_window)",
       "kind": "observed"
     }
   ],
@@ -224,12 +229,14 @@
   ],
   "recommendations": [
     "Surveiller les modifications des clés de registre liées au planificateur de tâches, en particulier sous `HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\*` (D3-SJA).",
-    "Détecter la création de tâches planifiées avec des noms ou des chemins suspects, comme `MalsightTest` ou des GUID spécifiques (D3-SJA).",
-    "Mettre en place des règles de détection basées sur les chemins de fichiers et les clés de registre observés : `C:\\Windows\\System32\\Tasks\\MalsightTest` et les clés contenant `MalsightTest` (D3-SJA).",
-    "Analyser la lignée des processus pour détecter si un processus légitime (comme `svchost.exe`) est utilisé pour exécuter des tâches planifiées suspectes (D3-PLA).",
+    "Détecter la création de tâches planifiées suspectes en analysant les chemins et les arguments utilisés, comme ceux observés dans `HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest` (D3-SJA).",
+    "Mettre en place des règles de détection basées sur les hachages (SHA256: cc7ed63f0672353ffeaf5dbc1b7a6e5ffe70858c5c433feeda6b401cdfaba47b, MD5: 179a3d0948ee1f3502db8a063b4eeed8) et les chemins de fichiers (C:\\Windows\\System32\\Tasks\\MalsightTest) (D3-EAL).",
+    "Analyser la lignée des processus pour détecter si des processus système légitimes (comme svchost.exe) sont utilisés pour exécuter des tâches planifiées suspectes (D3-PLA).",
     "Durcir les droits d'écriture sur les clés de registre du planificateur de tâches pour limiter qui peut créer ou modifier des tâches (D3-SJA).",
-    "Utiliser l'analyse des appels système pour détecter les opérations inhabituelles liées à la manipulation du planificateur de tâches (D3-SCA)."
+    "Utiliser l'analyse des appels système pour détecter les interactions inhabituelles avec les API de gestion des tâches planifiées (D3-SCA)."
   ],
-  "uncertainties": [],
+  "uncertainties": [
+    "L'attribution des écritures de registre au Planificateur de tâches est attribuée à 'service_window' (svchost.exe (1448)), ce qui rend difficile de déterminer si l'échantillon a initié ces actions ou si elles sont le résultat d'une activité système de fond."
+  ],
   "rejected_claims": []
 }

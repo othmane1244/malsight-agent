@@ -52,27 +52,10 @@ L'échantillon, nommé "T02_tache_planifiee.ps1", n'a pas d'appels API ou de rè
 
 | ID | Technique | Tactique | Source | Confiance | Preuve |
 | --- | --- | --- | --- | --- | --- |
-| [T1053](https://attack.mitre.org/techniques/T1053/) | Scheduled Task/Job | execution, persistence, privilege-escalation | llm | medium | Aucune preuve directe fournie dans les données pour cette technique. |
 
 ## Contre-mesures D3FEND
 
-Contre-mesures défensives [MITRE D3FEND](https://d3fend.mitre.org) associées aux techniques
-ATT&CK retenues (source : d3fend, cache local ; IDs vérifiés).
-
-| Technique ATT&CK | Contre-mesure D3FEND | Tactique | Artefact |
-| --- | --- | --- | --- |
-| [T1053](https://attack.mitre.org/techniques/T1053/) | [D3-FE File Encryption](https://d3fend.mitre.org/technique/d3f:FileEncryption/) | Harden | File |
-| [T1053](https://attack.mitre.org/techniques/T1053/) | [D3-FA File Analysis](https://d3fend.mitre.org/technique/d3f:FileAnalysis/) | Detect | File |
-| [T1053](https://attack.mitre.org/techniques/T1053/) | [D3-FIM File Integrity Monitoring](https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/) | Detect | File |
-| [T1053](https://attack.mitre.org/techniques/T1053/) | [D3-PLA Process Lineage Analysis](https://d3fend.mitre.org/technique/d3f:ProcessLineageAnalysis/) | Detect | Process |
-| [T1053](https://attack.mitre.org/techniques/T1053/) | [D3-PSA Process Spawn Analysis](https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/) | Detect | Process |
-| [T1053](https://attack.mitre.org/techniques/T1053/) | [D3-PSMD Process Self-Modification Detection](https://d3fend.mitre.org/technique/d3f:ProcessSelf-ModificationDetection/) | Detect | Process |
-| [T1053](https://attack.mitre.org/techniques/T1053/) | [D3-SCA System Call Analysis](https://d3fend.mitre.org/technique/d3f:SystemCallAnalysis/) | Detect | System Call |
-| [T1053](https://attack.mitre.org/techniques/T1053/) | [D3-SDM System Daemon Monitoring](https://d3fend.mitre.org/technique/d3f:SystemDaemonMonitoring/) | Detect | Operating System Process |
-| [T1053](https://attack.mitre.org/techniques/T1053/) | [D3-SJA Scheduled Job Analysis](https://d3fend.mitre.org/technique/d3f:ScheduledJobAnalysis/) | Detect | Job Schedule |
-| [T1053](https://attack.mitre.org/techniques/T1053/) | [D3-ABPI Application-based Process Isolation](https://d3fend.mitre.org/technique/d3f:Application-basedProcessIsolation/) | Isolate | Process |
-| [T1053](https://attack.mitre.org/techniques/T1053/) | [D3-CF Content Filtering](https://d3fend.mitre.org/technique/d3f:ContentFiltering/) | Isolate | File |
-| [T1053](https://attack.mitre.org/techniques/T1053/) | [D3-CM Content Modification](https://d3fend.mitre.org/technique/d3f:ContentModification/) | Isolate | File |
+- Aucune (aucune technique ATT&CK retenue, ou cache D3FEND absent : `malsight download-d3fend`).
 
 ## Recommandations
 
@@ -87,3 +70,19 @@ ATT&CK retenues (source : d3fend, cache local ; IDs vérifiés).
 
 - Toutes les modifications de registre et la création de fichiers sont attribuées à `service_window` via `svchost.exe (1448)`, ce qui rend difficile de déterminer si l'échantillon a initié ces actions ou si elles sont des activités système de fond.
 - L'échantillon lui-même n'a pas d'appels API ou de règles CAPA enregistrées dans les données fournies.
+
+## Affirmations rejetées par le vérificateur
+
+- Technique sans preuve vérifiable, rejetée : T1053 (aucune valeur reconnaissable)
+- Contre-mesure D3-FE pour une technique non retenue : T1053
+- Contre-mesure D3-FA pour une technique non retenue : T1053
+- Contre-mesure D3-FIM pour une technique non retenue : T1053
+- Contre-mesure D3-PLA pour une technique non retenue : T1053
+- Contre-mesure D3-PSA pour une technique non retenue : T1053
+- Contre-mesure D3-PSMD pour une technique non retenue : T1053
+- Contre-mesure D3-SCA pour une technique non retenue : T1053
+- Contre-mesure D3-SDM pour une technique non retenue : T1053
+- Contre-mesure D3-SJA pour une technique non retenue : T1053
+- Contre-mesure D3-ABPI pour une technique non retenue : T1053
+- Contre-mesure D3-CF pour une technique non retenue : T1053
+- Contre-mesure D3-CM pour une technique non retenue : T1053

@@ -153,6 +153,17 @@ def verify(report: Report, case: Case, kb=None, defend=None) -> Report:
         if not t.evidence.strip():
             rejected.append(f"Technique sans preuve : {t.id}")
             continue
+        if t.source == "llm":
+            # D8 : la preuve d'une technique proposée par le LLM doit citer au moins une valeur
+            # (chemin, clé, domaine, API) présente dans le dossier de cas. « N/A » ou une phrase sans
+            # valeur reconnaissable sont rejetés. Les techniques de capa et des règles D7 ne sont pas
+            # concernées : leur preuve est produite par l'outil.
+            valeurs = valeurs_citees(t.evidence)
+            if not any(v.lower() in corpus for v in valeurs):
+                motif = "aucune valeur reconnaissable" if not valeurs else \
+                        f"valeurs absentes du dossier de cas : {', '.join(valeurs)}"
+                rejected.append(f"Technique sans preuve vérifiable, rejetée : {t.id} ({motif})")
+                continue
         # « _ » compte comme séparateur (noms de fichiers) : frontières alphanumériques explicites
         if t.source == "llm" and any(re.search(r"(?<![a-z0-9])" + re.escape(t.id.lower()) + r"(?![0-9])", s)
                                      for s in suspects_bas):

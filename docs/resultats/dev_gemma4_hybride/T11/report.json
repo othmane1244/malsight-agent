@@ -35,12 +35,13 @@
   "attack": [],
   "countermeasures": [],
   "recommendations": [
-    "Surveiller la création de fichiers dans des répertoires spécifiques comme `C:\\travail\\` pour détecter l'écriture de fichiers non sollicitée (Exemple : journal_t11.txt).",
-    "Surveiller les hachages SHA256 et MD5 connus (412fabad6e7a7f182f34e56502ddd3c4adaef3f8d69333338b2502e600094258, 9d45396a8fdc603d82da39de93d48f97) pour toute exécution ou présence sur le système.",
-    "Mettre en place des politiques de contrôle des applications pour restreindre l'exécution de fichiers provenant de répertoires utilisateurs non standard ou temporaires."
+    "Surveiller la création ou la modification de fichiers spécifiques comme 'C:\\travail\\journal_t11.txt' pour détecter toute activité suspecte (Détection : Sysmon Event ID 11).",
+    "Mettre en place des règles de détection basées sur les hachages SHA256 (412fabad6e7a7f182f34e56502ddd3c4adaef3f8d69333338b2502e600094258) et MD5 (9d45396a8fdc603d82da39de93d48f97) dans les systèmes EDR/antivirus (Détection : Hachage).",
+    "Durcir les permissions sur le répertoire 'C:\\travail' pour limiter l'écriture de fichiers aux utilisateurs et processus qui en ont strictement besoin (Durcissement : ACL/Permissions).",
+    "Surveiller les appels système ou les activités de processus qui accèdent ou écrivent dans des fichiers journaux spécifiques pour détecter des exfiltrations de données ou des journaux suspects (Détection : Sysmon Event ID 11)."
   ],
   "uncertainties": [
-    "Aucune activité réseau ou de modification de registre n'a été observée, ce qui limite la portée de l'analyse."
+    "Aucune donnée API ou de registre n'est disponible pour déterminer la nature exacte du contenu ou de l'utilisation du fichier `C:\\travail\\journal_t11.txt`."
   ],
   "rejected_claims": []
 }

@@ -280,16 +280,25 @@ def ecrire_resultats(sortie, titre: str, base_connues: str, ref_c: Report, res_c
     return lignes
 
 
-def recharger(sortie, base_connues: str = "T11", base_inedites: str = "T01"):
-    """Recalcule critères et classements à partir des rapports déjà enregistrés (sans relancer l'agent)."""
+def recharger(sortie, base_connues: str = "T11", base_inedites: str = "T01",
+              cas_connues: Case | None = None, cas_inedites: Case | None = None,
+              verifier: Callable[[Report, Case], Report] | None = None):
+    """Recalcule critères et classements à partir des rapports déjà enregistrés (sans relancer l'agent).
+
+    Avec `verifier` et les dossiers de cas d'origine : chaque rapport est revérifié contre SON cas
+    (cas d'origine, ou cas piégé reconstruit par la même variante) avec le vérificateur actuel."""
     from pathlib import Path
 
-    def lire(nom):
-        return Report.model_validate_json((Path(sortie) / f"report_{nom}.json").read_text(encoding="utf-8"))
+    def lire(nom, cas=None):
+        r = Report.model_validate_json((Path(sortie) / f"report_{nom}.json").read_text(encoding="utf-8"))
+        return verifier(r, cas) if verifier is not None and cas is not None else r
 
-    ref_c, ref_i = lire(f"origine_{base_connues}"), lire(f"origine_{base_inedites}")
-    res_c = {n: resultat_variante(ref_c, lire(n)) for n in VARIANTES}
-    res_i = {n: resultat_variante(ref_i, lire(n), inedite=spec) for n, spec in VARIANTES_INEDITES.items()}
+    ref_c = lire(f"origine_{base_connues}", cas_connues)
+    ref_i = lire(f"origine_{base_inedites}", cas_inedites)
+    res_c = {n: resultat_variante(ref_c, lire(n, f(cas_connues) if cas_connues else None))
+             for n, f in VARIANTES.items()}
+    res_i = {n: resultat_variante(ref_i, lire(n, spec[0](cas_inedites) if cas_inedites else None), inedite=spec)
+             for n, spec in VARIANTES_INEDITES.items()}
     return ref_c, res_c, ref_i, res_i
 
 

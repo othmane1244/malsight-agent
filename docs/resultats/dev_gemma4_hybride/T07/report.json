@@ -6,16 +6,16 @@
     "size": 990,
     "file_type": "unknown"
   },
-  "executive_summary": "L'échantillon, un script PowerShell nommé \"T07_decouverte_systeme.ps1\", exécute des commandes système pour collecter des informations sur l'environnement cible. Les activités observées incluent l'exécution de `HOSTNAME.EXE` et `systeminfo.exe` via `powershell.exe`, ainsi que la création d'un fichier texte dans le répertoire `C:\\travail\\malsight_t07.txt`. Ces actions sont typiques des phases de reconnaissance et de collecte d'informations (Discovery).",
+  "executive_summary": "L'échantillon, un script PowerShell nommé \"T07_decouverte_systeme.ps1\", exécute des commandes système pour collecter des informations sur l'environnement cible. Il exécute des outils système standards comme `HOSTNAME.EXE` et `systeminfo.exe` via `powershell.exe`, et crée un fichier texte local nommé `C:\\travail\\malsight_t07.txt` pour y stocker potentiellement les résultats de cette collecte d'informations.",
   "behaviors": [
     {
       "summary": "Collecte d'informations système de base",
-      "evidence": "Exécution de \"C:\\Windows\\system32\\HOSTNAME.EXE\" par powershell.exe (3320) ; Exécution de \"C:\\Windows\\system32\\systeminfo.exe\" par powershell.exe (3320)",
+      "evidence": "L'exécution de \"C:\\Windows\\system32\\HOSTNAME.EXE\" et \"C:\\Windows\\system32\\systeminfo.exe\" via powershell.exe (3320) est observée.",
       "kind": "observed"
     },
     {
-      "summary": "Écriture de données dans un fichier local",
-      "evidence": "Création du fichier \"C:\\travail\\malsight_t07.txt\" par powershell.exe (3320)",
+      "summary": "Création d'un fichier de sortie local",
+      "evidence": "Le fichier \"C:\\travail\\malsight_t07.txt\" est créé par powershell.exe (3320).",
       "kind": "observed"
     }
   ],
@@ -113,11 +113,11 @@
     }
   ],
   "recommendations": [
-    "Surveiller l'exécution de processus spécifiques comme `powershell.exe` lorsqu'ils sont appelés avec des arguments contenant des noms de fichiers système comme `C:\\Windows\\system32\\HOSTNAME.EXE` (Détection de processus anormaux) (D3-PSA).",
-    "Mettre en place des politiques de contrôle des processus pour limiter l'exécution de scripts ou d'outils système (comme PowerShell) à des chemins et des arguments prédéfinis (D3-EAL).",
-    "Surveiller les appels système pour détecter des tentatives d'exécution de commandes d'information système inhabituelles ou non sollicitées (D3-SCA).",
-    "Analyser les fichiers avec les hachages SHA256 `91379f80153cf471af84f022d11c9a6b683a02ed584a80d0bf3734b6bab1e5f7` et MD5 `83410fbb1e5852e13f895ac481f70758` et bloquer leur exécution ou leur mouvement (Remédiation/Blocage des IOCs).",
-    "Surveiller la création ou la modification du fichier `C:\\travail\\malsight_t07.txt` pour détecter toute activité suspecte liée à ce chemin (Surveillance de fichiers spécifiques)."
+    "Surveiller l'exécution de processus système comme `powershell.exe` lorsqu'il est appelé avec des arguments spécifiques ou lorsqu'il est lancé depuis des chemins inhabituels, en particulier pour la découverte d'informations système (T1082). (D3-PSA)",
+    "Mettre en place des politiques de contrôle des processus pour limiter les exécutions de binaires système (comme `HOSTNAME.EXE`) à des contextes et des parents attendus, afin de détecter les anomalies de lancement. (D3-EAL)",
+    "Surveiller les appels système liés à la récupération d'informations système (ex: appels aux fonctions de récupération de nom d'hôte ou d'informations système) pour détecter des comportements de reconnaissance. (D3-SCA)",
+    "Analyser les fichiers suspects basés sur les hachages fournis (sha256: 91379f80153cf471af84f022d11c9a6b683a02ed584a80d0bf3734b6bab1e5f7, md5: 83410fbb1e5852e13f895ac481f70758) et le chemin de fichier (C:\\travail\\malsight_t07.txt) pour bloquer leur exécution ou leur modification. (D3-EDL)",
+    "Implémenter des mécanismes de détection des chemins de fichiers et des noms de processus spécifiques mentionnés dans les IOCs pour une réponse rapide. (D3-EDL)"
   ],
   "uncertainties": [],
   "rejected_claims": []
