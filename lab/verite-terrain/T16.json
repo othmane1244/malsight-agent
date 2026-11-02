@@ -1,0 +1,22 @@
+{
+  "id": "T16",
+  "echantillon": "T16_profil_powershell.ps1",
+  "description": "Persistance par le profil PowerShell de l'utilisateur courant (ligne Write-Host inoffensive) ; technique absente du jeu de développement.",
+  "execution": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\\travail\\T16_profil_powershell.ps1",
+  "environnement": "Windows Sandbox, réseau coupé (D1)",
+  "jeu": "validation (D4) : écrit avant les règles, jamais utilisé pour les régler",
+  "iocs": [
+    {
+      "type": "file_path",
+      "value": "C:\\Users\\WDAGUtilityAccount\\Documents\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1",
+      "preuve_attendue": "écriture du profil PowerShell CurrentUserCurrentHost (compte de la sandbox : WDAGUtilityAccount)"
+    }
+  ],
+  "attack": [
+    {
+      "id": "T1546.013",
+      "nom": "Event Triggered Execution: PowerShell Profile",
+      "preuve_attendue": "création ou modification de Microsoft.PowerShell_profile.ps1"
+    }
+  ]
+}

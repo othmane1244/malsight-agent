@@ -1,0 +1,27 @@
+{
+  "id": "T14",
+  "echantillon": "T14_tache_com.ps1",
+  "description": "Tâche planifiée MalsightTest14 créée via l'objet COM Schedule.Service (variante de T02 : API COM au lieu du module ScheduledTasks).",
+  "execution": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\\travail\\T14_tache_com.ps1",
+  "environnement": "Windows Sandbox, réseau coupé (D1)",
+  "jeu": "validation (D4) : écrit avant les règles, jamais utilisé pour les régler",
+  "iocs": [
+    {
+      "type": "file_path",
+      "value": "C:\\Windows\\System32\\Tasks\\MalsightTest14",
+      "preuve_attendue": "fichier de tâche créé par le service Planificateur de tâches (svchost.exe)"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest14",
+      "preuve_attendue": "clé TaskCache créée par le service Planificateur de tâches (svchost.exe)"
+    }
+  ],
+  "attack": [
+    {
+      "id": "T1053.005",
+      "nom": "Scheduled Task/Job: Scheduled Task",
+      "preuve_attendue": "tâche MalsightTest14 (fichier System32\\Tasks et clé TaskCache)"
+    }
+  ]
+}

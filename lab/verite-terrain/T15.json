@@ -1,0 +1,22 @@
+{
+  "id": "T15",
+  "echantillon": "T15_utilisateur.ps1",
+  "description": "Découverte de l'utilisateur courant avec whoami.exe /all, sortie dans un fichier texte (technique absente du jeu de développement).",
+  "execution": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\\travail\\T15_utilisateur.ps1",
+  "environnement": "Windows Sandbox, réseau coupé (D1)",
+  "jeu": "validation (D4) : écrit avant les règles, jamais utilisé pour les régler",
+  "iocs": [
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\malsight_t15.txt",
+      "preuve_attendue": "écriture du fichier de sortie (Sysmon EID 11, règle C:\\travail\\ ; Procmon WriteFile)"
+    }
+  ],
+  "attack": [
+    {
+      "id": "T1033",
+      "nom": "System Owner/User Discovery",
+      "preuve_attendue": "processus whoami.exe /all"
+    }
+  ]
+}

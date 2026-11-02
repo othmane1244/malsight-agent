@@ -23,5 +23,18 @@ les cibles sont `notepad.exe` ou des fichiers texte dans `C:\travail\`.
 | T11 | `T11_temoin_negatif.ps1` | *aucune* | **témoin négatif** : date + journal texte | Sysmon + Procmon |
 | T12 | `T12_scenario_combine.ps1` | T1082 + T1547.001 | **scénario combiné** : systeminfo, Run, DNS `c2.malsight.lab` | Sysmon + Procmon |
 
-**Origine** : tous écrits par l'équipe pour ce projet (aucune source externe). Les techniques
-d'évasion d'ATT&CK sont exclues, sauf T1112 (simple écriture d'une clé applicative factice).
+### Jeu de validation (D4) : T13 à T16
+
+Écrits **avant** les règles artefact → technique et **jamais utilisés pour régler** filtres,
+parseurs, règles ou prompts ; uniquement pour mesurer les résultats finaux (#16, #23).
+Non encore exécutés au moment de leur écriture.
+
+| ID | Script | Technique ATT&CK | Comportement | Rôle |
+| --- | --- | --- | --- | --- |
+| T13 | `T13_persistance_runonce.ps1` | T1547.001 | valeur **RunOnce** → notepad | technique du jeu de dev., réalisée autrement (T01 : Run) |
+| T14 | `T14_tache_com.ps1` | T1053.005 | tâche créée via l'**API COM** `Schedule.Service` (2099) | technique du jeu de dev., réalisée autrement (T02 : ScheduledTasks) |
+| T15 | `T15_utilisateur.ps1` | T1033 | `whoami /all` → fichier texte | technique **absente** du jeu de dev. |
+| T16 | `T16_profil_powershell.ps1` | T1546.013 | ligne `Write-Host` ajoutée au **profil PowerShell** | technique **absente** du jeu de dev. |
+
+**Origine** : tous écrits par l'auteur du projet (aucune source externe). Les comportements
+d'évasion sont exclus (D2) ; T1112 (T05) n'a aucun effet d'évasion réel.

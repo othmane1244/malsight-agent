@@ -1,0 +1,23 @@
+{
+  "id": "T13",
+  "echantillon": "T13_persistance_runonce.ps1",
+  "description": "Persistance par la valeur RunOnce MalsightTest13 vers notepad.exe (variante de T01 : RunOnce au lieu de Run).",
+  "execution": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\\travail\\T13_persistance_runonce.ps1",
+  "environnement": "Windows Sandbox, réseau coupé (D1)",
+  "jeu": "validation (D4) : écrit avant les règles, jamais utilisé pour les régler",
+  "iocs": [
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce\\MalsightTest13",
+      "donnee": "C:\\Windows\\System32\\notepad.exe",
+      "preuve_attendue": "écriture de la valeur sous CurrentVersion\\RunOnce (Sysmon EID 13 si couvert par la config, Procmon RegSetValue)"
+    }
+  ],
+  "attack": [
+    {
+      "id": "T1547.001",
+      "nom": "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder",
+      "preuve_attendue": "valeur MalsightTest13 sous CurrentVersion\\RunOnce"
+    }
+  ]
+}
