@@ -151,3 +151,44 @@ Le mode manuel (`lab/analyse.wsb`) reste disponible.
   la validation de T02 et T03 en mode automatique.)*
 - Les tests (`tests/test_lancer_analyse.py`) n'utilisent que `-SansLancer` : ils ne lancent
   jamais de sandbox.
+
+---
+
+## D4 : jeu de développement (T01 à T12) et jeu de validation (T13 à T16)
+
+- **Date** : 2026-11-02
+- **Statut** : acceptée
+
+### Contexte
+
+Le filtre de bruit système de la fusion Sysmon + Procmon (`BRUIT_SYSTEME`, #8) a été réglé en
+regardant les journaux de T01 à T12 : le bruit du témoin négatif T11 est passé de 57 à 1
+observation. Mesurer ensuite les performances finales sur ces mêmes échantillons les
+surestimerait (sur-ajustement) : le filtre a « vu » leurs journaux.
+
+### Décision
+
+- **Jeu de développement : T01 à T12.** On peut régler dessus les filtres, les parseurs, les
+  prompts et les seuils, autant que nécessaire.
+- **Jeu de validation : T13 à T16**, créé plus tard, **écrit sans regarder les filtres** ni leurs
+  résultats, et **jamais utilisé pour les régler**. Il sert uniquement à mesurer les résultats
+  finaux (#16, et comparaisons #17, #18).
+
+### Règles pour le jeu de validation
+
+1. Les scripts T13 à T16 et leurs vérités terrain sont écrits **avant** toute analyse de leurs
+   journaux, à partir des techniques ATT&CK choisies, sans consulter `BRUIT_SYSTEME`.
+2. Ils suivent les mêmes règles que T01 à T12 : scripts texte bénins de l'équipe,
+   `-Nettoyer`, vérité terrain, aucun comportement d'évasion (D2).
+3. Une fois leurs journaux collectés, **aucune modification** des filtres, parseurs ou prompts
+   ne doit être motivée par ce qu'on y voit. Si un défaut est découvert, il est corrigé sur le
+   jeu de développement, puis le jeu de validation est **remplacé** (T17+…) avant la mesure
+   finale, et l'épisode est consigné ici.
+4. Les résultats sont rapportés séparément : développement (optimiste) et validation
+   (estimation honnête).
+
+### Justification
+
+- Séparation classique apprentissage / test : sans elle, un taux de faux positifs de 0 sur T11
+  ne prouve rien, puisque le filtre a été écrit en regardant T11.
+- Coût faible : 4 scripts de plus, collectés en mode automatique (D3).

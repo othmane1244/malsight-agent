@@ -29,7 +29,8 @@ journaux d'événements, WNF, BAM, Amcache, `GameConfigStore`, traçage WMI…) 
 
 | Cas | IOC | Sans filtre | Avec filtre | dont arbre de l'échantillon | dont fenêtre de services |
 | --- | --- | --- | --- | --- | --- |
-| T01 (manuel) | 3/3 | 710 | 99 | 3 | 96 |
+| T01 (auto, `cases/T01/`) | 3/3 | 64 | **3** | 3 | 0 |
+| *T01 manuel (essai 2, `cases/essai2/`, gardé pour mémoire)* | *3/3* | *710* | *99* | *3* | *96* |
 | T02 | 2/2 | 68 | 15 | 0 | 15 (tâche planifiée : TaskCache + fichier) |
 | T03 | 1/1 | 22 | 7 | 0 | 7 (clés du service MalsightTest) |
 | T04 | 1/1 | 22 | 2 | 1 | 1 |
@@ -43,12 +44,14 @@ journaux d'événements, WNF, BAM, Amcache, `GameConfigStore`, traçage WMI…) 
 | T12 | 3/3 | 95 | 4 | 4 | 0 |
 
 - **Témoin négatif T11 : 57 éléments extraits avant filtre, 1 après, pour 1 attendu** : plus
-  aucun faux positif dynamique. Hors T01 : 580 → 72 observations sur 11 échantillons.
-- **T01** reste bruité : collecte en mode manuel (pas d'`auto.json`), la racine est la console
-  qui a aussi fait la préparation et la collecte, donc la fenêtre couvre toute la session.
-  Le relancer en mode automatique (accord nécessaire) donnerait un T01 comparable aux autres.
-- **Limite** : la liste `BRUIT_SYSTEME` est tirée de ces 12 analyses ; elle doit être confirmée
-  sur de nouvelles collectes pour éviter le sur-ajustement. Le bruit restant (notifications pour
+  aucun faux positif dynamique. Sur les 12 échantillons (T01 automatique) : 644 → 75 observations.
+- **T01 relancé en mode automatique** : 64 → **3** observations, exactement ses 3 IOC (contre
+  99 pour la collecte manuelle de l'essai 2, dont la racine était la console qui avait aussi fait
+  la préparation et la collecte). L'essai 2 est gardé dans `cases/essai2/`, le nouveau T01 est
+  dans `cases/T01/`.
+- **Limite** : la liste `BRUIT_SYSTEME` est tirée de ces 12 analyses. Décision D4 : T01 à T12
+  deviennent le jeu de **développement** ; un jeu de **validation** T13 à T16, écrit sans
+  regarder les filtres, mesurera les résultats finaux (#23). Le bruit restant (notifications pour
   T05, traçage RAS pour T10) est laissé visible volontairement.
 
 ---
