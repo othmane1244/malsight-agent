@@ -127,7 +127,7 @@ malsight-agent/
 │   ├── evaluation/   # comparaison, séries, notation, test anti-injection
 │   ├── report/       # rapport Markdown, export STIX
 │   └── cli.py
-└── tests/         # 175 tests rapides + 11 tests PowerShell (pytest -m slow)
+└── tests/         # 176 tests rapides + 11 tests PowerShell (pytest -m slow)
 ```
 
 ## Auteur
