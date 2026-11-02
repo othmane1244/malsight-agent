@@ -1,0 +1,22 @@
+{
+  "id": "T04",
+  "echantillon": "T04_script_logon.ps1",
+  "description": "Écrit HKCU\\Environment\\UserInitMprLogonScript vers notepad.exe.",
+  "execution": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\\travail\\T04_script_logon.ps1",
+  "environnement": "Windows Sandbox, réseau coupé (D1)",
+  "iocs": [
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Environment\\UserInitMprLogonScript",
+      "donnee": "C:\\Windows\\System32\\notepad.exe",
+      "preuve_attendue": "Sysmon EID 13 (TargetObject sous HKU\\<SID>\\Environment) ; Procmon RegSetValue"
+    }
+  ],
+  "attack": [
+    {
+      "id": "T1037.001",
+      "nom": "Boot or Logon Initialization Scripts: Logon Script (Windows)",
+      "preuve_attendue": "valeur UserInitMprLogonScript"
+    }
+  ]
+}

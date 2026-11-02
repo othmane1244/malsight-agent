@@ -1,0 +1,21 @@
+{
+  "id": "T08",
+  "echantillon": "T08_decouverte_reseau.ps1",
+  "description": "Lance ipconfig /all, route print et arp -a, sortie dans un fichier texte.",
+  "execution": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\\travail\\T08_decouverte_reseau.ps1",
+  "environnement": "Windows Sandbox, réseau coupé (D1)",
+  "iocs": [
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\malsight_t08.txt",
+      "preuve_attendue": "Sysmon EID 11 (règle maison C:\\travail\\) ; Procmon WriteFile"
+    }
+  ],
+  "attack": [
+    {
+      "id": "T1016",
+      "nom": "System Network Configuration Discovery",
+      "preuve_attendue": "Sysmon EID 1 : ipconfig.exe, route.exe, arp.exe"
+    }
+  ]
+}

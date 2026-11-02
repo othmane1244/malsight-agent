@@ -1,0 +1,22 @@
+{
+  "id": "T03",
+  "echantillon": "T03_service.ps1",
+  "description": "Crée le service MalsightTest (démarrage manuel, jamais démarré) vers notepad.exe.",
+  "execution": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\\travail\\T03_service.ps1",
+  "environnement": "Windows Sandbox, réseau coupé (D1)",
+  "iocs": [
+    {
+      "type": "registry_key",
+      "value": "HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\ImagePath",
+      "donnee": "C:\\Windows\\System32\\notepad.exe",
+      "preuve_attendue": "Sysmon EID 13 (règle \\ImagePath, processus services.exe) ; Procmon RegSetValue"
+    }
+  ],
+  "attack": [
+    {
+      "id": "T1543.003",
+      "nom": "Create or Modify System Process: Windows Service",
+      "preuve_attendue": "valeur ImagePath du service MalsightTest"
+    }
+  ]
+}

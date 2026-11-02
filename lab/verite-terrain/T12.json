@@ -1,0 +1,38 @@
+{
+  "id": "T12",
+  "echantillon": "T12_scenario_combine.ps1",
+  "description": "Scénario combiné : systeminfo, valeur Run MalsightTest12, tentative DNS c2.malsight.lab.",
+  "execution": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\\travail\\T12_scenario_combine.ps1",
+  "environnement": "Windows Sandbox, réseau coupé (D1)",
+  "iocs": [
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\MalsightTest12",
+      "donnee": "C:\\Windows\\System32\\notepad.exe",
+      "preuve_attendue": "Sysmon EID 13 (TargetObject sous HKU\\<SID>\\...\\Run) ; Procmon RegSetValue"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\malsight_t12_info.txt",
+      "preuve_attendue": "Sysmon EID 11 (règle maison C:\\travail\\) ; Procmon WriteFile"
+    },
+    {
+      "type": "domain",
+      "value": "c2.malsight.lab",
+      "preuve_attendue": "Sysmon EID 22 (résolution en échec attendue)"
+    }
+  ],
+  "attack": [
+    {
+      "id": "T1082",
+      "nom": "System Information Discovery",
+      "preuve_attendue": "Sysmon EID 1 : systeminfo.exe"
+    },
+    {
+      "id": "T1547.001",
+      "nom": "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder",
+      "preuve_attendue": "écriture de la valeur MalsightTest12 sous CurrentVersion\\Run"
+    }
+  ],
+  "role": "scénario combiné : teste la corrélation de plusieurs comportements"
+}

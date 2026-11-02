@@ -39,11 +39,13 @@ Aucun outil, échantillon ni journal n'est versionné : tout vit dans `C:\labo`,
    Copy-Item .\lab\scripts\*.ps1, .\lab\sysmon-malsight.xml C:\labo\entree\scripts\ -Force
    ```
 
-5. Échantillons de test de l'équipe (`lab/echantillons-test/`, vérité terrain dans
-   `lab/verite-terrain/`) : copier T01 avec
-   `Copy-Item .\lab\echantillons-test\T01_persistance_run.ps1 C:\labo\entree\samples\ -Force`,
-   puis dans la sandbox le lancer avec `& C:\travail\T01_persistance_run.ps1`
-   (la fenêtre de `setup-sandbox.ps1` a déjà ExecutionPolicy Bypass).
+5. Échantillons de test de l'équipe, T01 à T12 (liste dans
+   [`echantillons-test/README.md`](echantillons-test/README.md), vérité terrain dans
+   `lab/verite-terrain/`) : les copier tous avec
+   `Copy-Item .\lab\echantillons-test\T*.ps1 C:\labo\entree\samples\ -Force`,
+   puis dans la sandbox lancer **un seul échantillon par session**, par exemple
+   `& C:\travail\T01_persistance_run.ps1` (la fenêtre de `setup-sandbox.ps1` a déjà
+   ExecutionPolicy Bypass).
 
 ## Procédure d'analyse (par échantillon)
 

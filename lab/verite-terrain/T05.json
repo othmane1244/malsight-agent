@@ -1,0 +1,22 @@
+{
+  "id": "T05",
+  "echantillon": "T05_registre.ps1",
+  "description": "Crée HKCU\\Software\\MalsightTest\\Config (clé applicative factice).",
+  "execution": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\\travail\\T05_registre.ps1",
+  "environnement": "Windows Sandbox, réseau coupé (D1)",
+  "iocs": [
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\MalsightTest\\Config",
+      "donnee": "mode=test;intervalle=60",
+      "preuve_attendue": "Procmon RegSetValue seulement (clé non couverte par la config Sysmon) : teste la fusion Sysmon + Procmon"
+    }
+  ],
+  "attack": [
+    {
+      "id": "T1112",
+      "nom": "Modify Registry",
+      "preuve_attendue": "écriture de la clé HKCU\\Software\\MalsightTest"
+    }
+  ]
+}

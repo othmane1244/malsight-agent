@@ -1,0 +1,26 @@
+{
+  "id": "T02",
+  "echantillon": "T02_tache_planifiee.ps1",
+  "description": "Crée la tâche planifiée MalsightTest (notepad.exe, déclenchement en 2099).",
+  "execution": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\\travail\\T02_tache_planifiee.ps1",
+  "environnement": "Windows Sandbox, réseau coupé (D1)",
+  "iocs": [
+    {
+      "type": "file_path",
+      "value": "C:\\Windows\\System32\\Tasks\\MalsightTest",
+      "preuve_attendue": "Sysmon EID 11 (règle SwiftOnSecurity sur System32\\Tasks, processus svchost.exe) ; Procmon CreateFile"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest",
+      "preuve_attendue": "Procmon RegCreateKey seulement (TaskCache non couvert par la config Sysmon)"
+    }
+  ],
+  "attack": [
+    {
+      "id": "T1053.005",
+      "nom": "Scheduled Task/Job: Scheduled Task",
+      "preuve_attendue": "fichier de tâche MalsightTest dans System32\\Tasks"
+    }
+  ]
+}

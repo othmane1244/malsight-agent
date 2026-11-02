@@ -1,0 +1,21 @@
+{
+  "id": "T10",
+  "echantillon": "T10_telechargement.ps1",
+  "description": "Tente de télécharger http://update.malsight.lab/outil.txt (échec attendu).",
+  "execution": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\\travail\\T10_telechargement.ps1",
+  "environnement": "Windows Sandbox, réseau coupé (D1)",
+  "iocs": [
+    {
+      "type": "domain",
+      "value": "update.malsight.lab",
+      "preuve_attendue": "Sysmon EID 22 seulement (réseau coupé : ni connexion ni HTTP ; l'URL n'est pas observable)"
+    }
+  ],
+  "attack": [
+    {
+      "id": "T1105",
+      "nom": "Ingress Tool Transfer",
+      "preuve_attendue": "requête DNS vers update.malsight.lab depuis powershell.exe"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "T11",
+  "echantillon": "T11_temoin_negatif.ps1",
+  "description": "Témoin négatif : lit la date et ajoute une ligne à un journal texte.",
+  "execution": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\\travail\\T11_temoin_negatif.ps1",
+  "environnement": "Windows Sandbox, réseau coupé (D1)",
+  "iocs": [
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\journal_t11.txt",
+      "preuve_attendue": "Sysmon EID 11 (règle maison C:\\travail\\) ; Procmon WriteFile"
+    }
+  ],
+  "attack": [],
+  "role": "témoin négatif : aucune technique attendue, sert à mesurer faux positifs et hallucinations"
+}

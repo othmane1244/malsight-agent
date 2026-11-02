@@ -1,0 +1,21 @@
+{
+  "id": "T06",
+  "echantillon": "T06_powershell_encode.ps1",
+  "description": "Lance powershell -EncodedCommand qui écrit un fichier texte.",
+  "execution": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\\travail\\T06_powershell_encode.ps1",
+  "environnement": "Windows Sandbox, réseau coupé (D1)",
+  "iocs": [
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\malsight_t06.txt",
+      "preuve_attendue": "Sysmon EID 11 (règle maison C:\\travail\\, processus powershell.exe enfant) ; Procmon WriteFile"
+    }
+  ],
+  "attack": [
+    {
+      "id": "T1059.001",
+      "nom": "Command and Scripting Interpreter: PowerShell",
+      "preuve_attendue": "Sysmon EID 1 : powershell.exe avec -EncodedCommand dans CommandLine"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "T07",
+  "echantillon": "T07_decouverte_systeme.ps1",
+  "description": "Lance hostname.exe et systeminfo.exe, sortie dans un fichier texte.",
+  "execution": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\\travail\\T07_decouverte_systeme.ps1",
+  "environnement": "Windows Sandbox, réseau coupé (D1)",
+  "iocs": [
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\malsight_t07.txt",
+      "preuve_attendue": "Sysmon EID 11 (règle maison C:\\travail\\) ; Procmon WriteFile"
+    }
+  ],
+  "attack": [
+    {
+      "id": "T1082",
+      "nom": "System Information Discovery",
+      "preuve_attendue": "Sysmon EID 1 : systeminfo.exe et hostname.exe"
+    }
+  ]
+}
