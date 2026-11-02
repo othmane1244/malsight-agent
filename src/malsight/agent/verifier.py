@@ -142,45 +142,61 @@ def verify(report: Report, case: Case, kb=None, defend=None) -> Report:
     rejected += [f"API non observée : {a.name}" for a in report.sensitive_apis if a.name not in known]
     report.sensitive_apis = kept_apis
 
-    # ATT&CK : ID valide dans la base officielle + preuve non vide
-    kept_attack, seen = [], set()
-    for t in report.attack:
-        if t.id in seen:
-            continue
-        if kb is not None and not kb.is_valid(t.id):
-            rejected.append(f"ID ATT&CK inexistant : {t.id}")
-            continue
-        if not t.evidence.strip():
-            rejected.append(f"Technique sans preuve : {t.id}")
-            continue
-        if t.source == "llm":
-            # D8 : la preuve d'une technique proposée par le LLM doit citer au moins une valeur
-            # (chemin, clé, domaine, API) présente dans le dossier de cas. « N/A » ou une phrase sans
-            # valeur reconnaissable sont rejetés. Les techniques de capa et des règles D7 ne sont pas
-            # concernées : leur preuve est produite par l'outil.
-            valeurs = valeurs_citees(t.evidence)
-            if not any(v.lower() in corpus for v in valeurs):
-                motif = "aucune valeur reconnaissable" if not valeurs else \
-                        f"valeurs absentes du dossier de cas : {', '.join(valeurs)}"
-                rejected.append(f"Technique sans preuve vérifiable, rejetée : {t.id} ({motif})")
+    # D10 « les outils classent, le LLM explique » : la liste officielle ne contient que les
+    # techniques des outils (règles D7, capa) ; une technique du LLM va dans les suggestions.
+    report.suggestions = [*(t for t in report.attack if t.source == "llm"), *report.suggestions]
+    report.attack = [t for t in report.attack if t.source != "llm"]
+
+    def filtrer(techniques, deja: set[str], suggestion: bool):
+        """ATT&CK : ID valide, preuve (vérifiable pour le LLM, D8), garde anti-injection, nom officiel."""
+        gardees = []
+        for t in techniques:
+            if t.id in deja:
                 continue
-        # « _ » compte comme séparateur (noms de fichiers) : frontières alphanumériques explicites
-        if t.source == "llm" and any(re.search(r"(?<![a-z0-9])" + re.escape(t.id.lower()) + r"(?![0-9])", s)
-                                     for s in suspects_bas):
-            rejected.append(f"Technique demandée par une consigne d'injection, rejetée : {t.id}")
-            continue
-        if kb is not None:
-            # Toujours le nom et la tactique officiels : jamais ceux écrits par le LLM
-            nom_officiel = kb.name(t.id)
-            if t.name and nom_officiel and t.name.strip().lower() != nom_officiel.lower() \
-                    and nom_officiel.lower() not in t.name.lower():
-                report.uncertainties.append(
-                    f"Nom ATT&CK corrigé pour {t.id} : « {t.name} » -> « {nom_officiel} » (base officielle)")
-            t.name = nom_officiel or t.name
-            t.tactic = kb.tactic(t.id) or t.tactic
-        seen.add(t.id)
-        kept_attack.append(t)
-    report.attack = kept_attack
+            if kb is not None and not kb.is_valid(t.id):
+                rejected.append(f"ID ATT&CK inexistant : {t.id}")
+                continue
+            if not t.evidence.strip():
+                rejected.append(f"Technique sans preuve : {t.id}")
+                continue
+            if t.source == "llm":
+                # D8 : la preuve d'une technique proposée par le LLM doit citer au moins une valeur
+                # (chemin, clé, domaine, API) présente dans le dossier de cas. « N/A » ou une phrase sans
+                # valeur reconnaissable sont rejetés. Les techniques de capa et des règles D7 ne sont pas
+                # concernées : leur preuve est produite par l'outil.
+                valeurs = valeurs_citees(t.evidence)
+                if not any(v.lower() in corpus for v in valeurs):
+                    motif = "aucune valeur reconnaissable" if not valeurs else \
+                            f"valeurs absentes du dossier de cas : {', '.join(valeurs)}"
+                    rejected.append(f"Technique sans preuve vérifiable, rejetée : {t.id} ({motif})")
+                    continue
+                # « _ » compte comme séparateur (noms de fichiers) : frontières alphanumériques explicites
+                if any(re.search(r"(?<![a-z0-9])" + re.escape(t.id.lower()) + r"(?![0-9])", s) for s in suspects_bas):
+                    rejected.append(f"Technique demandée par une consigne d'injection, rejetée : {t.id}")
+                    continue
+            if suggestion and t.id in techniques_regles and t.id not in regles_declenchees:
+                # D10 : une technique couverte par une règle D7 n'est suggérée que si la règle s'est déclenchée
+                rejected.append(f"Suggestion couverte par une règle D7 qui ne s'est pas déclenchée, rejetée : {t.id}")
+                continue
+            if kb is not None:
+                # Toujours le nom et la tactique officiels : jamais ceux écrits par le LLM
+                nom_officiel = kb.name(t.id)
+                if t.name and nom_officiel and t.name.strip().lower() != nom_officiel.lower() \
+                        and nom_officiel.lower() not in t.name.lower():
+                    report.uncertainties.append(
+                        f"Nom ATT&CK corrigé pour {t.id} : « {t.name} » -> « {nom_officiel} » (base officielle)")
+                t.name = nom_officiel or t.name
+                t.tactic = kb.tactic(t.id) or t.tactic
+            deja.add(t.id)
+            gardees.append(t)
+        return gardees
+
+    from malsight.attack.regles import REGLES, appliquer
+    techniques_regles = {r.technique for r in REGLES}
+    regles_declenchees = {t.id for t in appliquer(case.dynamic)}
+    officielles: set[str] = set()
+    report.attack = filtrer(report.attack, officielles, suggestion=False)
+    report.suggestions = filtrer(report.suggestions, set(officielles), suggestion=True)  # pas de doublon officiel
 
     # Contre-mesures D3FEND et IDs D3FEND cités dans les recommandations
     rejected += _verify_countermeasures(report, defend)

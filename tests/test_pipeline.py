@@ -36,8 +36,8 @@ def test_verifier_rejects_hallucinations(case, kb):
     r.behaviors = [Behavior(summary="Chiffre des fichiers", evidence="CryptEncrypt")]
     r = verify(r, case, kb)
     assert [i.value for i in r.iocs] == ["update.demo.lab"]
-    assert [t.id for t in r.attack] == ["T1059.003"]
-    assert r.attack[0].name == "Windows Command Shell"
+    assert r.attack == [] and [t.id for t in r.suggestions] == ["T1059.003"]   # D10
+    assert r.suggestions[0].name == "Windows Command Shell"
     assert r.behaviors[0].kind == "inferred"
     assert len(r.rejected_claims) == 2
 

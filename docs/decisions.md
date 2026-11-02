@@ -242,10 +242,12 @@ version initiale) n'est plus tenable.
   le mémoire, #1 à #3 rattachées à J4), J2 = 4 novembre, J3 = 6 novembre, J4 = 16 novembre.
 - **Suivi** : sans équipe, la relecture croisée (#22) est remplacée par une relecture différée
   (relire le lendemain) et par les garde-fous automatiques (tests, vérificateur, CI).
-- **Modèles LLM (ajout du 2026-11-02)** : **`gemma4:e4b`** (Ollama, déjà installé) est le modèle
-  de **développement** ; c'est la valeur par défaut de `LLM_MODEL`. **`qwen3:8b`** est en
-  téléchargement (lent) ; dès qu'il est prêt, comparaison sur T01 (techniques trouvées /
-  attendues, rejets, temps, JSON valide) pour choisir le modèle des mesures finales du 9 novembre.
+- **Modèles LLM (ajout du 2026-11-02, décision finale le 2026-11-03)** : **`gemma4:e4b`**
+  (Ollama, contexte 8192) est le **modèle final**, utilisé pour toutes les mesures ; c'est la
+  valeur par défaut de `LLM_MODEL`. **`qwen3:8b` est abandonné** : son téléchargement (5,2 Go)
+  a échoué sur une connexion instable (`max retries exceeded`, retombé à 6 % après avoir atteint
+  51 %). Sa comparaison avec gemma4:e4b est présentée comme **perspective** dans le mémoire ;
+  `malsight serie` permet de la faire avec `LLM_MODEL=qwen3:8b` sans changer le code.
 
 ### Justification
 
@@ -449,3 +451,53 @@ la clé, le domaine ou l'API.
 `malsight injection` : variantes 1 à 4 (connues lors de la conception, base T11) et 5a / 5b
 (inédites, base T01), classement « le LLM a résisté » / « le LLM a obéi mais le vérificateur a
 bloqué » / « échec ». Résultats : `docs/resultats/injection_gemma4_e4b/criteres.md` et journal.
+
+---
+
+## D10 : « les outils classent, le LLM explique »
+
+- **Date** : 2026-11-03
+- **Statut** : acceptée
+
+### Décision
+
+- La liste officielle `attack` du rapport ne contient que les techniques des **outils** : règles
+  déterministes D7 et capa. C'est elle que note D9.
+- Les techniques proposées par le LLM vont dans une liste séparée `suggestions`, section
+  « Suggestions à valider par l'analyste » du rapport. Elles restent filtrées par le vérificateur
+  (ID officiel, preuve vérifiable D8, garde anti-injection, nom et tactique officiels), avec une
+  règle de plus : **une suggestion couverte par une règle D7 n'est gardée que si la règle s'est
+  déclenchée sur ce cas** ; une suggestion en double de la liste officielle est retirée.
+- Les contre-mesures D3FEND ne portent que sur la liste officielle.
+- Le vérificateur impose l'invariant : une technique de source `llm` trouvée dans `attack` est
+  déplacée dans `suggestions` (ce qui a permis de revérifier les rapports déjà enregistrés).
+- Le filtre des suggestions utilise le déclenchement des règles **dans tous les modes**, y compris
+  `llm` (où les règles n'alimentent pas la liste officielle).
+
+### Justification : tableau des 3 modes (jeu de développement, gemma4:e4b, contexte 8192)
+
+Avant D10 (techniques du LLM dans la liste officielle, vérificateur D8) :
+
+| Mode | Strict : vraies / FP | Précision strict | Rappel strict |
+| --- | --- | --- | --- |
+| `regles` | 10/12 · 0 | 100 % | 83 % |
+| `llm` | 4/12 · 4 | 50 % | 33 % |
+| `hybride` | 10/12 · 3 | 77 % | 83 % |
+
+Après D10 (`malsight bilan --reverifier`, mêmes brouillons du LLM) :
+
+| Mode | Liste officielle : vraies / FP | Précision | Rappel | Suggestions : vraies / total |
+| --- | --- | --- | --- | --- |
+| `regles` | 10/12 · 0 | 100 % | 83 % | 0 / 0 |
+| `llm` | 0/12 · 0 | — | 0 % | 4 / 5 |
+| `hybride` | **10/12 · 0** | **100 %** | 83 % | 0 / 1 |
+
+- En hybride, le LLM n'apportait **aucune vraie technique** au-delà des règles et ajoutait **3 faux
+  positifs** à preuve réelle mais hors sujet (T05 et T08 : T1547.001 hors clé Run ; T10 :
+  T1566.001 sur un domaine). Le vérificateur ne peut pas juger la pertinence sémantique d'une
+  preuve ; la séparation, si : la liste officielle reste exacte, et le jugement va à l'analyste.
+- Les règles retirent les suggestions erronées sur les techniques qu'elles couvrent (T1547.001
+  de T05 et T08) ; la seule suggestion restante en hybride (T1566.001, sans règle) est fausse et
+  signalée comme « à valider ».
+- En mode `llm`, 4 des 5 suggestions gardées sont justes : le LLM reste utile pour expliquer et
+  proposer, pas pour classer.

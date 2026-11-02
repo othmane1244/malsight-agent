@@ -55,7 +55,16 @@ L'échantillon, exécuté via `powershell.exe`, a principalement interagi avec l
 
 | ID | Technique | Tactique | Source | Confiance | Preuve |
 | --- | --- | --- | --- | --- | --- |
-| [T1566.001](https://attack.mitre.org/techniques/T1566/001/) | Spearphishing Attachment | initial-access | llm | medium | update.malsight.lab |
+
+## Suggestions à valider par l'analyste
+
+Techniques proposées par le modèle de langage, **non retenues dans la liste officielle** (D10 :
+les outils classent, le LLM explique). Chacune cite une preuve retrouvée dans le dossier de cas,
+mais sa pertinence reste à valider.
+
+| ID | Technique | Tactique | Confiance | Preuve |
+| --- | --- | --- | --- | --- |
+| [T1566.001](https://attack.mitre.org/techniques/T1566/001/) | Spearphishing Attachment | initial-access | medium | update.malsight.lab |
 
 ## Contre-mesures D3FEND
 

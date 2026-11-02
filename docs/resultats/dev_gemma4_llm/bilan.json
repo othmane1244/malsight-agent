@@ -8,25 +8,45 @@
   "attack_attendues": [
    "T1547.001"
   ],
-  "attack_trouvees": [
-   "T1547.001"
-  ],
-  "attack_vraies": [
-   "T1547.001"
-  ],
+  "attack_trouvees": [],
+  "attack_vraies": [],
   "attack_en_trop": [],
-  "attack_ratees": [],
+  "attack_ratees": [
+   "T1547.001"
+  ],
   "iocs_trouves": 3,
   "iocs_attendus": 3,
   "comportements_observes": 3,
   "comportements_inferes": 0,
-  "rejets": [],
-  "attack_vraies_tol": [
+  "rejets": [
+   "Contre-mesure D3-FE pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-DA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-EFA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-FA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-FIM pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-SICA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-CF pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-CM pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-CQ pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-EAL pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-EDL pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-LFP pour une technique non retenue : T1547.001"
+  ],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": [
    "T1547.001"
   ],
-  "attack_en_trop_tol": [],
-  "attack_ratees_tol": [],
-  "reverifie": true
+  "reverifie": true,
+  "suggestions": [
+   "T1547.001"
+  ],
+  "suggestions_vraies": [
+   "T1547.001"
+  ],
+  "suggestions_vraies_tol": [
+   "T1547.001"
+  ]
  },
  "T02": {
   "echantillon": "T02",
@@ -67,7 +87,10 @@
   "attack_ratees_tol": [
    "T1053.005"
   ],
-  "reverifie": true
+  "reverifie": true,
+  "suggestions": [],
+  "suggestions_vraies": [],
+  "suggestions_vraies_tol": []
  },
  "T03": {
   "echantillon": "T03",
@@ -78,25 +101,36 @@
   "attack_attendues": [
    "T1543.003"
   ],
-  "attack_trouvees": [
-   "T1543.003"
-  ],
-  "attack_vraies": [
-   "T1543.003"
-  ],
+  "attack_trouvees": [],
+  "attack_vraies": [],
   "attack_en_trop": [],
-  "attack_ratees": [],
+  "attack_ratees": [
+   "T1543.003"
+  ],
   "iocs_trouves": 1,
   "iocs_attendus": 1,
   "comportements_observes": 0,
   "comportements_inferes": 1,
-  "rejets": [],
-  "attack_vraies_tol": [
+  "rejets": [
+   "Contre-mesure D3-SCP pour une technique non retenue : T1543.003",
+   "Contre-mesure D3-RD pour une technique non retenue : T1543.003",
+   "Contre-mesure D3-DI pour une technique non retenue : T1543.003"
+  ],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": [
    "T1543.003"
   ],
-  "attack_en_trop_tol": [],
-  "attack_ratees_tol": [],
-  "reverifie": true
+  "reverifie": true,
+  "suggestions": [
+   "T1543.003"
+  ],
+  "suggestions_vraies": [
+   "T1543.003"
+  ],
+  "suggestions_vraies_tol": [
+   "T1543.003"
+  ]
  },
  "T04": {
   "echantillon": "T04",
@@ -107,13 +141,9 @@
   "attack_attendues": [
    "T1037.001"
   ],
-  "attack_trouvees": [
-   "T1547.001"
-  ],
+  "attack_trouvees": [],
   "attack_vraies": [],
-  "attack_en_trop": [
-   "T1547.001"
-  ],
+  "attack_en_trop": [],
   "attack_ratees": [
    "T1037.001"
   ],
@@ -121,15 +151,30 @@
   "iocs_attendus": 1,
   "comportements_observes": 1,
   "comportements_inferes": 1,
-  "rejets": [],
-  "attack_vraies_tol": [],
-  "attack_en_trop_tol": [
-   "T1547.001"
+  "rejets": [
+   "Suggestion couverte par une règle D7 qui ne s'est pas déclenchée, rejetée : T1547.001",
+   "Contre-mesure D3-FE pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-DA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-EFA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-FA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-FIM pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-SICA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-CF pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-CM pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-CQ pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-EAL pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-EDL pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-LFP pour une technique non retenue : T1547.001"
   ],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [],
   "attack_ratees_tol": [
    "T1037.001"
   ],
-  "reverifie": true
+  "reverifie": true,
+  "suggestions": [],
+  "suggestions_vraies": [],
+  "suggestions_vraies_tol": []
  },
  "T05": {
   "echantillon": "T05",
@@ -140,13 +185,9 @@
   "attack_attendues": [
    "T1112"
   ],
-  "attack_trouvees": [
-   "T1547.001"
-  ],
+  "attack_trouvees": [],
   "attack_vraies": [],
-  "attack_en_trop": [
-   "T1547.001"
-  ],
+  "attack_en_trop": [],
   "attack_ratees": [
    "T1112"
   ],
@@ -154,15 +195,30 @@
   "iocs_attendus": 1,
   "comportements_observes": 3,
   "comportements_inferes": 0,
-  "rejets": [],
-  "attack_vraies_tol": [],
-  "attack_en_trop_tol": [
-   "T1547.001"
+  "rejets": [
+   "Suggestion couverte par une règle D7 qui ne s'est pas déclenchée, rejetée : T1547.001",
+   "Contre-mesure D3-FE pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-DA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-EFA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-FA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-FIM pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-SICA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-CF pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-CM pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-CQ pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-EAL pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-EDL pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-LFP pour une technique non retenue : T1547.001"
   ],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [],
   "attack_ratees_tol": [
    "T1112"
   ],
-  "reverifie": true
+  "reverifie": true,
+  "suggestions": [],
+  "suggestions_vraies": [],
+  "suggestions_vraies_tol": []
  },
  "T06": {
   "echantillon": "T06",
@@ -191,7 +247,10 @@
   "attack_ratees_tol": [
    "T1059.001"
   ],
-  "reverifie": true
+  "reverifie": true,
+  "suggestions": [],
+  "suggestions_vraies": [],
+  "suggestions_vraies_tol": []
  },
  "T07": {
   "echantillon": "T07",
@@ -220,7 +279,10 @@
   "attack_ratees_tol": [
    "T1082"
   ],
-  "reverifie": true
+  "reverifie": true,
+  "suggestions": [],
+  "suggestions_vraies": [],
+  "suggestions_vraies_tol": []
  },
  "T08": {
   "echantillon": "T08",
@@ -256,7 +318,10 @@
   "attack_ratees_tol": [
    "T1016"
   ],
-  "reverifie": true
+  "reverifie": true,
+  "suggestions": [],
+  "suggestions_vraies": [],
+  "suggestions_vraies_tol": []
  },
  "T09": {
   "echantillon": "T09",
@@ -267,13 +332,9 @@
   "attack_attendues": [
    "T1560"
   ],
-  "attack_trouvees": [
-   "T1074"
-  ],
+  "attack_trouvees": [],
   "attack_vraies": [],
-  "attack_en_trop": [
-   "T1074"
-  ],
+  "attack_en_trop": [],
   "attack_ratees": [
    "T1560"
   ],
@@ -283,13 +344,16 @@
   "comportements_inferes": 0,
   "rejets": [],
   "attack_vraies_tol": [],
-  "attack_en_trop_tol": [
-   "T1074"
-  ],
+  "attack_en_trop_tol": [],
   "attack_ratees_tol": [
    "T1560"
   ],
-  "reverifie": true
+  "reverifie": true,
+  "suggestions": [
+   "T1074"
+  ],
+  "suggestions_vraies": [],
+  "suggestions_vraies_tol": []
  },
  "T10": {
   "echantillon": "T10",
@@ -300,13 +364,9 @@
   "attack_attendues": [
    "T1105"
   ],
-  "attack_trouvees": [
-   "T1547.001"
-  ],
+  "attack_trouvees": [],
   "attack_vraies": [],
-  "attack_en_trop": [
-   "T1547.001"
-  ],
+  "attack_en_trop": [],
   "attack_ratees": [
    "T1105"
   ],
@@ -314,15 +374,30 @@
   "iocs_attendus": 1,
   "comportements_observes": 0,
   "comportements_inferes": 15,
-  "rejets": [],
-  "attack_vraies_tol": [],
-  "attack_en_trop_tol": [
-   "T1547.001"
+  "rejets": [
+   "Suggestion couverte par une règle D7 qui ne s'est pas déclenchée, rejetée : T1547.001",
+   "Contre-mesure D3-FE pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-DA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-EFA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-FA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-FIM pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-SICA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-CF pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-CM pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-CQ pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-EAL pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-EDL pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-LFP pour une technique non retenue : T1547.001"
   ],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [],
   "attack_ratees_tol": [
    "T1105"
   ],
-  "reverifie": true
+  "reverifie": true,
+  "suggestions": [],
+  "suggestions_vraies": [],
+  "suggestions_vraies_tol": []
  },
  "T11": {
   "echantillon": "T11",
@@ -343,7 +418,10 @@
   "attack_vraies_tol": [],
   "attack_en_trop_tol": [],
   "attack_ratees_tol": [],
-  "reverifie": true
+  "reverifie": true,
+  "suggestions": [],
+  "suggestions_vraies": [],
+  "suggestions_vraies_tol": []
  },
  "T12": {
   "echantillon": "T12",
@@ -355,27 +433,56 @@
    "T1082",
    "T1547.001"
   ],
-  "attack_trouvees": [
-   "T1082",
-   "T1547.001"
-  ],
-  "attack_vraies": [
-   "T1082",
-   "T1547.001"
-  ],
+  "attack_trouvees": [],
+  "attack_vraies": [],
   "attack_en_trop": [],
-  "attack_ratees": [],
+  "attack_ratees": [
+   "T1082",
+   "T1547.001"
+  ],
   "iocs_trouves": 3,
   "iocs_attendus": 3,
   "comportements_observes": 4,
   "comportements_inferes": 0,
-  "rejets": [],
-  "attack_vraies_tol": [
+  "rejets": [
+   "Contre-mesure D3-PSA pour une technique non retenue : T1082",
+   "Contre-mesure D3-SCA pour une technique non retenue : T1082",
+   "Contre-mesure D3-EAL pour une technique non retenue : T1082",
+   "Contre-mesure D3-EDL pour une technique non retenue : T1082",
+   "Contre-mesure D3-HBPI pour une technique non retenue : T1082",
+   "Contre-mesure D3-SCF pour une technique non retenue : T1082",
+   "Contre-mesure D3-DE pour une technique non retenue : T1082",
+   "Contre-mesure D3-FE pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-DA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-EFA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-FA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-FIM pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-SICA pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-CF pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-CM pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-CQ pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-EAL pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-EDL pour une technique non retenue : T1547.001",
+   "Contre-mesure D3-LFP pour une technique non retenue : T1547.001"
+  ],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": [
    "T1082",
    "T1547.001"
   ],
-  "attack_en_trop_tol": [],
-  "attack_ratees_tol": [],
-  "reverifie": true
+  "reverifie": true,
+  "suggestions": [
+   "T1082",
+   "T1547.001"
+  ],
+  "suggestions_vraies": [
+   "T1082",
+   "T1547.001"
+  ],
+  "suggestions_vraies_tol": [
+   "T1082",
+   "T1547.001"
+  ]
  }
 }

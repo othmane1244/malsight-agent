@@ -72,6 +72,7 @@
       "evidence": "règle R-T1543.003-registre : HKLM\\System\\CurrentControlSet\\Services\\MalsightTest\\ImagePath (services.exe (852))"
     }
   ],
+  "suggestions": [],
   "countermeasures": [
     {
       "id": "D3-SCP",

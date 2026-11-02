@@ -39,6 +39,10 @@ L'échantillon, un script PowerShell nommé "T07_decouverte_systeme.ps1", exécu
 | ID | Technique | Tactique | Source | Confiance | Preuve |
 | --- | --- | --- | --- | --- | --- |
 
+## Suggestions à valider par l'analyste
+
+- Aucune.
+
 ## Contre-mesures D3FEND
 
 - Aucune (aucune technique ATT&CK retenue, ou cache D3FEND absent : `malsight download-d3fend`).

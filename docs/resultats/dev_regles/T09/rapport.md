@@ -42,6 +42,10 @@ Rapport généré sans LLM : faits extraits uniquement.
 | --- | --- | --- | --- | --- | --- |
 | [T1560](https://attack.mitre.org/techniques/T1560/) | Archive Collected Data | collection | rule | high | règle R-T1560-archive : C:\travail\collecte.zip (powershell.exe (7900)) |
 
+## Suggestions à valider par l'analyste
+
+- Aucune.
+
 ## Contre-mesures D3FEND
 
 Contre-mesures défensives [MITRE D3FEND](https://d3fend.mitre.org) associées aux techniques

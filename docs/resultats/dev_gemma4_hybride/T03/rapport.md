@@ -44,6 +44,10 @@ L'échantillon analysé n'a pas d'activité d'exécution directe visible dans le
 | --- | --- | --- | --- | --- | --- |
 | [T1543.003](https://attack.mitre.org/techniques/T1543/003/) | Windows Service | persistence, privilege-escalation | rule | high | règle R-T1543.003-registre : HKLM\System\CurrentControlSet\Services\MalsightTest\ImagePath (services.exe (852)) |
 
+## Suggestions à valider par l'analyste
+
+- Aucune.
+
 ## Contre-mesures D3FEND
 
 Contre-mesures défensives [MITRE D3FEND](https://d3fend.mitre.org) associées aux techniques

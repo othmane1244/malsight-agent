@@ -98,13 +98,20 @@ def test_regle_preuve_et_source():
 
 # ---------- Vérificateur : nom et tactique officiels ----------
 
+def _cas_run(cle):
+    """Cas où la clé Run est observée : la règle R-T1547.001 se déclenche (D10)."""
+    return Case(sample=SAMPLE, dynamic=DynamicData(registry_keys_set=[cle], observations=[
+        Observation(kind="registry", value=cle, processes=["powershell.exe (1)"], attribution="sample_tree")]))
+
+
 def test_nom_et_tactique_toujours_officiels(kb):
     cle = r"HKCU\Software\Microsoft\Windows\CurrentVersion\Run\X"
     r = Report(sample=SAMPLE, attack=[AttackTechnique(
         id="T1547.001", name="PowerShell: Encoded Command Execution", tactic="execution",
         source="llm", confidence="medium", evidence=cle)])
-    r = verify(r, Case(sample=SAMPLE, dynamic=DynamicData(registry_keys_set=[cle])), kb)
-    assert r.attack[0].name == "Registry Run Keys / Startup Folder" and r.attack[0].tactic == "persistence"
+    r = verify(r, _cas_run(cle), kb)
+    s = r.suggestions[0]                                            # D10 : technique du LLM = suggestion
+    assert s.name == "Registry Run Keys / Startup Folder" and s.tactic == "persistence" and r.attack == []
     assert any("Nom ATT&CK corrigé" in u for u in r.uncertainties)
 
 
@@ -118,10 +125,9 @@ def test_nom_et_tactique_toujours_officiels(kb):
 ])
 def test_technique_llm_exige_une_valeur_du_dossier(kb, preuve, gardee):
     cle = r"HKCU\Software\Microsoft\Windows\CurrentVersion\Run\X"
-    case = Case(sample=SAMPLE, dynamic=DynamicData(registry_keys_set=[cle]))
     r = verify(Report(sample=SAMPLE, attack=[AttackTechnique(
-        id="T1547.001", source="llm", confidence="medium", evidence=preuve)]), case, kb)
-    assert ([t.id for t in r.attack] == ["T1547.001"]) is gardee
+        id="T1547.001", source="llm", confidence="medium", evidence=preuve)]), _cas_run(cle), kb)
+    assert ([t.id for t in r.suggestions] == ["T1547.001"]) is gardee and r.attack == []
     if not gardee:
         assert any("sans preuve vérifiable" in m for m in r.rejected_claims)
 

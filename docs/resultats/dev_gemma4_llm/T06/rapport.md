@@ -38,6 +38,10 @@ L'échantillon exécute PowerShell avec une commande encodée (`-EncodedCommand`
 | ID | Technique | Tactique | Source | Confiance | Preuve |
 | --- | --- | --- | --- | --- | --- |
 
+## Suggestions à valider par l'analyste
+
+- Aucune.
+
 ## Contre-mesures D3FEND
 
 - Aucune (aucune technique ATT&CK retenue, ou cache D3FEND absent : `malsight download-d3fend`).

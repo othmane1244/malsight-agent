@@ -62,7 +62,8 @@
     }
   ],
   "sensitive_apis": [],
-  "attack": [
+  "attack": [],
+  "suggestions": [
     {
       "id": "T1543.003",
       "name": "Windows Service",
@@ -72,35 +73,7 @@
       "evidence": "Création de la clé de registre HKLM\\System\\CurrentControlSet\\Services\\MalsightTest et définition de ses sous-clés (Type, Start, ImagePath, etc.) par services.exe."
     }
   ],
-  "countermeasures": [
-    {
-      "id": "D3-SCP",
-      "name": "System Configuration Permissions",
-      "technique": "T1543.003",
-      "tactic": "Harden",
-      "artifact": "System Configuration Database",
-      "url": "https://d3fend.mitre.org/technique/d3f:SystemConfigurationPermissions/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-RD",
-      "name": "Restore Database",
-      "technique": "T1543.003",
-      "tactic": "Restore",
-      "artifact": "Database",
-      "url": "https://d3fend.mitre.org/technique/d3f:RestoreDatabase/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-DI",
-      "name": "Data Inventory",
-      "technique": "T1543.003",
-      "tactic": "Model",
-      "artifact": "Database",
-      "url": "https://d3fend.mitre.org/technique/d3f:DataInventory/",
-      "source": "d3fend"
-    }
-  ],
+  "countermeasures": [],
   "recommendations": [
     "Surveiller la création de clés de registre sous HKLM\\System\\CurrentControlSet\\Services, en particulier celles qui définissent un `ImagePath` pointant vers des exécutables non standards ou des chemins inhabituels. (D3-SCP)",
     "Surveiller les appels API ou les événements de création de services Windows (ex: `CreateService`) qui modifient des clés de registre critiques comme HKLM\\System\\CurrentControlSet\\Services. (D3-SCP)",
@@ -112,5 +85,9 @@
     "L'attribution de l'écriture des clés de registre au processus `services.exe` (852) est notée comme 'service_window', ce qui suggère que l'activité pourrait être une activité de fond de Windows plutôt qu'une action directe de l'échantillon. Cependant, l'ensemble des modifications est cohérent avec une tentative de persistance.",
     "Aucune preuve d'exécution directe de l'échantillon est visible dans les appels d'API ou les processus enfants, rendant difficile de déterminer si l'échantillon a initié cette modification ou si elle est le résultat d'un contexte système."
   ],
-  "rejected_claims": []
+  "rejected_claims": [
+    "Contre-mesure D3-SCP pour une technique non retenue : T1543.003",
+    "Contre-mesure D3-RD pour une technique non retenue : T1543.003",
+    "Contre-mesure D3-DI pour une technique non retenue : T1543.003"
+  ]
 }

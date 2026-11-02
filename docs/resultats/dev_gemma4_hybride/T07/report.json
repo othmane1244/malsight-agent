@@ -47,6 +47,7 @@
       "evidence": "règle R-T1082-processus : \"C:\\Windows\\system32\\HOSTNAME.EXE\" (powershell.exe (3320))"
     }
   ],
+  "suggestions": [],
   "countermeasures": [
     {
       "id": "D3-PSA",

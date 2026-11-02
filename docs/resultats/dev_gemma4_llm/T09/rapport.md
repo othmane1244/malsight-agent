@@ -41,7 +41,16 @@ L'échantillon, exécuté via `powershell.exe`, a été observé en train de cr�
 
 | ID | Technique | Tactique | Source | Confiance | Preuve |
 | --- | --- | --- | --- | --- | --- |
-| [T1074](https://attack.mitre.org/techniques/T1074/) | Data Staged | collection | llm | medium | Aucune preuve directe de la technique T1074 (Data Staging) n'est fournie, mais la création et la compression de multiples fichiers dans un répertoire unique (`C:\travail\collecte`) suggèrent une préparation de données. |
+
+## Suggestions à valider par l'analyste
+
+Techniques proposées par le modèle de langage, **non retenues dans la liste officielle** (D10 :
+les outils classent, le LLM explique). Chacune cite une preuve retrouvée dans le dossier de cas,
+mais sa pertinence reste à valider.
+
+| ID | Technique | Tactique | Confiance | Preuve |
+| --- | --- | --- | --- | --- |
+| [T1074](https://attack.mitre.org/techniques/T1074/) | Data Staged | collection | medium | Aucune preuve directe de la technique T1074 (Data Staging) n'est fournie, mais la création et la compression de multiples fichiers dans un répertoire unique (`C:\travail\collecte`) suggèrent une préparation de données. |
 
 ## Contre-mesures D3FEND
 

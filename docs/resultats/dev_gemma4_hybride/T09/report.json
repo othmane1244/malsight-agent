@@ -77,6 +77,7 @@
       "evidence": "règle R-T1560-archive : C:\\travail\\collecte.zip (powershell.exe (7900))"
     }
   ],
+  "suggestions": [],
   "countermeasures": [
     {
       "id": "D3-FE",

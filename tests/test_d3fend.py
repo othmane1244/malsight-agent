@@ -77,7 +77,7 @@ def test_techniques_des_verites_avec_parentes():
 
 def _rapport(case, attack_ids, cms, recs=()):
     r = Report(sample=case.sample)
-    r.attack = [AttackTechnique(id=t, source="llm", confidence="medium", evidence="RegSetValueExW") for t in attack_ids]
+    r.attack = [AttackTechnique(id=t, source="rule", confidence="high", evidence="RegSetValueExW") for t in attack_ids]
     r.countermeasures = cms
     r.recommendations = list(recs)
     return r

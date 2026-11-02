@@ -112,7 +112,10 @@ class Report(BaseModel):
     behaviors: list[Behavior] = Field(default_factory=list)
     iocs: list[IOC] = Field(default_factory=list)
     sensitive_apis: list[SensitiveApi] = Field(default_factory=list)
+    # D10 « les outils classent, le LLM explique » : liste officielle = outils seulement (règles D7, capa)
     attack: list[AttackTechnique] = Field(default_factory=list)
+    # Techniques proposées par le LLM, filtrées par le vérificateur, à valider par l'analyste (D10)
+    suggestions: list[AttackTechnique] = Field(default_factory=list)
     countermeasures: list[Countermeasure] = Field(default_factory=list)   # D3FEND, depuis le cache local
     recommendations: list[str] = Field(default_factory=list)
     uncertainties: list[str] = Field(default_factory=list)

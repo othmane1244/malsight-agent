@@ -38,6 +38,10 @@ Rapport généré sans LLM : faits extraits uniquement.
 | --- | --- | --- | --- | --- | --- |
 | [T1037.001](https://attack.mitre.org/techniques/T1037/001/) | Logon Script (Windows) | persistence, privilege-escalation | rule | high | règle R-T1037.001-registre : HKCU\Environment\UserInitMprLogonScript (powershell.exe (8064)) |
 
+## Suggestions à valider par l'analyste
+
+- Aucune.
+
 ## Contre-mesures D3FEND
 
 Contre-mesures défensives [MITRE D3FEND](https://d3fend.mitre.org) associées aux techniques

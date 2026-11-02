@@ -63,6 +63,7 @@
   ],
   "sensitive_apis": [],
   "attack": [],
+  "suggestions": [],
   "countermeasures": [],
   "recommendations": [
     "Surveiller l'exécution de commandes système de découverte d'informations comme `ipconfig.exe` et `route print` (T1082) en analysant les appels système (D3-SCA) pour détecter des séquences inhabituelles ou des processus non autorisés.",

@@ -28,6 +28,7 @@ COLONNES = [
     ("attack_trouvees", "ATT&CK trouvées"), ("attack_vraies", "Vraies (strict)"),
     ("attack_vraies_tol", "Vraies (tolérant)"), ("attack_en_trop", "FP strict"),
     ("attack_en_trop_tol", "FP tolérant"), ("attack_ratees", "Ratées (strict)"), ("iocs", "IOC trouvés / attendus"),
+    ("suggestions", "Suggestions LLM (vraies / total)"),
     ("comportements", "Comportements observés / inférés"), ("rejets", "Rejets"),
     ("temps_s", "Temps (s)"), ("json_valide", "JSON valide"),
 ]
@@ -64,9 +65,14 @@ def evaluer(report: Report, verite: dict) -> dict:
     trouvees = [t.id for t in report.attack]
     iocs_ok = sum(any(i.type == a["type"] and correspond(a["type"], a["value"], i.value) for i in report.iocs)
                   for a in verite["iocs"])
+    suggestions = [t.id for t in report.suggestions]
     return {
         "attack_attendues": sorted(attendues), "attack_trouvees": trouvees,
         **noter_attack(trouvees, attendues),
+        # D10 : suggestions du LLM, hors notation officielle (combien, combien de vraies)
+        "suggestions": suggestions,
+        "suggestions_vraies": sorted(set(suggestions) & attendues),
+        "suggestions_vraies_tol": sorted(a for a in attendues if a in suggestions or _parent(a) in suggestions),
         "iocs_trouves": iocs_ok, "iocs_attendus": len(verite["iocs"]),
         "comportements_observes": sum(b.kind == "observed" for b in report.behaviors),
         "comportements_inferes": sum(b.kind == "inferred" for b in report.behaviors),
@@ -128,6 +134,8 @@ def _cellules(l: dict) -> dict[str, str]:
         "attack_ratees": ids(l.get("attack_ratees")) if ok else ids(l.get("attack_attendues")),
         "iocs": f"{l['iocs_trouves']}/{l['iocs_attendus']}" if ok else "—",
         "comportements": f"{l['comportements_observes']} / {l['comportements_inferes']}" if ok else "—",
+        "suggestions": (f"{len(l.get('suggestions_vraies', []))} / {len(l.get('suggestions', []))}"
+                        + (f" ({ids(l.get('suggestions'))})" if l.get("suggestions") else "")) if ok else "—",
         "rejets": str(len(l.get("rejets", []))) if ok else "—",
         "temps_s": str(l.get("temps_s", "")), "json_valide": "oui" if ok else "non",
     }
@@ -156,6 +164,7 @@ def ecrire_tableaux(bilan: dict, sortie: Path) -> None:
         "iocs": f"{sum(l.get('iocs_trouves', 0) for l in valides)}/{sum(l.get('iocs_attendus', 0) for l in valides)}",
         "comportements": f"{sum(l.get('comportements_observes', 0) for l in valides)} / "
                          f"{sum(l.get('comportements_inferes', 0) for l in valides)}",
+        "suggestions": f"{s['suggestions']['vraies']} / {s['suggestions']['total']}",
         "rejets": str(sum(len(l.get('rejets', [])) for l in valides)),
         "temps_s": str(round(sum(l.get("temps_s", 0) for l in bilan.values()), 1)),
         "json_valide": f"{len(valides)}/{len(bilan)}",
@@ -187,6 +196,12 @@ def scores(bilan: dict) -> dict:
         out[cle] = {"vraies": vraies, "fp": fp,
                     "precision": vraies / (vraies + fp) if vraies + fp else None,
                     "rappel": vraies / attendues if attendues else None}
+    # D10 : suggestions du LLM (hors notation officielle)
+    total = sum(len(l.get("suggestions", [])) for l in valides)
+    vraies = sum(len(l.get("suggestions_vraies", [])) for l in valides)
+    out["suggestions"] = {"total": total, "vraies": vraies,
+                          "vraies_tol": sum(len(l.get("suggestions_vraies_tol", [])) for l in valides),
+                          "precision": vraies / total if total else None}
     return out
 
 
@@ -195,7 +210,7 @@ def tableau_modes(series: dict[str, Path]) -> list[str]:
     précision, rappel, faux positifs, IOC, témoin négatif, JSON valides, temps moyen par échantillon."""
     tete = ["Mode", "Strict : vraies", "Strict : FP", "Strict : précision", "Strict : rappel",
             "Tolérant : vraies", "Tolérant : FP", "Tolérant : précision", "Tolérant : rappel",
-            "IOC", "Témoin négatif sans FP", "JSON valides", "Temps moyen (s)"]
+            "Suggestions LLM : vraies / total", "IOC", "Témoin négatif sans FP", "JSON valides", "Temps moyen (s)"]
     lignes = ["| " + " | ".join(tete) + " |", "|" + " --- |" * len(tete)]
     for mode, dossier in series.items():
         bilan = json.loads((Path(dossier) / "bilan.json").read_text(encoding="utf-8"))
@@ -210,6 +225,7 @@ def tableau_modes(series: dict[str, Path]) -> list[str]:
             _pct(s["strict"]["precision"]), _pct(s["strict"]["rappel"]),
             f"{s['tolerant']['vraies']}/{s['attendues']}", str(s["tolerant"]["fp"]),
             _pct(s["tolerant"]["precision"]), _pct(s["tolerant"]["rappel"]),
+            f"{s['suggestions']['vraies']} / {s['suggestions']['total']}",
             f"{sum(l.get('iocs_trouves', 0) for l in valides)}/{sum(l.get('iocs_attendus', 0) for l in valides)}",
             "—" if temoin is None else ("oui" if temoin else "**non**"),
             f"{len(valides)}/{len(bilan)}",

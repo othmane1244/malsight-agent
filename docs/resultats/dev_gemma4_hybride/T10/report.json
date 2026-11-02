@@ -127,7 +127,8 @@
     }
   ],
   "sensitive_apis": [],
-  "attack": [
+  "attack": [],
+  "suggestions": [
     {
       "id": "T1566.001",
       "name": "Spearphishing Attachment",

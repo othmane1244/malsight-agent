@@ -113,6 +113,7 @@
   ],
   "sensitive_apis": [],
   "attack": [],
+  "suggestions": [],
   "countermeasures": [],
   "recommendations": [
     "Surveiller les modifications des clés de registre liées au planificateur de tâches, en particulier sous `HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\` pour détecter l'ajout ou la modification de tâches (D3-SJA).",

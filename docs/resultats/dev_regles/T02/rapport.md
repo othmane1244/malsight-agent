@@ -51,6 +51,10 @@ Rapport généré sans LLM : faits extraits uniquement.
 | --- | --- | --- | --- | --- | --- |
 | [T1053.005](https://attack.mitre.org/techniques/T1053/005/) | Scheduled Task | execution, persistence, privilege-escalation | rule | high | règle R-T1053.005-registre : HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree\MalsightTest (svchost.exe (1448)) |
 
+## Suggestions à valider par l'analyste
+
+- Aucune.
+
 ## Contre-mesures D3FEND
 
 Contre-mesures défensives [MITRE D3FEND](https://d3fend.mitre.org) associées aux techniques

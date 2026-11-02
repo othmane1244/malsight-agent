@@ -75,6 +75,7 @@
       "evidence": "règle R-T1547.001-registre : HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\MalsightTest12 (powershell.exe (7444))"
     }
   ],
+  "suggestions": [],
   "countermeasures": [
     {
       "id": "D3-PSA",

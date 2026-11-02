@@ -33,6 +33,7 @@
   ],
   "sensitive_apis": [],
   "attack": [],
+  "suggestions": [],
   "countermeasures": [],
   "recommendations": [
     "Surveiller la création de fichiers spécifiques comme 'C:\\travail\\journal_t11.txt' pour détecter toute activité d'écriture de données dans ce chemin.",

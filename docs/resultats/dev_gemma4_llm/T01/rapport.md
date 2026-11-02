@@ -40,27 +40,20 @@ L'échantillon, un script PowerShell nommé "T01_persistance_run.ps1", a été o
 
 | ID | Technique | Tactique | Source | Confiance | Preuve |
 | --- | --- | --- | --- | --- | --- |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | Registry Run Keys / Startup Folder | persistence, privilege-escalation | llm | medium | HKCU\Software\Microsoft\Windows\CurrentVersion\Run\MalsightTest |
+
+## Suggestions à valider par l'analyste
+
+Techniques proposées par le modèle de langage, **non retenues dans la liste officielle** (D10 :
+les outils classent, le LLM explique). Chacune cite une preuve retrouvée dans le dossier de cas,
+mais sa pertinence reste à valider.
+
+| ID | Technique | Tactique | Confiance | Preuve |
+| --- | --- | --- | --- | --- |
+| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | Registry Run Keys / Startup Folder | persistence, privilege-escalation | medium | HKCU\Software\Microsoft\Windows\CurrentVersion\Run\MalsightTest |
 
 ## Contre-mesures D3FEND
 
-Contre-mesures défensives [MITRE D3FEND](https://d3fend.mitre.org) associées aux techniques
-ATT&CK retenues (source : d3fend, cache local ; IDs vérifiés).
-
-| Technique ATT&CK | Contre-mesure D3FEND | Tactique | Artefact |
-| --- | --- | --- | --- |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-FE File Encryption](https://d3fend.mitre.org/technique/d3f:FileEncryption/) | Harden | File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-DA Dynamic Analysis](https://d3fend.mitre.org/technique/d3f:DynamicAnalysis/) | Detect | Executable File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-EFA Emulated File Analysis](https://d3fend.mitre.org/technique/d3f:EmulatedFileAnalysis/) | Detect | Executable File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-FA File Analysis](https://d3fend.mitre.org/technique/d3f:FileAnalysis/) | Detect | File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-FIM File Integrity Monitoring](https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/) | Detect | File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-SICA System Init Config Analysis](https://d3fend.mitre.org/technique/d3f:SystemInitConfigAnalysis/) | Detect | System Init Configuration |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-CF Content Filtering](https://d3fend.mitre.org/technique/d3f:ContentFiltering/) | Isolate | File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-CM Content Modification](https://d3fend.mitre.org/technique/d3f:ContentModification/) | Isolate | File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-CQ Content Quarantine](https://d3fend.mitre.org/technique/d3f:ContentQuarantine/) | Isolate | File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-EAL Executable Allowlisting](https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/) | Isolate | Executable File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-EDL Executable Denylisting](https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/) | Isolate | Executable File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-LFP Local File Permissions](https://d3fend.mitre.org/technique/d3f:LocalFilePermissions/) | Isolate | File |
+- Aucune (aucune technique ATT&CK retenue, ou cache D3FEND absent : `malsight download-d3fend`).
 
 ## Recommandations
 
@@ -73,3 +66,18 @@ ATT&CK retenues (source : d3fend, cache local ; IDs vérifiés).
 ## Incertitudes
 
 - Aucune signalée.
+
+## Affirmations rejetées par le vérificateur
+
+- Contre-mesure D3-FE pour une technique non retenue : T1547.001
+- Contre-mesure D3-DA pour une technique non retenue : T1547.001
+- Contre-mesure D3-EFA pour une technique non retenue : T1547.001
+- Contre-mesure D3-FA pour une technique non retenue : T1547.001
+- Contre-mesure D3-FIM pour une technique non retenue : T1547.001
+- Contre-mesure D3-SICA pour une technique non retenue : T1547.001
+- Contre-mesure D3-CF pour une technique non retenue : T1547.001
+- Contre-mesure D3-CM pour une technique non retenue : T1547.001
+- Contre-mesure D3-CQ pour une technique non retenue : T1547.001
+- Contre-mesure D3-EAL pour une technique non retenue : T1547.001
+- Contre-mesure D3-EDL pour une technique non retenue : T1547.001
+- Contre-mesure D3-LFP pour une technique non retenue : T1547.001

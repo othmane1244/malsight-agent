@@ -42,6 +42,10 @@ L'échantillon, un script PowerShell nommé "T01_persistance_run.ps1", a été e
 | --- | --- | --- | --- | --- | --- |
 | [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | Registry Run Keys / Startup Folder | persistence, privilege-escalation | rule | high | règle R-T1547.001-registre : HKCU\Software\Microsoft\Windows\CurrentVersion\Run\MalsightTest (powershell.exe (7552)) |
 
+## Suggestions à valider par l'analyste
+
+- Aucune.
+
 ## Contre-mesures D3FEND
 
 Contre-mesures défensives [MITRE D3FEND](https://d3fend.mitre.org) associées aux techniques

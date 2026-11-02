@@ -38,6 +38,7 @@
   ],
   "sensitive_apis": [],
   "attack": [],
+  "suggestions": [],
   "countermeasures": [],
   "recommendations": [
     "Surveiller l'utilisation de PowerShell avec l'argument `-EncodedCommand` via Sysmon (Event ID 1) pour détecter l'exécution de commandes encodées. (D3-PS) (D3-LFP)",

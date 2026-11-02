@@ -37,6 +37,10 @@ Rapport généré sans LLM : faits extraits uniquement.
 | --- | --- | --- | --- | --- | --- |
 | [T1082](https://attack.mitre.org/techniques/T1082/) | System Information Discovery | discovery | rule | high | règle R-T1082-processus : "C:\Windows\system32\HOSTNAME.EXE" (powershell.exe (3320)) |
 
+## Suggestions à valider par l'analyste
+
+- Aucune.
+
 ## Contre-mesures D3FEND
 
 Contre-mesures défensives [MITRE D3FEND](https://d3fend.mitre.org) associées aux techniques

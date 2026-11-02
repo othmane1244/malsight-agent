@@ -117,6 +117,7 @@
       "evidence": "règle R-T1053.005-registre : HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest (svchost.exe (1448))"
     }
   ],
+  "suggestions": [],
   "countermeasures": [
     {
       "id": "D3-PLA",

@@ -134,9 +134,10 @@ def analyze(case: Case, use_llm: bool = True, kb=None, defend=None, llm=None, re
         draft = llm_draft(case, tools, report, kb, llm=llm)
         report.executive_summary = draft.executive_summary
         report.behaviors = draft.behaviors
-        report.attack += [t.model_copy(update={"source": "llm",
-                                               "confidence": "low" if t.confidence == "low" else "medium"})
-                          for t in draft.attack]
+        # D10 : les techniques du LLM sont des suggestions à valider, jamais la liste officielle
+        report.suggestions = [t.model_copy(update={"source": "llm",
+                                                   "confidence": "low" if t.confidence == "low" else "medium"})
+                              for t in draft.attack]
         report.uncertainties = draft.uncertainties
     else:
         report.executive_summary = "Rapport généré sans LLM : faits extraits uniquement."

@@ -70,16 +70,9 @@
       "source": "rule",
       "confidence": "high",
       "evidence": "règle R-T1016-processus : \"C:\\Windows\\system32\\ipconfig.exe\" /all (powershell.exe (7472))"
-    },
-    {
-      "id": "T1547.001",
-      "name": "Registry Run Keys / Startup Folder",
-      "tactic": "persistence, privilege-escalation",
-      "source": "llm",
-      "confidence": "medium",
-      "evidence": "L'écriture de données dans un fichier local : C:\\travail\\malsight_t08.txt."
     }
   ],
+  "suggestions": [],
   "countermeasures": [
     {
       "id": "D3-FE",
@@ -188,114 +181,6 @@
       "artifact": "Executable File",
       "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
       "source": "d3fend"
-    },
-    {
-      "id": "D3-FE",
-      "name": "File Encryption",
-      "technique": "T1547.001",
-      "tactic": "Harden",
-      "artifact": "File",
-      "url": "https://d3fend.mitre.org/technique/d3f:FileEncryption/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-DA",
-      "name": "Dynamic Analysis",
-      "technique": "T1547.001",
-      "tactic": "Detect",
-      "artifact": "Executable File",
-      "url": "https://d3fend.mitre.org/technique/d3f:DynamicAnalysis/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-EFA",
-      "name": "Emulated File Analysis",
-      "technique": "T1547.001",
-      "tactic": "Detect",
-      "artifact": "Executable File",
-      "url": "https://d3fend.mitre.org/technique/d3f:EmulatedFileAnalysis/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-FA",
-      "name": "File Analysis",
-      "technique": "T1547.001",
-      "tactic": "Detect",
-      "artifact": "File",
-      "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-FIM",
-      "name": "File Integrity Monitoring",
-      "technique": "T1547.001",
-      "tactic": "Detect",
-      "artifact": "File",
-      "url": "https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-SICA",
-      "name": "System Init Config Analysis",
-      "technique": "T1547.001",
-      "tactic": "Detect",
-      "artifact": "System Init Configuration",
-      "url": "https://d3fend.mitre.org/technique/d3f:SystemInitConfigAnalysis/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-CF",
-      "name": "Content Filtering",
-      "technique": "T1547.001",
-      "tactic": "Isolate",
-      "artifact": "File",
-      "url": "https://d3fend.mitre.org/technique/d3f:ContentFiltering/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-CM",
-      "name": "Content Modification",
-      "technique": "T1547.001",
-      "tactic": "Isolate",
-      "artifact": "File",
-      "url": "https://d3fend.mitre.org/technique/d3f:ContentModification/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-CQ",
-      "name": "Content Quarantine",
-      "technique": "T1547.001",
-      "tactic": "Isolate",
-      "artifact": "File",
-      "url": "https://d3fend.mitre.org/technique/d3f:ContentQuarantine/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-EAL",
-      "name": "Executable Allowlisting",
-      "technique": "T1547.001",
-      "tactic": "Isolate",
-      "artifact": "Executable File",
-      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-EDL",
-      "name": "Executable Denylisting",
-      "technique": "T1547.001",
-      "tactic": "Isolate",
-      "artifact": "Executable File",
-      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-LFP",
-      "name": "Local File Permissions",
-      "technique": "T1547.001",
-      "tactic": "Isolate",
-      "artifact": "File",
-      "url": "https://d3fend.mitre.org/technique/d3f:LocalFilePermissions/",
-      "source": "d3fend"
     }
   ],
   "recommendations": [
@@ -307,5 +192,19 @@
     "Surveiller les processus qui exécutent des outils de ligne de commande système (`ipconfig.exe`) en les liant à des processus parents inhabituels (ex: `powershell.exe`) pour détecter des chaînes d'attaque de type 'Living off the Land'. (D3-PSA)"
   ],
   "uncertainties": [],
-  "rejected_claims": []
+  "rejected_claims": [
+    "Suggestion couverte par une règle D7 qui ne s'est pas déclenchée, rejetée : T1547.001",
+    "Contre-mesure D3-FE pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-DA pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-EFA pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-FA pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-FIM pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-SICA pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-CF pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-CM pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-CQ pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-EAL pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-EDL pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-LFP pour une technique non retenue : T1547.001"
+  ]
 }

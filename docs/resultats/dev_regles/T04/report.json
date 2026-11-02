@@ -41,6 +41,7 @@
       "evidence": "règle R-T1037.001-registre : HKCU\\Environment\\UserInitMprLogonScript (powershell.exe (8064))"
     }
   ],
+  "suggestions": [],
   "countermeasures": [
     {
       "id": "D3-FE",

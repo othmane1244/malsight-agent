@@ -57,7 +57,8 @@
     }
   ],
   "sensitive_apis": [],
-  "attack": [
+  "attack": [],
+  "suggestions": [
     {
       "id": "T1074",
       "name": "Data Staged",

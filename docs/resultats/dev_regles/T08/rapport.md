@@ -41,6 +41,10 @@ Rapport généré sans LLM : faits extraits uniquement.
 | --- | --- | --- | --- | --- | --- |
 | [T1016](https://attack.mitre.org/techniques/T1016/) | System Network Configuration Discovery | discovery | rule | high | règle R-T1016-processus : "C:\Windows\system32\ipconfig.exe" /all (powershell.exe (7472)) |
 
+## Suggestions à valider par l'analyste
+
+- Aucune.
+
 ## Contre-mesures D3FEND
 
 Contre-mesures défensives [MITRE D3FEND](https://d3fend.mitre.org) associées aux techniques

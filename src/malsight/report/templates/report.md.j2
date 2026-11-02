@@ -45,6 +45,22 @@
 | [{{ t.id }}](https://attack.mitre.org/techniques/{{ t.id | replace(".", "/") }}/) | {{ t.name }} | {{ t.tactic }} | {{ t.source }} | {{ t.confidence }} | {{ t.evidence }} |
 {% endfor %}
 
+## Suggestions à valider par l'analyste
+
+{% if r.suggestions %}
+Techniques proposées par le modèle de langage, **non retenues dans la liste officielle** (D10 :
+les outils classent, le LLM explique). Chacune cite une preuve retrouvée dans le dossier de cas,
+mais sa pertinence reste à valider.
+
+| ID | Technique | Tactique | Confiance | Preuve |
+| --- | --- | --- | --- | --- |
+{% for t in r.suggestions %}
+| [{{ t.id }}](https://attack.mitre.org/techniques/{{ t.id | replace(".", "/") }}/) | {{ t.name }} | {{ t.tactic }} | {{ t.confidence }} | {{ t.evidence }} |
+{% endfor %}
+{% else %}
+- Aucune.
+{% endif %}
+
 ## Contre-mesures D3FEND
 
 {% if r.countermeasures %}

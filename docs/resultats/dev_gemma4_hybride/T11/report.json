@@ -33,6 +33,7 @@
   ],
   "sensitive_apis": [],
   "attack": [],
+  "suggestions": [],
   "countermeasures": [],
   "recommendations": [
     "Surveiller la création ou la modification de fichiers spécifiques comme 'C:\\travail\\journal_t11.txt' pour détecter toute activité suspecte (Détection : Sysmon Event ID 11).",

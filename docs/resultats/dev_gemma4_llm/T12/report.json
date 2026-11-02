@@ -57,7 +57,8 @@
     }
   ],
   "sensitive_apis": [],
-  "attack": [
+  "attack": [],
+  "suggestions": [
     {
       "id": "T1082",
       "name": "System Information Discovery",
@@ -75,179 +76,7 @@
       "evidence": "Écriture de la clé de registre \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\MalsightTest12\""
     }
   ],
-  "countermeasures": [
-    {
-      "id": "D3-PSA",
-      "name": "Process Spawn Analysis",
-      "technique": "T1082",
-      "tactic": "Detect",
-      "artifact": "Create Process",
-      "url": "https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-SCA",
-      "name": "System Call Analysis",
-      "technique": "T1082",
-      "tactic": "Detect",
-      "artifact": "System Call",
-      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallAnalysis/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-EAL",
-      "name": "Executable Allowlisting",
-      "technique": "T1082",
-      "tactic": "Isolate",
-      "artifact": "Create Process",
-      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-EDL",
-      "name": "Executable Denylisting",
-      "technique": "T1082",
-      "tactic": "Isolate",
-      "artifact": "Create Process",
-      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-HBPI",
-      "name": "Hardware-based Process Isolation",
-      "technique": "T1082",
-      "tactic": "Isolate",
-      "artifact": "Create Process",
-      "url": "https://d3fend.mitre.org/technique/d3f:Hardware-basedProcessIsolation/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-SCF",
-      "name": "System Call Filtering",
-      "technique": "T1082",
-      "tactic": "Isolate",
-      "artifact": "System Call",
-      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallFiltering/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-DE",
-      "name": "Decoy Environment",
-      "technique": "T1082",
-      "tactic": "Deceive",
-      "artifact": "Decoy Artifact",
-      "url": "https://d3fend.mitre.org/technique/d3f:DecoyEnvironment/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-FE",
-      "name": "File Encryption",
-      "technique": "T1547.001",
-      "tactic": "Harden",
-      "artifact": "File",
-      "url": "https://d3fend.mitre.org/technique/d3f:FileEncryption/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-DA",
-      "name": "Dynamic Analysis",
-      "technique": "T1547.001",
-      "tactic": "Detect",
-      "artifact": "Executable File",
-      "url": "https://d3fend.mitre.org/technique/d3f:DynamicAnalysis/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-EFA",
-      "name": "Emulated File Analysis",
-      "technique": "T1547.001",
-      "tactic": "Detect",
-      "artifact": "Executable File",
-      "url": "https://d3fend.mitre.org/technique/d3f:EmulatedFileAnalysis/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-FA",
-      "name": "File Analysis",
-      "technique": "T1547.001",
-      "tactic": "Detect",
-      "artifact": "File",
-      "url": "https://d3fend.mitre.org/technique/d3f:FileAnalysis/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-FIM",
-      "name": "File Integrity Monitoring",
-      "technique": "T1547.001",
-      "tactic": "Detect",
-      "artifact": "File",
-      "url": "https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-SICA",
-      "name": "System Init Config Analysis",
-      "technique": "T1547.001",
-      "tactic": "Detect",
-      "artifact": "System Init Configuration",
-      "url": "https://d3fend.mitre.org/technique/d3f:SystemInitConfigAnalysis/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-CF",
-      "name": "Content Filtering",
-      "technique": "T1547.001",
-      "tactic": "Isolate",
-      "artifact": "File",
-      "url": "https://d3fend.mitre.org/technique/d3f:ContentFiltering/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-CM",
-      "name": "Content Modification",
-      "technique": "T1547.001",
-      "tactic": "Isolate",
-      "artifact": "File",
-      "url": "https://d3fend.mitre.org/technique/d3f:ContentModification/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-CQ",
-      "name": "Content Quarantine",
-      "technique": "T1547.001",
-      "tactic": "Isolate",
-      "artifact": "File",
-      "url": "https://d3fend.mitre.org/technique/d3f:ContentQuarantine/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-EAL",
-      "name": "Executable Allowlisting",
-      "technique": "T1547.001",
-      "tactic": "Isolate",
-      "artifact": "Executable File",
-      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-EDL",
-      "name": "Executable Denylisting",
-      "technique": "T1547.001",
-      "tactic": "Isolate",
-      "artifact": "Executable File",
-      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
-      "source": "d3fend"
-    },
-    {
-      "id": "D3-LFP",
-      "name": "Local File Permissions",
-      "technique": "T1547.001",
-      "tactic": "Isolate",
-      "artifact": "File",
-      "url": "https://d3fend.mitre.org/technique/d3f:LocalFilePermissions/",
-      "source": "d3fend"
-    }
-  ],
+  "countermeasures": [],
   "recommendations": [
     "Surveiller les tentatives d'accès ou de modification des clés de registre de démarrage utilisateur, telles que \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\", pour détecter des écritures suspectes (D3-SCA).",
     "Mettre en place une surveillance des appels système pour détecter toute tentative d'exécution de processus ou de modification de configuration système non autorisée (D3-PSA).",
@@ -256,5 +85,25 @@
     "Surveiller la création de fichiers dans des chemins spécifiques ou l'écriture de données dans des fichiers de configuration pour détecter des exfiltrations potentielles (D3-FIM)."
   ],
   "uncertainties": [],
-  "rejected_claims": []
+  "rejected_claims": [
+    "Contre-mesure D3-PSA pour une technique non retenue : T1082",
+    "Contre-mesure D3-SCA pour une technique non retenue : T1082",
+    "Contre-mesure D3-EAL pour une technique non retenue : T1082",
+    "Contre-mesure D3-EDL pour une technique non retenue : T1082",
+    "Contre-mesure D3-HBPI pour une technique non retenue : T1082",
+    "Contre-mesure D3-SCF pour une technique non retenue : T1082",
+    "Contre-mesure D3-DE pour une technique non retenue : T1082",
+    "Contre-mesure D3-FE pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-DA pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-EFA pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-FA pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-FIM pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-SICA pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-CF pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-CM pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-CQ pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-EAL pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-EDL pour une technique non retenue : T1547.001",
+    "Contre-mesure D3-LFP pour une technique non retenue : T1547.001"
+  ]
 }

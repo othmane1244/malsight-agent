@@ -7,6 +7,38 @@ est dans les [issues](https://github.com/othmane1244/malsight-agent/issues) et l
 
 ---
 
+## 2026-11-03 (fin de soirée) : D10 « les outils classent, le LLM explique », modèle final
+
+### Décisions
+- **Modèle final : gemma4:e4b** (D5). qwen3:8b abandonné (téléchargement échoué), présenté comme
+  perspective ; worktree de la base `43ef7d7` supprimé.
+- **D10** : la liste officielle `attack` ne contient que les techniques des outils (règles D7,
+  capa) ; les techniques du LLM vont dans `suggestions` (« Suggestions à valider par
+  l'analyste »), filtrées par le vérificateur, et une suggestion couverte par une règle D7 n'est
+  gardée que si la règle s'est déclenchée. La notation D9 porte sur la liste officielle ; les
+  suggestions ont leur propre colonne.
+
+### Tableau final des 3 modes (jeu de développement, gemma4:e4b, contexte 8192)
+
+| Mode | Officielle strict : vraies / FP | Précision | Rappel | Tolérant : vraies / FP | Suggestions : vraies / total | IOC | T11 sans FP | JSON | Temps moyen (s) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `regles` | 10/12 · 0 | 100 % | 83 % | 10/12 · 0 | 0 / 0 | 17/17 | oui | 12/12 | 0.0 |
+| `llm` | 0/12 · 0 | — | 0 % | 0/12 · 0 | 4 / 5 | 17/17 | oui | 12/12 | 156.6 |
+| `hybride` | **10/12 · 0** | **100 %** | 83 % | **10/12 · 0** | 0 / 1 | 17/17 | oui | 12/12 | 124.8 |
+
+- Recalculé avec `malsight bilan --reverifier` (mêmes brouillons du LLM). Détail et évolution :
+  `docs/resultats/comparaison_modes_dev.md`.
+- Hybride : les 3 faux positifs d'avant D10 (preuve réelle mais hors sujet) disparaissent de la
+  liste officielle ; la seule suggestion restante (T10 : T1566.001, sans règle) est fausse et
+  signalée « à valider ».
+- Test anti-injection recalculé avec les deux listes : classements inchangés (aucun échec).
+
+### Suite
+Préparation du jeu de validation T13 à T16 (#23) en `-SansLancer` ; exécution réelle après
+accord explicite de l'utilisateur (D3).
+
+---
+
 ## 2026-11-03 (nuit) : preuve vérifiable des techniques LLM (D8) et tableau final des 3 modes
 
 ### Correction du vérificateur

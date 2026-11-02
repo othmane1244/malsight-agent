@@ -42,18 +42,20 @@ L'échantillon analysé, nommé T03_service.ps1, n'a pas d'appels d'API sensible
 
 | ID | Technique | Tactique | Source | Confiance | Preuve |
 | --- | --- | --- | --- | --- | --- |
-| [T1543.003](https://attack.mitre.org/techniques/T1543/003/) | Windows Service | persistence, privilege-escalation | llm | medium | Création de la clé de registre HKLM\System\CurrentControlSet\Services\MalsightTest et définition de ses sous-clés (Type, Start, ImagePath, etc.) par services.exe. |
+
+## Suggestions à valider par l'analyste
+
+Techniques proposées par le modèle de langage, **non retenues dans la liste officielle** (D10 :
+les outils classent, le LLM explique). Chacune cite une preuve retrouvée dans le dossier de cas,
+mais sa pertinence reste à valider.
+
+| ID | Technique | Tactique | Confiance | Preuve |
+| --- | --- | --- | --- | --- |
+| [T1543.003](https://attack.mitre.org/techniques/T1543/003/) | Windows Service | persistence, privilege-escalation | medium | Création de la clé de registre HKLM\System\CurrentControlSet\Services\MalsightTest et définition de ses sous-clés (Type, Start, ImagePath, etc.) par services.exe. |
 
 ## Contre-mesures D3FEND
 
-Contre-mesures défensives [MITRE D3FEND](https://d3fend.mitre.org) associées aux techniques
-ATT&CK retenues (source : d3fend, cache local ; IDs vérifiés).
-
-| Technique ATT&CK | Contre-mesure D3FEND | Tactique | Artefact |
-| --- | --- | --- | --- |
-| [T1543.003](https://attack.mitre.org/techniques/T1543/003/) | [D3-SCP System Configuration Permissions](https://d3fend.mitre.org/technique/d3f:SystemConfigurationPermissions/) | Harden | System Configuration Database |
-| [T1543.003](https://attack.mitre.org/techniques/T1543/003/) | [D3-RD Restore Database](https://d3fend.mitre.org/technique/d3f:RestoreDatabase/) | Restore | Database |
-| [T1543.003](https://attack.mitre.org/techniques/T1543/003/) | [D3-DI Data Inventory](https://d3fend.mitre.org/technique/d3f:DataInventory/) | Model | Database |
+- Aucune (aucune technique ATT&CK retenue, ou cache D3FEND absent : `malsight download-d3fend`).
 
 ## Recommandations
 
@@ -67,3 +69,9 @@ ATT&CK retenues (source : d3fend, cache local ; IDs vérifiés).
 
 - L'attribution de l'écriture des clés de registre au processus `services.exe` (852) est notée comme 'service_window', ce qui suggère que l'activité pourrait être une activité de fond de Windows plutôt qu'une action directe de l'échantillon. Cependant, l'ensemble des modifications est cohérent avec une tentative de persistance.
 - Aucune preuve d'exécution directe de l'échantillon est visible dans les appels d'API ou les processus enfants, rendant difficile de déterminer si l'échantillon a initié cette modification ou si elle est le résultat d'un contexte système.
+
+## Affirmations rejetées par le vérificateur
+
+- Contre-mesure D3-SCP pour une technique non retenue : T1543.003
+- Contre-mesure D3-RD pour une technique non retenue : T1543.003
+- Contre-mesure D3-DI pour une technique non retenue : T1543.003

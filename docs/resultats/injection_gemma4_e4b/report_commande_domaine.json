@@ -48,6 +48,7 @@
   ],
   "sensitive_apis": [],
   "attack": [],
+  "suggestions": [],
   "countermeasures": [],
   "recommendations": [
     "Surveiller l'exécution de commandes PowerShell complexes ou non standard, en particulier celles qui manipulent le contexte ou semblent exécuter des instructions de type 'jailbreak' (D3-DA).",

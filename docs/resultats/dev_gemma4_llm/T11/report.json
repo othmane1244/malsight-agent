@@ -33,6 +33,7 @@
   ],
   "sensitive_apis": [],
   "attack": [],
+  "suggestions": [],
   "countermeasures": [],
   "recommendations": [
     "Surveiller la création de fichiers dans des répertoires spécifiques comme `C:\\travail\\` pour détecter des écritures de données non sollicitées. (Aucun identifiant D3FEND spécifique)",

@@ -43,6 +43,7 @@
   ],
   "sensitive_apis": [],
   "attack": [],
+  "suggestions": [],
   "countermeasures": [],
   "recommendations": [
     "Surveiller l'exécution de `systeminfo.exe` ou de commandes WMI suspectes (T1047) en analysant les arguments passés, car cela peut indiquer une collecte d'informations système.",

@@ -43,7 +43,10 @@ L'échantillon exécute une série de commandes système pour la découverte d'i
 | ID | Technique | Tactique | Source | Confiance | Preuve |
 | --- | --- | --- | --- | --- | --- |
 | [T1016](https://attack.mitre.org/techniques/T1016/) | System Network Configuration Discovery | discovery | rule | high | règle R-T1016-processus : "C:\Windows\system32\ipconfig.exe" /all (powershell.exe (7472)) |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | Registry Run Keys / Startup Folder | persistence, privilege-escalation | llm | medium | L'écriture de données dans un fichier local : C:\travail\malsight_t08.txt. |
+
+## Suggestions à valider par l'analyste
+
+- Aucune.
 
 ## Contre-mesures D3FEND
 
@@ -64,18 +67,6 @@ ATT&CK retenues (source : d3fend, cache local ; IDs vérifiés).
 | [T1016](https://attack.mitre.org/techniques/T1016/) | [D3-CQ Content Quarantine](https://d3fend.mitre.org/technique/d3f:ContentQuarantine/) | Isolate | File |
 | [T1016](https://attack.mitre.org/techniques/T1016/) | [D3-EAL Executable Allowlisting](https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/) | Isolate | Create Process |
 | [T1016](https://attack.mitre.org/techniques/T1016/) | [D3-EDL Executable Denylisting](https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/) | Isolate | Executable File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-FE File Encryption](https://d3fend.mitre.org/technique/d3f:FileEncryption/) | Harden | File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-DA Dynamic Analysis](https://d3fend.mitre.org/technique/d3f:DynamicAnalysis/) | Detect | Executable File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-EFA Emulated File Analysis](https://d3fend.mitre.org/technique/d3f:EmulatedFileAnalysis/) | Detect | Executable File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-FA File Analysis](https://d3fend.mitre.org/technique/d3f:FileAnalysis/) | Detect | File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-FIM File Integrity Monitoring](https://d3fend.mitre.org/technique/d3f:FileIntegrityMonitoring/) | Detect | File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-SICA System Init Config Analysis](https://d3fend.mitre.org/technique/d3f:SystemInitConfigAnalysis/) | Detect | System Init Configuration |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-CF Content Filtering](https://d3fend.mitre.org/technique/d3f:ContentFiltering/) | Isolate | File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-CM Content Modification](https://d3fend.mitre.org/technique/d3f:ContentModification/) | Isolate | File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-CQ Content Quarantine](https://d3fend.mitre.org/technique/d3f:ContentQuarantine/) | Isolate | File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-EAL Executable Allowlisting](https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/) | Isolate | Executable File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-EDL Executable Denylisting](https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/) | Isolate | Executable File |
-| [T1547.001](https://attack.mitre.org/techniques/T1547/001/) | [D3-LFP Local File Permissions](https://d3fend.mitre.org/technique/d3f:LocalFilePermissions/) | Isolate | File |
 
 ## Recommandations
 
@@ -89,3 +80,19 @@ ATT&CK retenues (source : d3fend, cache local ; IDs vérifiés).
 ## Incertitudes
 
 - Aucune signalée.
+
+## Affirmations rejetées par le vérificateur
+
+- Suggestion couverte par une règle D7 qui ne s'est pas déclenchée, rejetée : T1547.001
+- Contre-mesure D3-FE pour une technique non retenue : T1547.001
+- Contre-mesure D3-DA pour une technique non retenue : T1547.001
+- Contre-mesure D3-EFA pour une technique non retenue : T1547.001
+- Contre-mesure D3-FA pour une technique non retenue : T1547.001
+- Contre-mesure D3-FIM pour une technique non retenue : T1547.001
+- Contre-mesure D3-SICA pour une technique non retenue : T1547.001
+- Contre-mesure D3-CF pour une technique non retenue : T1547.001
+- Contre-mesure D3-CM pour une technique non retenue : T1547.001
+- Contre-mesure D3-CQ pour une technique non retenue : T1547.001
+- Contre-mesure D3-EAL pour une technique non retenue : T1547.001
+- Contre-mesure D3-EDL pour une technique non retenue : T1547.001
+- Contre-mesure D3-LFP pour une technique non retenue : T1547.001

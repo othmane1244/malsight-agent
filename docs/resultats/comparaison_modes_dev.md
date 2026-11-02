@@ -1,44 +1,42 @@
-# Comparaison des 3 modes : jeu de développement T01 à T12 (tableau final)
+# Comparaison des 3 modes : jeu de développement T01 à T12 (tableau final, D10)
 
-**Modèle : gemma4:e4b** (Ollama, contexte 8192) · notation D9 · vérificateur avec preuve
-vérifiable des techniques LLM (D8) · 12 techniques attendues (T11 = témoin négatif, aucune).
-Généré par `malsight modes regles=dev_regles llm=dev_gemma4_llm hybride=dev_gemma4_hybride`.
-Détails par échantillon : `dev_regles/`, `dev_gemma4_llm/`, `dev_gemma4_hybride/`.
+**Modèle : gemma4:e4b** (Ollama, contexte 8192) · notation D9 sur la **liste officielle**
+(outils : règles D7, capa) · suggestions du LLM comptées à part (D10) · 12 techniques attendues
+(T11 = témoin négatif, aucune). Généré par
+`malsight modes regles=dev_regles llm=dev_gemma4_llm hybride=dev_gemma4_hybride`.
 
-| Mode | Strict : vraies | Strict : FP | Strict : précision | Strict : rappel | Tolérant : vraies | Tolérant : FP | Tolérant : précision | Tolérant : rappel | IOC | Témoin négatif sans FP | JSON valides | Temps moyen (s) |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `regles` | 10/12 | 0 | 100% | 83% | 10/12 | 0 | 100% | 83% | 17/17 | oui | 12/12 | 0.0 |
-| `llm` | 4/12 | 4 | 50% | 33% | 4/12 | 4 | 50% | 33% | 17/17 | oui | 12/12 | 156.6 |
-| `hybride` | 10/12 | 3 | 77% | 83% | 10/12 | 3 | 77% | 83% | 17/17 | oui | 12/12 | 124.8 |
+| Mode | Strict : vraies | Strict : FP | Strict : précision | Strict : rappel | Tolérant : vraies | Tolérant : FP | Tolérant : précision | Tolérant : rappel | Suggestions LLM : vraies / total | IOC | Témoin négatif sans FP | JSON valides | Temps moyen (s) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `regles` | 10/12 | 0 | 100% | 83% | 10/12 | 0 | 100% | 83% | 0 / 0 | 17/17 | oui | 12/12 | 0.0 |
+| `llm` | 0/12 | 0 | — | 0% | 0/12 | 0 | — | 0% | 4 / 5 | 17/17 | oui | 12/12 | 156.6 |
+| `hybride` | **10/12** | **0** | **100%** | 83% | **10/12** | **0** | **100%** | 83% | 0 / 1 | 17/17 | oui | 12/12 | 124.8 |
+
+Suggestions gardées : `llm` : T01 T1547.001 ✓, T03 T1543.003 ✓, T09 T1074 ✗, T12 T1082 ✓ et
+T1547.001 ✓ ; `hybride` : T10 T1566.001 ✗ (aucune règle ne couvre T1566.001).
 
 ## Comment ces séries ont été obtenues
 
 - `regles` : sans LLM, déterministe.
-- `llm` : série du 3 novembre (contexte 8192), **revérifiée** avec le vérificateur actuel à partir
-  des rapports enregistrés (`malsight bilan --reverifier`) : le vérificateur ne fait que retirer,
-  les techniques sont celles qu'une nouvelle exécution donnerait pour le même brouillon du LLM.
-  Avant revérification : 4/12 strict avec 8 FP (5/12 et 7 FP en tolérant).
-- `hybride` : **relancée** entièrement avec le vérificateur actuel. Le LLM n'est pas déterministe :
-  d'une exécution à l'autre, les techniques qu'il propose varient (le FP de T08 est nouveau).
+- `llm` : série du 3 novembre (contexte 8192), revérifiée avec le vérificateur actuel (D8 + D10)
+  à partir des rapports enregistrés (`malsight bilan --reverifier`). Le vérificateur ne fait que
+  retirer ou déplacer : mêmes brouillons du LLM.
+- `hybride` : relancée le 3 novembre avec le vérificateur D8, puis revérifiée avec D10.
+- En mode `llm`, la liste officielle est vide par construction (aucun outil n'y classe) ; le
+  filtre des suggestions utilise quand même le déclenchement des règles (D10).
+
+## Évolution
+
+| Étape | `llm` strict (vraies / FP) | `hybride` strict (vraies / FP) |
+| --- | --- | --- |
+| Contexte 8192, règles D7 | 4/12 · 8 | 10/12 · 2 |
+| + preuve vérifiable des techniques LLM (D8) | 4/12 · 4 | 10/12 · 3 (relance, LLM non déterministe) |
+| + D10 (liste officielle = outils ; LLM en suggestions) | 0/12 · 0 (suggestions 4/5) | **10/12 · 0** (suggestions 0/1) |
 
 ## Lecture
 
-- **Les règles portent la justesse ATT&CK** : 10/12, aucun faux positif. T1112 (T05) et T1105
-  (T10) n'ont volontairement pas de règle (D7).
-- **La preuve vérifiable (D8) a divisé par deux les faux positifs du LLM seul** (8 -> 4), sans
-  perdre de vraie technique : les techniques à preuve « N/A » ou sans valeur sont rejetées.
-- **Le mode hybride n'apporte aucune vraie technique au-delà des règles** et garde **3 faux
-  positifs** dont la preuve cite une valeur réelle mais **sans rapport avec la technique** :
-  T05 T1547.001 (clé `HKCU\Software\MalsightTest`, pas une clé Run), T08 T1547.001 (un fichier
-  texte), T10 T1566.001 *Spearphishing Attachment* (un domaine). Le vérificateur contrôle que la
-  preuve existe, pas qu'elle soutient la technique.
-- **Témoin négatif T11** : aucun faux positif dans les 3 modes. **IOC** : 17/17 partout (les IOC
-  viennent des outils). **JSON** : 12/12 partout.
-- **Apport du LLM** : résumé, comportements regroupés, recommandations avec contre-mesures D3FEND.
-
-## Piste (non appliquée, à décider)
-
-Cohérence technique / règle : une technique proposée par le LLM et **couverte par une règle D7**
-n'est retenue que si la règle s'est déclenchée sur ce cas. Supprimerait les FP de T05 et T08
-(T1547.001) ; T1566.001 (T10), sans règle, resterait au LLM. À mesurer d'abord sur le jeu de
-développement (D4).
+- **Les outils classent** : 10/12 sans aucun faux positif. T1112 (T05) et T1105 (T10) n'ont
+  volontairement pas de règle (D7) et restent ratées.
+- **Le LLM explique** : résumé, comportements regroupés, recommandations D3FEND, et suggestions
+  à valider. Seules, ses suggestions sont justes 4 fois sur 5 ; en hybride, la seule restante
+  (T1566.001 sur un domaine) est fausse et clairement signalée comme suggestion.
+- Témoin négatif T11 : aucun faux positif. IOC : 17/17. JSON : 12/12.
