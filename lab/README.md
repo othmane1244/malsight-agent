@@ -69,6 +69,13 @@ reste ouverte et le journal est dans `C:\labo\resultats\auto-erreur_<date>.log`.
 
 Un échantillon à la fois ; vider `C:\labo\resultats` entre deux analyses (étape 7 ci-dessous).
 
+Pour comparer les résultats à la vérité terrain (tableau IOC attendu / trouvé / source ;
+code de sortie 1 si un IOC manque) :
+
+```powershell
+malsight comparer C:\labo\resultats     # ou un dossier archivé, ex. cases\T02
+```
+
 ## Procédure d'analyse manuelle (par échantillon)
 
 0. Sur l'hôte, depuis la racine du dépôt, vérifier les prérequis (code de sortie 0 attendu) :

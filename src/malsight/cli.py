@@ -1,4 +1,4 @@
-"""Interface en ligne de commande : malsight extract | analyze | download-attack."""
+"""Interface en ligne de commande : malsight extract | analyze | comparer | download-attack."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -43,6 +43,19 @@ def analyze(case_file: Path, out: Path = typer.Option(None, help="Rapport Markdo
     except ImportError:
         pass
     typer.echo(f"Rapport : {out}")
+
+
+@app.command()
+def comparer(resultats: Path = typer.Argument(..., help="Dossier de collecte (ou dossier qui en contient un, ex. cases/T02)"),
+             verite: Path = typer.Option(None, help="Vérité terrain (défaut : lab/verite-terrain/<Tnn>.json d'après le manifeste)"),
+             verites: Path = typer.Option(Path("lab/verite-terrain"), help="Dossier des vérités terrain")):
+    """Compare un dossier de résultats du labo à sa vérité terrain (IOC attendu / trouvé / source)."""
+    from malsight.evaluation.comparer import comparer as run, tableau, trouver_dossier, verite_pour
+    dossier = trouver_dossier(resultats)
+    vt, res = run(dossier, verite or verite_pour(dossier, verites))
+    typer.echo(tableau(vt, res))
+    if not all(r.trouve for r in res):
+        raise typer.Exit(1)
 
 
 @app.command("download-attack")
