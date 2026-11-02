@@ -50,8 +50,11 @@ def test_verifier_keeps_backslash_iocs(case, kb):
 
 
 def test_llm_ollama_contexte_et_limite_explicites(monkeypatch):
-    """Contexte, limite de génération et délai explicites (pas les valeurs par défaut d'Ollama)."""
-    import langchain_ollama
+    """Contexte, limite de génération et délai explicites (pas les valeurs par défaut d'Ollama).
+
+    Faux module `langchain_ollama` : le test ne dépend pas de son installation (absent de la CI)."""
+    import sys
+    import types
 
     from malsight.agent import pipeline
     recus = {}
@@ -60,7 +63,7 @@ def test_llm_ollama_contexte_et_limite_explicites(monkeypatch):
         def __init__(self, **kw):
             recus.update(kw)
 
-    monkeypatch.setattr(langchain_ollama, "ChatOllama", FauxChatOllama)
+    monkeypatch.setitem(sys.modules, "langchain_ollama", types.SimpleNamespace(ChatOllama=FauxChatOllama))
     monkeypatch.setenv("LLM_PROVIDER", "ollama")
     monkeypatch.delenv("LLM_NUM_CTX", raising=False)
     pipeline._llm()

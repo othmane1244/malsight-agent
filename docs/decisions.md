@@ -523,3 +523,4 @@ Après D10 (`malsight bilan --reverifier`, mêmes brouillons du LLM) :
 | Date | Bug | Correction |
 | --- | --- | --- |
 | 2026-11-03 | `malsight analyze` n'appliquait pas les règles D7 (seul `malsight serie` le faisait) : avec D10, la liste officielle du rapport de démo était vide | `analyze` en mode hybride par défaut, règles seules avec `--no-llm` ; test `test_analyze_applique_les_regles_d7` |
+| 2026-11-03 | CI rouge depuis d2e976c : `test_llm_ollama_contexte_et_limite_explicites` importait `langchain_ollama`, non installé en CI (défaut du test, pas du code) | le test fournit un faux module `langchain_ollama` ; CI de nouveau verte |
