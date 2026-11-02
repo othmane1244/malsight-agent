@@ -7,6 +7,35 @@ est dans les [issues](https://github.com/othmane1244/malsight-agent/issues) et l
 
 ---
 
+## 2026-11-03 (nuit) : jeu de validation T13 à T16 (#23, D4)
+
+### Collecte (mode automatique, accord pour T13, T14, T15, T16)
+Aucune analyse en erreur ; **5/5 IOC** retrouvés (T13 1/1, T14 2/2, T15 1/1, T16 1/1) ; archivé
+dans `cases/T13` à `cases/T16`. **Aucune correction de fait** de la vérité terrain (le chemin du
+profil PowerShell de T16 sous `WDAGUtilityAccount` était exact) : tableau D4 vide. Aucune règle,
+aucun filtre, parseur ni prompt modifié.
+
+### Tableau de validation (séparé du développement ; gemma4:e4b, contexte 8192, D9 + D10)
+
+| Mode | Officielle strict : vraies / FP | Précision | Rappel | Tolérant : vraies / FP | Suggestions : vraies / total | IOC | JSON | Temps moyen (s) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `regles` | 2/4 · 0 | 100 % | 50 % | 2/4 · 0 | 0 / 0 | 5/5 | 4/4 | 0.0 |
+| `llm` | 0/4 · 0 | — | 0 % | 0/4 · 0 | 1 / 2 (tolérant 2 / 2) | 5/5 | 4/4 | 127.2 |
+| `hybride` | **2/4 · 0** | **100 %** | 50 % | 2/4 · 0 | 0 / 1 | 5/5 | 4/4 | 134.6 |
+
+**Développement contre validation (mode hybride, liste officielle)** : précision 100 % dans les
+deux ; rappel **83 % → 50 %**.
+
+- Les règles **généralisent aux variantes** (T13 RunOnce, T14 tâche via COM) sans faux positif.
+- Les techniques **absentes du jeu de développement** (T15 T1033, T16 T1546.013) ne sont trouvées
+  ni par les règles (aucune règle, choix D4 / D7) ni par le LLM (suggestion T1087.002 fausse pour
+  T15, aucune pour T16).
+- C'est l'estimation honnête : le système est précis, mais ne couvre que ce que ses règles
+  couvrent ; le LLM n'a pas comblé les trous sur ces deux techniques.
+- Détail : `docs/resultats/validation/README.md`.
+
+---
+
 ## 2026-11-03 (fin de soirée) : D10 « les outils classent, le LLM explique », modèle final
 
 ### Décisions

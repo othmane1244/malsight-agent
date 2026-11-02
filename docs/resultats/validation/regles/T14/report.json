@@ -1,0 +1,253 @@
+{
+  "sample": {
+    "filename": "T14_tache_com.ps1",
+    "sha256": "e6da01058c5ac5a5fcbdb6a33ef6c4ba04aa2f95654ff16b591d4bb7f31ca044",
+    "md5": "350ff8888502b035739809902f90610b",
+    "size": 1721,
+    "file_type": "unknown"
+  },
+  "executive_summary": "Rapport généré sans LLM : faits extraits uniquement.",
+  "behaviors": [],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "e6da01058c5ac5a5fcbdb6a33ef6c4ba04aa2f95654ff16b591d4bb7f31ca044",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "350ff8888502b035739809902f90610b",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\Windows\\System32\\Tasks\\MalsightTest14",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\BatteryIdTable",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\CompositeBatteryData",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\LastLongTermEventTime",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\MaxBatteryIndex",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\SerializedStateData",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Plain\\{B2F663AA-D5A2-4529-B716-3585F6D73624}",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{B2F663AA-D5A2-4529-B716-3585F6D73624}",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{B2F663AA-D5A2-4529-B716-3585F6D73624}\\Actions",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{B2F663AA-D5A2-4529-B716-3585F6D73624}\\Description",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{B2F663AA-D5A2-4529-B716-3585F6D73624}\\DynamicInfo",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{B2F663AA-D5A2-4529-B716-3585F6D73624}\\Hash",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{B2F663AA-D5A2-4529-B716-3585F6D73624}\\Path",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{B2F663AA-D5A2-4529-B716-3585F6D73624}\\Schema",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{B2F663AA-D5A2-4529-B716-3585F6D73624}\\Triggers",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{B2F663AA-D5A2-4529-B716-3585F6D73624}\\URI",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest14",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest14\\Id",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest14\\Index",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest14\\SD",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SYSTEM\\SOFTWARE\\Microsoft\\TIP\\AggregateResults\\data",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [
+    {
+      "id": "T1053.005",
+      "name": "Scheduled Task",
+      "tactic": "execution, persistence, privilege-escalation",
+      "source": "rule",
+      "confidence": "high",
+      "evidence": "règle R-T1053.005-registre : HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest14 (svchost.exe (1448))"
+    }
+  ],
+  "suggestions": [],
+  "countermeasures": [
+    {
+      "id": "D3-PLA",
+      "name": "Process Lineage Analysis",
+      "technique": "T1053.005",
+      "tactic": "Detect",
+      "artifact": "Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ProcessLineageAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-PSA",
+      "name": "Process Spawn Analysis",
+      "technique": "T1053.005",
+      "tactic": "Detect",
+      "artifact": "Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ProcessSpawnAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-PSMD",
+      "name": "Process Self-Modification Detection",
+      "technique": "T1053.005",
+      "tactic": "Detect",
+      "artifact": "Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ProcessSelf-ModificationDetection/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SCA",
+      "name": "System Call Analysis",
+      "technique": "T1053.005",
+      "tactic": "Detect",
+      "artifact": "System Call",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SDM",
+      "name": "System Daemon Monitoring",
+      "technique": "T1053.005",
+      "tactic": "Detect",
+      "artifact": "Operating System Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemDaemonMonitoring/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SJA",
+      "name": "Scheduled Job Analysis",
+      "technique": "T1053.005",
+      "tactic": "Detect",
+      "artifact": "Job Schedule",
+      "url": "https://d3fend.mitre.org/technique/d3f:ScheduledJobAnalysis/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-ABPI",
+      "name": "Application-based Process Isolation",
+      "technique": "T1053.005",
+      "tactic": "Isolate",
+      "artifact": "Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:Application-basedProcessIsolation/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EAL",
+      "name": "Executable Allowlisting",
+      "technique": "T1053.005",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableAllowlisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-EDL",
+      "name": "Executable Denylisting",
+      "technique": "T1053.005",
+      "tactic": "Isolate",
+      "artifact": "Create Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:ExecutableDenylisting/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-HBPI",
+      "name": "Hardware-based Process Isolation",
+      "technique": "T1053.005",
+      "tactic": "Isolate",
+      "artifact": "Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:Hardware-basedProcessIsolation/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-KBPI",
+      "name": "Kernel-based Process Isolation",
+      "technique": "T1053.005",
+      "tactic": "Isolate",
+      "artifact": "Process",
+      "url": "https://d3fend.mitre.org/technique/d3f:Kernel-basedProcessIsolation/",
+      "source": "d3fend"
+    },
+    {
+      "id": "D3-SCF",
+      "name": "System Call Filtering",
+      "technique": "T1053.005",
+      "tactic": "Isolate",
+      "artifact": "System Call",
+      "url": "https://d3fend.mitre.org/technique/d3f:SystemCallFiltering/",
+      "source": "d3fend"
+    }
+  ],
+  "recommendations": [],
+  "uncertainties": [],
+  "rejected_claims": []
+}

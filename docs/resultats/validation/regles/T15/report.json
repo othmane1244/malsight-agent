@@ -1,0 +1,65 @@
+{
+  "sample": {
+    "filename": "T15_utilisateur.ps1",
+    "sha256": "636eb716c425c1123f6e9d235da11c089859cc35f8f9ba06d2b6bb446dc33f08",
+    "md5": "26ffba7cdd7026ef60f05e5b85d7d2cd",
+    "size": 1157,
+    "file_type": "unknown"
+  },
+  "executive_summary": "Rapport généré sans LLM : faits extraits uniquement.",
+  "behaviors": [],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "636eb716c425c1123f6e9d235da11c089859cc35f8f9ba06d2b6bb446dc33f08",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "26ffba7cdd7026ef60f05e5b85d7d2cd",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\malsight_t15.txt",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\BatteryIdTable",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\CompositeBatteryData",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\LastLongTermEventTime",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\MaxBatteryIndex",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\SerializedStateData",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SYSTEM\\SOFTWARE\\Microsoft\\TIP\\AggregateResults\\data",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [],
+  "suggestions": [],
+  "countermeasures": [],
+  "recommendations": [],
+  "uncertainties": [],
+  "rejected_claims": []
+}

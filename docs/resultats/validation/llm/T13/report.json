@@ -1,0 +1,67 @@
+{
+  "sample": {
+    "filename": "T13_persistance_runonce.ps1",
+    "sha256": "7d4711b61bbb454c40becacb4d4d977c58d2a53dada7719ba2295466a30debd3",
+    "md5": "c27481a7da976f92a8326eb38db40d83",
+    "size": 1307,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon est un script PowerShell nommé \"T13_persistance_runonce.ps1\". Son comportement observé se limite à la modification du registre pour établir une persistance au démarrage de l'utilisateur actuel. Il écrit une clé de registre sous `HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce` avec la valeur `MalsightTest13` via `powershell.exe`. Aucune activité réseau, appel API sensible ou autre comportement malveillant n'a été observé.",
+  "behaviors": [
+    {
+      "summary": "Établir une persistance au démarrage de l'utilisateur via la clé RunOnce du registre.",
+      "evidence": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce\\MalsightTest13",
+      "kind": "inferred"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "7d4711b61bbb454c40becacb4d4d977c58d2a53dada7719ba2295466a30debd3",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "c27481a7da976f92a8326eb38db40d83",
+      "source": "fichier"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce\\MalsightTest13",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [],
+  "suggestions": [
+    {
+      "id": "T1547.001",
+      "name": "Registry Run Keys / Startup Folder",
+      "tactic": "persistence, privilege-escalation",
+      "source": "llm",
+      "confidence": "medium",
+      "evidence": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce"
+    }
+  ],
+  "countermeasures": [],
+  "recommendations": [
+    "Surveiller la création ou la modification des clés de registre dans les chemins de démarrage utilisateur, tels que `HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce`, pour détecter des exécutions potentiellement indésirables.",
+    "Mettre en place des règles de détection (YARA/Sigma) basées sur les hachages SHA256 (`7d4711b61bbb454c40becacb4d4d977c58d2a53dada7719ba2295466a30debd3`) et MD5 (`c27481a7da976f92a8326eb38db40d83`) pour identifier l'échantillon lors de l'exécution.",
+    "Durcir les politiques de sécurité pour limiter l'écriture dans les clés de registre de démarrage utilisateur (`HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce`) aux processus de confiance connus.",
+    "Surveiller les appels API liés à la modification du registre pour détecter toute tentative d'écriture dans les chemins de démarrage système ou utilisateur."
+  ],
+  "uncertainties": [
+    "Le script est exécuté par `powershell.exe (7772)` qui est l'attribution de l'action, mais la nature exacte de l'exécution (manuelle, planifiée, etc.) n'est pas précisée."
+  ],
+  "rejected_claims": [
+    "ID D3FEND absent du cache retiré d'une recommandation : D3-RSC",
+    "ID D3FEND absent du cache retiré d'une recommandation : D3-HSH",
+    "ID D3FEND absent du cache retiré d'une recommandation : D3-REG",
+    "ID D3FEND absent du cache retiré d'une recommandation : D3-API"
+  ]
+}

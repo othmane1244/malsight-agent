@@ -1,0 +1,91 @@
+{
+  "sample": {
+    "filename": "T15_utilisateur.ps1",
+    "sha256": "636eb716c425c1123f6e9d235da11c089859cc35f8f9ba06d2b6bb446dc33f08",
+    "md5": "26ffba7cdd7026ef60f05e5b85d7d2cd",
+    "size": 1157,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon exécute des commandes système et écrit des données sur le système de fichiers et le registre. Il exécute `whoami.exe /all` via `powershell.exe` et crée un fichier nommé `C:\\travail\\malsight_t15.txt`. L'activité de registre observée provient principalement de processus système (`svchost.exe`) et concerne des clés de télémétrie (SRUM) et des résultats agrégés (TIP), sans lien direct prouvé avec l'activité de l'échantillon.",
+  "behaviors": [
+    {
+      "summary": "Exécution d'une commande système pour récupérer des informations d'identification de l'utilisateur.",
+      "evidence": "powershell.exe (4020) exécute \"C:\\Windows\\system32\\whoami.exe\" /all",
+      "kind": "observed"
+    },
+    {
+      "summary": "Création d'un fichier dans le répertoire de travail.",
+      "evidence": "C:\\travail\\malsight_t15.txt créé par powershell.exe (4020)",
+      "kind": "observed"
+    },
+    {
+      "summary": "Lecture/Écriture de clés de registre liées à la télémétrie système (SRUM) et aux résultats agrégés (TIP).",
+      "evidence": "HKLM\\SYSTEM\\SOFTWARE\\Microsoft\\TIP\\AggregateResults\\data (par svchost.exe (2060)) ; HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\LastLongTermEventTime (par svchost.exe (2060)) ; HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\CompositeBatteryData (par svchost.exe (2060)) ; HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\BatteryIdTable (par svchost.exe (2060)) ; HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\MaxBatteryIndex (par svchost.exe (2060)) ; HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\SerializedStateData (par svchost.exe (2060))",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "636eb716c425c1123f6e9d235da11c089859cc35f8f9ba06d2b6bb446dc33f08",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "26ffba7cdd7026ef60f05e5b85d7d2cd",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\malsight_t15.txt",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\BatteryIdTable",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\CompositeBatteryData",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\LastLongTermEventTime",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\MaxBatteryIndex",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\SerializedStateData",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SYSTEM\\SOFTWARE\\Microsoft\\TIP\\AggregateResults\\data",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [],
+  "suggestions": [],
+  "countermeasures": [],
+  "recommendations": [
+    "Surveiller les modifications des clés de registre liées à la télémétrie de la batterie (ex: HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\*).",
+    "Surveiller la création ou la modification de fichiers dans le répertoire C:\\travail\\.",
+    "Surveiller les hachages SHA256 (636eb716c425c1123f6e9d235da11c089859cc35f8f9ba06d2b6bb446dc33f08) et MD5 (26ffba7cdd7026ef60f05e5b85d7d2cd) pour toute exécution.",
+    "Surveiller les accès aux clés de registre spécifiques : HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\BatteryIdTable, HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\CompositeBatteryData, HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\LastLongTermEventTime, HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\MaxBatteryIndex, HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\SerializedStateData, et HKLM\\SYSTEM\\SOFTWARE\\Microsoft\\TIP\\AggregateResults\\data."
+  ],
+  "uncertainties": [
+    "L'activité de modification des clés de registre de télémétrie (SRUM/TIP) est attribuée à 'svchost.exe (2060)' et n'est pas directement liée à l'activité de l'échantillon, mais est observée pendant son exécution.",
+    "Aucune activité réseau (connexion établie, résolution DNS) n'est observée, ce qui limite l'analyse des communications externes."
+  ],
+  "rejected_claims": [
+    "Technique sans preuve vérifiable, rejetée : T1059.001 (aucune valeur reconnaissable)"
+  ]
+}

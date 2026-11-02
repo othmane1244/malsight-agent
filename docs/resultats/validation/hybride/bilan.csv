@@ -1,0 +1,5 @@
+echantillon,attack_attendues,attack_trouvees,attack_vraies,attack_vraies_tol,attack_en_trop,attack_en_trop_tol,attack_ratees,iocs,suggestions,comportements,rejets,temps_s,json_valide
+T13,T1547.001,T1547.001,1,1,—,—,—,1/1,0 / 0,1 / 0,0,115.4,oui
+T14,T1053.005,T1053.005,1,1,—,—,—,2/2,0 / 0,2 / 0,0,171.5,oui
+T15,T1033,—,0,0,—,—,T1033,1/1,0 / 1 (T1087.002),3 / 0,0,126.8,oui
+T16,T1546.013,—,0,0,—,—,T1546.013,1/1,0 / 0,1 / 0,1,124.7,oui

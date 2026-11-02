@@ -1,0 +1,70 @@
+{
+  "sample": {
+    "filename": "T16_profil_powershell.ps1",
+    "sha256": "afc924e9da8688254d77e10b14b1f8529f2a6848acd7a52c91121e4a1fa63fad",
+    "md5": "5c4fb521e07eb82472f5e2a5245c90fd",
+    "size": 1393,
+    "file_type": "unknown"
+  },
+  "executive_summary": "Rapport généré sans LLM : faits extraits uniquement.",
+  "behaviors": [],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "afc924e9da8688254d77e10b14b1f8529f2a6848acd7a52c91121e4a1fa63fad",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "5c4fb521e07eb82472f5e2a5245c90fd",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\Users\\WDAGUtilityAccount\\Documents\\WindowsPowerShell",
+      "source": "extraction"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\Users\\WDAGUtilityAccount\\Documents\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\BatteryIdTable",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\CompositeBatteryData",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\LastLongTermEventTime",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\MaxBatteryIndex",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\SerializedStateData",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SYSTEM\\SOFTWARE\\Microsoft\\TIP\\AggregateResults\\data",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [],
+  "suggestions": [],
+  "countermeasures": [],
+  "recommendations": [],
+  "uncertainties": [],
+  "rejected_claims": []
+}

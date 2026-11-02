@@ -1,0 +1,97 @@
+{
+  "sample": {
+    "filename": "T15_utilisateur.ps1",
+    "sha256": "636eb716c425c1123f6e9d235da11c089859cc35f8f9ba06d2b6bb446dc33f08",
+    "md5": "26ffba7cdd7026ef60f05e5b85d7d2cd",
+    "size": 1157,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon exécute des commandes système et écrit des données sur le système de fichiers et le registre. Il exécute `whoami.exe /all` via `powershell.exe` et crée un fichier nommé `C:\\travail\\malsight_t15.txt`. De plus, il y a des écritures de registre observées sur des clés liées à la télémétrie de Windows (SRUM) et des résultats agrégés (TIP), attribuées à `svchost.exe`.",
+  "behaviors": [
+    {
+      "summary": "Exécution d'une commande système pour récupérer des informations d'identification de l'utilisateur.",
+      "evidence": "process: \"C:\\Windows\\system32\\whoami.exe\" /all",
+      "kind": "observed"
+    },
+    {
+      "summary": "Création d'un fichier dans le répertoire 'C:\\travail'.",
+      "evidence": "file: C:\\travail\\malsight_t15.txt",
+      "kind": "observed"
+    },
+    {
+      "summary": "Écriture de données dans des clés de registre liées à la télémétrie de Windows (SRUM) et des résultats agrégés.",
+      "evidence": "registry: HKLM\\SYSTEM\\SOFTWARE\\Microsoft\\TIP\\AggregateResults\\data",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "636eb716c425c1123f6e9d235da11c089859cc35f8f9ba06d2b6bb446dc33f08",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "26ffba7cdd7026ef60f05e5b85d7d2cd",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\travail\\malsight_t15.txt",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\BatteryIdTable",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\CompositeBatteryData",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\LastLongTermEventTime",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\MaxBatteryIndex",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\SerializedStateData",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SYSTEM\\SOFTWARE\\Microsoft\\TIP\\AggregateResults\\data",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [],
+  "suggestions": [
+    {
+      "id": "T1087.002",
+      "name": "Domain Account",
+      "tactic": "discovery",
+      "source": "llm",
+      "confidence": "medium",
+      "evidence": "process: \"C:\\Windows\\system32\\whoami.exe\" /all"
+    }
+  ],
+  "countermeasures": [],
+  "recommendations": [
+    "Surveiller les modifications des clés de registre liées à la télémétrie de la batterie (ex: HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\*), car ces clés sont listées dans les IOCs et pourraient être ciblées pour masquer des activités ou des données.",
+    "Surveiller la création ou la modification de fichiers dans le répertoire C:\\travail\\, en particulier les fichiers avec des extensions spécifiques, pour détecter des écritures inhabituelles.",
+    "Surveiller les hachages SHA256 (636eb716c425c1123f6e9d235da11c089859cc35f8f9ba06d2b6bb446dc33f08) et MD5 (26ffba7cdd7026ef60f05e5b85d7d2cd) pour toute activité de fichier suspecte.",
+    "Mettre en place des règles de surveillance des accès aux clés de registre système critiques (HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\* et HKLM\\SYSTEM\\SOFTWARE\\Microsoft\\TIP\\AggregateResults\\data) pour détecter toute modification non sollicitée."
+  ],
+  "uncertainties": [
+    "Les écritures de registre sur les clés de télémétrie (SRUM) et TIP sont attribuées à 'svchost.exe' et ne sont pas directement liées à l'activité de l'échantillon, mais sont observées pendant son exécution."
+  ],
+  "rejected_claims": []
+}

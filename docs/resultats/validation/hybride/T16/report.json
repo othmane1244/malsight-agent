@@ -1,0 +1,86 @@
+{
+  "sample": {
+    "filename": "T16_profil_powershell.ps1",
+    "sha256": "afc924e9da8688254d77e10b14b1f8529f2a6848acd7a52c91121e4a1fa63fad",
+    "md5": "5c4fb521e07eb82472f5e2a5245c90fd",
+    "size": 1393,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon est un script PowerShell (`T16_profil_powershell.ps1`) qui a interagi avec le système de fichiers pour créer ou modifier des fichiers de profil PowerShell dans le répertoire de l'utilisateur. Il n'y a aucune preuve d'activité réseau ou d'utilisation de clés de registre critiques pour des opérations malveillantes. Les modifications de registre observées proviennent de processus système (`svchost.exe`) et concernent des zones de télémétrie système (SRUM), ce qui suggère une activité de fond de Windows plutôt qu'une action directe de l'échantillon.",
+  "behaviors": [
+    {
+      "summary": "Écriture de fichiers de profil PowerShell",
+      "evidence": "C:\\Users\\WDAGUtilityAccount\\Documents\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "afc924e9da8688254d77e10b14b1f8529f2a6848acd7a52c91121e4a1fa63fad",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "5c4fb521e07eb82472f5e2a5245c90fd",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\Users\\WDAGUtilityAccount\\Documents\\WindowsPowerShell",
+      "source": "extraction"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\Users\\WDAGUtilityAccount\\Documents\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\BatteryIdTable",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\CompositeBatteryData",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\LastLongTermEventTime",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\MaxBatteryIndex",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\SerializedStateData",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SYSTEM\\SOFTWARE\\Microsoft\\TIP\\AggregateResults\\data",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [],
+  "suggestions": [],
+  "countermeasures": [],
+  "recommendations": [
+    "Surveiller les écritures de clés de registre spécifiques liées à la télémétrie de la batterie (ex: HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\*). (Aucun identifiant D3FEND spécifique fourni)",
+    "Surveiller la création ou la modification de fichiers dans le répertoire utilisateur Documents, en particulier les fichiers de profil PowerShell (ex: C:\\Users\\WDAGUtilityAccount\\Documents\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1).",
+    "Surveiller l'exécution de scripts PowerShell depuis des chemins non standards ou des répertoires utilisateurs (ex: C:\\Users\\WDAGUtilityAccount\\Documents\\WindowsPowerShell).",
+    "Mettre en place des politiques de durcissement pour limiter les droits d'écriture dans les clés de registre système critiques de télémétrie (SRUM).",
+    "Analyser les hachages (sha256: afc924e9da8688254d77e10b14b1f8529f2a6848acd7a52c91121e4a1fa63fad, md5: 5c4fb521e07eb82472f5e2a5245c90fd) pour toute activité suspecte, même si aucune technique n'est attribuée."
+  ],
+  "uncertainties": [
+    "Les modifications de registre observées (ex: HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\*) sont attribuées à `svchost.exe` et concernent des zones de télémétrie système. Il est incertain si l'échantillon a initié ces écritures ou si elles sont une activité de fond de Windows coïncidant avec l'exécution."
+  ],
+  "rejected_claims": [
+    "Technique sans preuve vérifiable, rejetée : T1021.001 (aucune valeur reconnaissable)"
+  ]
+}

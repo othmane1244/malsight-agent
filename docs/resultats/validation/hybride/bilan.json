@@ -1,0 +1,126 @@
+{
+ "T13": {
+  "echantillon": "T13",
+  "mode": "hybride",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 115.4,
+  "attack_attendues": [
+   "T1547.001"
+  ],
+  "attack_trouvees": [
+   "T1547.001"
+  ],
+  "attack_vraies": [
+   "T1547.001"
+  ],
+  "attack_en_trop": [],
+  "attack_ratees": [],
+  "attack_vraies_tol": [
+   "T1547.001"
+  ],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": [],
+  "suggestions": [],
+  "suggestions_vraies": [],
+  "suggestions_vraies_tol": [],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 1,
+  "comportements_inferes": 0,
+  "rejets": []
+ },
+ "T14": {
+  "echantillon": "T14",
+  "mode": "hybride",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 171.5,
+  "attack_attendues": [
+   "T1053.005"
+  ],
+  "attack_trouvees": [
+   "T1053.005"
+  ],
+  "attack_vraies": [
+   "T1053.005"
+  ],
+  "attack_en_trop": [],
+  "attack_ratees": [],
+  "attack_vraies_tol": [
+   "T1053.005"
+  ],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": [],
+  "suggestions": [],
+  "suggestions_vraies": [],
+  "suggestions_vraies_tol": [],
+  "iocs_trouves": 2,
+  "iocs_attendus": 2,
+  "comportements_observes": 2,
+  "comportements_inferes": 0,
+  "rejets": []
+ },
+ "T15": {
+  "echantillon": "T15",
+  "mode": "hybride",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 126.8,
+  "attack_attendues": [
+   "T1033"
+  ],
+  "attack_trouvees": [],
+  "attack_vraies": [],
+  "attack_en_trop": [],
+  "attack_ratees": [
+   "T1033"
+  ],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": [
+   "T1033"
+  ],
+  "suggestions": [
+   "T1087.002"
+  ],
+  "suggestions_vraies": [],
+  "suggestions_vraies_tol": [],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 3,
+  "comportements_inferes": 0,
+  "rejets": []
+ },
+ "T16": {
+  "echantillon": "T16",
+  "mode": "hybride",
+  "modele": "gemma4:e4b",
+  "json_valide": true,
+  "temps_s": 124.7,
+  "attack_attendues": [
+   "T1546.013"
+  ],
+  "attack_trouvees": [],
+  "attack_vraies": [],
+  "attack_en_trop": [],
+  "attack_ratees": [
+   "T1546.013"
+  ],
+  "attack_vraies_tol": [],
+  "attack_en_trop_tol": [],
+  "attack_ratees_tol": [
+   "T1546.013"
+  ],
+  "suggestions": [],
+  "suggestions_vraies": [],
+  "suggestions_vraies_tol": [],
+  "iocs_trouves": 1,
+  "iocs_attendus": 1,
+  "comportements_observes": 1,
+  "comportements_inferes": 0,
+  "rejets": [
+   "Technique sans preuve vérifiable, rejetée : T1021.001 (aucune valeur reconnaissable)"
+  ]
+ }
+}

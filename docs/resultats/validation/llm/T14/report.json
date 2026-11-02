@@ -1,0 +1,173 @@
+{
+  "sample": {
+    "filename": "T14_tache_com.ps1",
+    "sha256": "e6da01058c5ac5a5fcbdb6a33ef6c4ba04aa2f95654ff16b591d4bb7f31ca044",
+    "md5": "350ff8888502b035739809902f90610b",
+    "size": 1721,
+    "file_type": "unknown"
+  },
+  "executive_summary": "L'échantillon analysé, nommé \"T14_tache_com.ps1\", n'a pas d'appels API sensibles ni de règles CAPA associées. L'analyse dynamique montre que des modifications de registre et des écritures de fichiers ont eu lieu, toutes attribuées à des processus système (`svchost.exe`). Ces actions consistent à créer et à modifier des éléments liés au planificateur de tâches de Windows (Task Scheduler), notamment en écrivant des clés de registre et un fichier dans `C:\\Windows\\System32\\Tasks\\MalsightTest14`. De plus, des écritures de registre sont observées dans des zones de télémétrie système (SRUM et TIP), ce qui suggère une interaction avec les mécanismes de reporting ou de gestion des données système.",
+  "behaviors": [
+    {
+      "summary": "Création et modification d'éléments du Planificateur de tâches (Task Scheduler)",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest14",
+      "kind": "observed"
+    },
+    {
+      "summary": "Création d'un fichier de tâche dans le répertoire système",
+      "evidence": "C:\\Windows\\System32\\Tasks\\MalsightTest14",
+      "kind": "observed"
+    },
+    {
+      "summary": "Écriture de données de télémétrie système (SRUM et TIP)",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\LastLongTermEventTime",
+      "kind": "observed"
+    }
+  ],
+  "iocs": [
+    {
+      "type": "sha256",
+      "value": "e6da01058c5ac5a5fcbdb6a33ef6c4ba04aa2f95654ff16b591d4bb7f31ca044",
+      "source": "fichier"
+    },
+    {
+      "type": "md5",
+      "value": "350ff8888502b035739809902f90610b",
+      "source": "fichier"
+    },
+    {
+      "type": "file_path",
+      "value": "C:\\Windows\\System32\\Tasks\\MalsightTest14",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\BatteryIdTable",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\CompositeBatteryData",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\LastLongTermEventTime",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\MaxBatteryIndex",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\SerializedStateData",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Plain\\{B2F663AA-D5A2-4529-B716-3585F6D73624}",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{B2F663AA-D5A2-4529-B716-3585F6D73624}",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{B2F663AA-D5A2-4529-B716-3585F6D73624}\\Actions",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{B2F663AA-D5A2-4529-B716-3585F6D73624}\\Description",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{B2F663AA-D5A2-4529-B716-3585F6D73624}\\DynamicInfo",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{B2F663AA-D5A2-4529-B716-3585F6D73624}\\Hash",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{B2F663AA-D5A2-4529-B716-3585F6D73624}\\Path",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{B2F663AA-D5A2-4529-B716-3585F6D73624}\\Schema",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{B2F663AA-D5A2-4529-B716-3585F6D73624}\\Triggers",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{B2F663AA-D5A2-4529-B716-3585F6D73624}\\URI",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest14",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest14\\Id",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest14\\Index",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest14\\SD",
+      "source": "extraction"
+    },
+    {
+      "type": "registry_key",
+      "value": "HKLM\\SYSTEM\\SOFTWARE\\Microsoft\\TIP\\AggregateResults\\data",
+      "source": "extraction"
+    }
+  ],
+  "sensitive_apis": [],
+  "attack": [],
+  "suggestions": [
+    {
+      "id": "T1053",
+      "name": "Scheduled Task/Job",
+      "tactic": "execution, persistence, privilege-escalation",
+      "source": "llm",
+      "confidence": "medium",
+      "evidence": "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\MalsightTest14"
+    }
+  ],
+  "countermeasures": [],
+  "recommendations": [
+    "Surveiller la création ou la modification de fichiers dans le chemin `C:\\Windows\\System32\\Tasks\\MalsightTest14` pour détecter des artefacts potentiels.",
+    "Surveiller les modifications des clés de registre liées au planificateur de tâches, en particulier sous `HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tasks\\{B2F663AA-D5A2-4529-B716-3585F6D73624}` et ses sous-clés, pour détecter des ajouts ou des modifications non autorisés.",
+    "Surveiller les accès et modifications des clés de registre de télémétrie de batterie sous `HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SRUM\\Telemetry\\*` pour identifier des tentatives de manipulation de données système.",
+    "Mettre en place des règles de détection (YARA/Sigma) basées sur les hachages SHA256 (`e6da01058c5ac5a5fcbdb6a33ef6c4ba04aa2f95654ff16b591d4bb7f31ca044`) et MD5 (`350ff8888502b035739809902f90610b`) pour détecter la présence de l'échantillon.",
+    "Surveiller les appels d'API ou les activités liées à la création de tâches planifiées pour détecter des comportements anormaux (D3-LFP)."
+  ],
+  "uncertainties": [
+    "Toutes les modifications de registre et les écritures de fichiers sont attribuées à `svchost.exe` (1448) ou `svchost.exe` (2060) via `service_window`, ce qui rend difficile de déterminer si l'échantillon est la cause directe de ces actions ou si elles sont des activités de fond de Windows coïncidant avec l'exécution."
+  ],
+  "rejected_claims": [
+    "ID D3FEND absent du cache retiré d'une recommandation : D3-FSD",
+    "ID D3FEND absent du cache retiré d'une recommandation : D3-RMD",
+    "ID D3FEND absent du cache retiré d'une recommandation : D3-RMD",
+    "ID D3FEND absent du cache retiré d'une recommandation : D3-FSD"
+  ]
+}
