@@ -23,12 +23,22 @@ __pycache__/
 venv/
 .pytest_cache/
 .ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.ipynb_checkpoints/
 dist/
 build/
 
 # --- Secrets et données locales ---
 .env
+.env.*
+!.env.example
 *.key
+*.pem
+*.pfx
 chroma_db/
 data/enterprise-attack.json
 data/d3fend/
@@ -36,7 +46,10 @@ data/d3fend/
 # --- IDE / OS ---
 .vscode/
 .idea/
+*.swp
 .DS_Store
+Thumbs.db
+desktop.ini
 
 # --- Journaux du labo (Windows Sandbox) ---
 *.evtx
