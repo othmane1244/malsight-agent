@@ -1,6 +1,6 @@
 # Agent IA pour l'analyse assistée de malware — Étude, architecture et planning
 
-Nov 1, 2026 · @Shadow
+Nov 1, 2026 · Othmane Aliouali
 
 ## 1. Contexte, objectifs et périmètre
 
