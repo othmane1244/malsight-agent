@@ -208,7 +208,7 @@ malsight-agent/
 ## Contexte
 
 Projet académique du cycle ingénieur IA & Cybersécurité (ENSA Béni Mellal), module
-« Compliance et Gouvernance ». Réalisé **seul** (Othmane Aliouali) en 14 jours ; la version
+« IA avancée en cybersécurité ». Réalisé **seul** (Othmane Aliouali) en 14 jours ; la version
 présentée est figée sous le tag `v1.0-soutenance` (gel du code, décision D11).
 Planning et périmètre : [D5](docs/decisions.md), [`docs/planning.md`](docs/planning.md).
 
